@@ -18,6 +18,12 @@
 
         <spring.version>5.2.5.RELEASE</spring.version>
         <spring-data-jpa.version>2.2.6.RELEASE</spring-data-jpa.version>
+
+        <tomcat.version>9.0.31</tomcat.version>
+
+        <!--DB-->
+        <postgresql.version>42.2.10</postgresql.version>
+
         <!-- Hibernate -->
         <hibernate.version>5.4.12.Final</hibernate.version>
 
@@ -53,6 +59,19 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring-data-jpa.version}</version>
+        </dependency>
+
+        <!--        postgres-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
