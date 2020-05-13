@@ -101,6 +101,13 @@
             <version>${ehcache.version}</version>
         </dependency>
 
+        <!--Web-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+
+
         <!--Test-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
