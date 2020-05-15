@@ -9,6 +9,7 @@
 <hr>
 <ul>
     <li><a href="login">Login page</a></li>
+    <li><a href="rest/admin/users">rest/admin/users</a></li>
 </ul>
 </body>
 </html>
