@@ -1,8 +1,10 @@
 package ru.javawebinar.lunchvoting.service;
 
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.lunchvoting.model.Role;
 import ru.javawebinar.lunchvoting.model.User;
@@ -27,6 +29,14 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @Before("")
+    public void setUp() throws Exception {
+        cacheManager.getCache("users").clear();
+    }
 
     @Test
     void create() {
@@ -95,6 +105,15 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     void deletedNotFound() {
         assertThrows(NotFoundException.class, () -> service.delete(1));
+    }
+
+    @Test
+    void deleteUseCache() {
+        List<User> all = service.getAll();
+        assertEquals(all, of(ADMIN, USER1, USER2));
+        service.deleteUseCache(101);
+        List<User> all2 = service.getAll();
+        assertEquals(all2, of(ADMIN, USER1, USER2));
     }
 
 //    @Test
