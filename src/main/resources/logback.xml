@@ -20,7 +20,8 @@
         </encoder>
     </appender>
 
-    <logger name="ru.javawebinar.voting" level="debug"/>
+    <logger name="ru.javawebinar.lunchvoting" level="debug"/>
+    <logger name="org.springframework.security" level="debug"/>
 
     <root level="info">
         <appender-ref ref="file"/>
