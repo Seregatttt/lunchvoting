@@ -6,6 +6,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.javawebinar.lunchvoting.model.User;
@@ -19,14 +21,14 @@ import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithId
 //import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.security.crypto.password.PasswordEncoder;
-//import ru.javawebinar.voting.AuthorizedUser;
+import ru.javawebinar.lunchvoting.AuthorizedUser;
 //import ru.javawebinar.voting.to.UserTo;
 //import ru.javawebinar.voting.util.UserUtil;
 //import static ru.javawebinar.voting.util.UserUtil.prepareToSave;
 
-@Service
+@Service("userService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class UserService {
+public class UserService implements UserDetailsService {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private final UserRepository repository;
@@ -71,5 +73,14 @@ public class UserService {
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
         repository.save(user);
+    }
+
+    @Override
+    public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = repository.getByEmail(email.toLowerCase());
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + email + " is not found");
+        }
+        return new AuthorizedUser(user);
     }
 }
