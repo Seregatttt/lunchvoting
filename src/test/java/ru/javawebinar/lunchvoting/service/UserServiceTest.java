@@ -23,7 +23,9 @@ public class UserServiceTest extends AbstractServiceTest {
     public static User USER1 = new User(101, "User1", "user1@mail.ru", "user1", Role.ROLE_USER);
     public static User USER2 = new User(102, "User2", "user2@mail.ru", "user2", Role.ROLE_USER);
     public static User NEW_USER1 = new User(101, "new_user", "new_user@mail.ru", "new_user1", Role.ROLE_USER);
-
+    public static User NEW_USER_DUBLE_EMAIL = new User(null, "Duplicate", "user1@mail.ru", "newPass", Role.ROLE_USER);
+    public static User ADMIN_UPDATE_EMAIL =new User(100, "ROLE_ADMIN", "super-admin@mail.ru", "ROLE_ADMIN", Role.ROLE_ADMIN);
+    public static User UPDATE_DUBLE_EMAIL =new User(100, "ROLE_ADMIN", "user1@mail.ru", "ROLE_ADMIN", Role.ROLE_ADMIN);
     @Autowired
     protected UserService service;
 
@@ -51,7 +53,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     void createDuplicateMail() {
         assertThrows(DataAccessException.class, () ->
-                service.create(new User(null, "Duplicate", "user1@mail.ru", "newPass", Role.ROLE_USER)));
+                service.create(NEW_USER_DUBLE_EMAIL));
     }
 
     @Test
@@ -84,14 +86,14 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     void update() {
-        User updated = new User(100, "ROLE_ADMIN", "super-admin@mail.ru", "ROLE_ADMIN", Role.ROLE_ADMIN);
+        User updated = ADMIN_UPDATE_EMAIL;
         service.update(new User(updated));
         assertEquals(service.get(100), updated);
     }
 
     @Test
     void updateDublicateEmail() {
-        User updated = new User(100, "ROLE_ADMIN", "user1@mail.ru", "ROLE_ADMIN", Role.ROLE_ADMIN);
+        User updated = UPDATE_DUBLE_EMAIL;
         assertThrows(DataAccessException.class, () ->
                 service.update(new User(updated)));
     }
