@@ -1,15 +1,16 @@
-<%@ page contentType="text/html;charset=UTF-8"  %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Java Enterprise (Topjava)</title>
+    <jsp:include page="fragments/headTag.jsp"/>
 </head>
 <body>
-<h3>Проект <a href="https://github.com/JavaWebinar/topjava" target="_blank">Java Enterprise (Topjava)</a></h3>
-<hr>
-<ul>
-    <li><a href="login">Login page</a></li>
-    <li><a href="rest/admin/users">rest/admin/users</a></li>
-</ul>
+<div class="box">
+    <h3>Проект <a href="https://github.com/JavaWebinar/lunchvoting" target="_blank">Java Enterprise (LunchVoting)</a></h3>
+    <hr>
+    <ul>
+        <li><a href="login">Login page</a></li>
+        <li><a href="rest/admin/users">rest/admin/users</a></li>
+    </ul>
+</div>
 </body>
 </html>
