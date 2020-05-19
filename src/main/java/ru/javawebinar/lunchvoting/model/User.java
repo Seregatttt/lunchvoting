@@ -6,11 +6,12 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.CollectionUtils;
+import ru.javawebinar.lunchvoting.HasId;
 
 import javax.persistence.*;
-//import javax.validation.constraints.Email;
-//import javax.validation.constraints.NotBlank;
-//import javax.validation.constraints.Size;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
@@ -23,7 +24,7 @@ import java.util.Set;
 })
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
-public class User {
+public class User implements HasId {
     public static final int START_USERS_SEQ = 100;
 
     @Id
@@ -34,8 +35,8 @@ public class User {
 //  See https://hibernate.atlassian.net/browse/HHH-3718 and https://hibernate.atlassian.net/browse/HHH-12034
 //  Proxy initialization when accessing its identifier managed now by JPA_PROXY_COMPLIANCE setting
 
- //   @NotBlank
-  //  @Size(min = 2, max = 100)
+    @NotBlank
+    @Size(min = 2, max = 100)
     @Column(name = "name", nullable = false)
     protected String name;
 
@@ -44,14 +45,14 @@ public class User {
     public static final String ALL_SORTED = "User.getAllSorted";
 
     @Column(name = "email", nullable = false, unique = true)
- //   @Email
-  //  @NotBlank
-  //  @Size(max = 100)
+    @Email
+    @NotBlank
+    @Size(max = 100)
     private String email;
 
     @Column(name = "password", nullable = false)
-  //  @NotBlank
-   // @Size(min = 5, max = 100)
+    @NotBlank
+    @Size(min = 5, max = 100)
     // https://stackoverflow.com/a/12505165/548473
    // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;

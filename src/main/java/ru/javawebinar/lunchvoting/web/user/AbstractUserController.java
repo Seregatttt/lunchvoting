@@ -8,6 +8,8 @@ import ru.javawebinar.lunchvoting.service.UserService;
 
 import java.util.List;
 
+import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNew;
+
 //import static ru.javawebinar.lunchvoting.util.ValidationUtil.assureIdConsistent;
 //import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNew;
 
@@ -19,8 +21,7 @@ public abstract class AbstractUserController {
 
     public List<User> getAll() {
         log.info("getAll");
-        List<User> userList = service.getAll();
-        return userList;
+        return service.getAll();
     }
 
     public User get(int id) {
@@ -30,7 +31,7 @@ public abstract class AbstractUserController {
 
     public User create(User user) {
         log.info("create {}", user);
-      //  checkNew(user);
+        checkNew(user);
         return service.create(user);
     }
 

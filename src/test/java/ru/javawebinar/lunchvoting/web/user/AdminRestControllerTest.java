@@ -7,7 +7,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-//import ru.javawebinar.lunchvoting.UserTestData;
 import ru.javawebinar.lunchvoting.UserTestData;
 import ru.javawebinar.lunchvoting.model.Role;
 import ru.javawebinar.lunchvoting.model.User;
@@ -16,14 +15,16 @@ import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.UserTestData.*;
+import static ru.javawebinar.lunchvoting.UserTestData.USER_MATCHER;
+import static ru.javawebinar.lunchvoting.UserTestData.jsonWithPassword;
+
+//import ru.javawebinar.lunchvoting.UserTestData;
 //import static ru.javawebinar.lunchvoting.util.exception.ErrorType.VALIDATION_ERROR;
 //import static ru.javawebinar.lunchvoting.web.ExceptionInfoHandler.EXCEPTION_DUPLICATE_EMAIL;
 
@@ -37,13 +38,80 @@ class AdminRestControllerTest extends AbstractControllerTest {
     public static User NEW_USER = new User(null, "new_user", "new_user@mail.ru", "new_pass", Role.ROLE_USER);
     public static User NEW_USER_DOUBLE_EMAIL = new User(null, "DuplicateEmail", "user1@mail.ru", "newPass", Role.ROLE_USER);
     public static User UPDATE_USER1_NEW_PASS = new User(101, "User1", "user1@mail.ru", "newPass", Role.ROLE_USER);
-    public static User UPDATE_ADMIN_NEW_EMAIL =new User(100, "Admin", "super-admin@mail.ru", "admin", Role.ROLE_ADMIN);
-    public static User UPDATE_ADMIN_DOUBLE_EMAIL =new User(100, "Admin", "user1@mail.ru", "password1", Role.ROLE_ADMIN);
+    public static User UPDATE_ADMIN_NEW_EMAIL = new User(100, "Admin", "super-admin@mail.ru", "admin", Role.ROLE_ADMIN);
+    public static User UPDATE_ADMIN_DOUBLE_EMAIL = new User(100, "Admin", "user1@mail.ru", "password1", Role.ROLE_ADMIN);
     public static final int USER_ID = 101;
     public static final int ADMIN_ID = 100;
 
     @Autowired
     private UserService userService;
+
+    @Test
+    void createWithLocation() throws Exception {
+        User newUser = NEW_USER;
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_ADMIN_USERS_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(UserTestData.jsonWithPassword(newUser, "newPass")))
+                .andExpect(status().isCreated());
+
+        User created = readFromJson(action, User.class);
+        int newId = created.getId();
+        newUser.setId(newId);
+        USER_MATCHER.assertMatch(created, newUser);
+        USER_MATCHER.assertMatch(userService.get(newId), newUser);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void createDuplicate() throws Exception {
+        User expected = NEW_USER_DOUBLE_EMAIL;
+        perform(MockMvcRequestBuilders.post(REST_ADMIN_USERS_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(jsonWithPassword(expected, "newPass")))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.type", is("CONSTRAINS_ERROR")))
+                .andExpect(jsonPath("$.details", hasItem("exception user duplicateEmail")))
+                .andDo(print());
+
+    }
+
+    @Test
+    void createInvalid() throws Exception {
+        User expected = new User(null, null, "", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
+        perform(MockMvcRequestBuilders.post(REST_ADMIN_USERS_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(JsonUtil.writeValue(expected)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
+                .andExpect(jsonPath("$.details", hasItem("[Field email must not be blank]")))
+                .andDo(print());
+    }
+
+    @Test
+    void createNewUserWithId() throws Exception {
+        User expected = new User(1000, "test", "test@mail.ru", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
+        perform(MockMvcRequestBuilders.post(REST_ADMIN_USERS_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(JsonUtil.writeValue(expected)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
+                .andExpect(jsonPath("$.details", hasItem("User must be new (id=null)")))
+                .andDo(print());
+    }
+
+    @Test
+    void getAll() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_USERS_URL)
+                .with(userHttpBasic(ADMIN)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(ADMIN, USER, USER2));
+    }
 
     @Test
     void get() throws Exception {
@@ -60,7 +128,6 @@ class AdminRestControllerTest extends AbstractControllerTest {
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_USERS_URL + 1)
                 .with(userHttpBasic(ADMIN)))
-                .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
@@ -72,23 +139,6 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_MATCHER.contentJson(ADMIN));
-    }
-
-    @Test
-    void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_ADMIN_USERS_URL + USER_ID)
-                .with(userHttpBasic(ADMIN)))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> userService.get(USER_ID));
-    }
-
-    @Test
-    void deleteNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_ADMIN_USERS_URL + 1)
-                .with(userHttpBasic(ADMIN)))
-                .andExpect(status().isUnprocessableEntity())
-                .andDo(print());
     }
 
     @Test
@@ -118,44 +168,6 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createWithLocation() throws Exception {
-        User newUser = NEW_USER;
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_ADMIN_USERS_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
-                .content(UserTestData.jsonWithPassword(newUser, "newPass")))
-                .andExpect(status().isCreated());
-
-        User created = readFromJson(action, User.class);
-        int newId = created.getId();
-        newUser.setId(newId);
-        USER_MATCHER.assertMatch(created, newUser);
-        USER_MATCHER.assertMatch(userService.get(newId), newUser);
-    }
-
-    @Test
-    void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_USERS_URL)
-                .with(userHttpBasic(ADMIN)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_MATCHER.contentJson(ADMIN, USER,USER2));
-    }
-
-    @Test
-    void createInvalid() throws Exception {
-        User expected = new User(null, null, "", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
-        perform(MockMvcRequestBuilders.post(REST_ADMIN_USERS_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
-                .content(JsonUtil.writeValue(expected)))
-                .andExpect(status().isUnprocessableEntity())
-               // .andExpect(errorType(VALIDATION_ERROR))
-                .andDo(print());
-    }
-
-    @Test
     void updateInvalid() throws Exception {
         User updated = new User(USER);
         updated.setName("");
@@ -164,8 +176,8 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isUnprocessableEntity())
-                .andDo(print())
-               // .andExpect(errorType(VALIDATION_ERROR))
+                .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
+                .andExpect(jsonPath("$.details", hasItem("[Field name size must be between 2 and 100]")))
                 .andDo(print());
     }
 
@@ -178,24 +190,26 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(jsonWithPassword(updated, "password1")))
-                .andExpect(status().isUnprocessableEntity())
-              //  .andExpect(errorType(VALIDATION_ERROR))
-              //  .andExpect(detailMessage(EXCEPTION_DUPLICATE_EMAIL))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.type", is("CONSTRAINS_ERROR")))
+                .andExpect(jsonPath("$.details", hasItem("exception user duplicateEmail")))
                 .andDo(print());
     }
 
     @Test
-    @Transactional(propagation = Propagation.NEVER)
-    void createDuplicate() throws Exception {
-        User expected = NEW_USER_DOUBLE_EMAIL;
-        perform(MockMvcRequestBuilders.post(REST_ADMIN_USERS_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
-                .content(jsonWithPassword(expected, "newPass")))
-                .andExpect(status().isUnprocessableEntity())
-              //  .andExpect(errorType(VALIDATION_ERROR))
-              //  .andExpect(detailMessage(EXCEPTION_DUPLICATE_EMAIL))
-                .andDo(print());
+    void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_ADMIN_USERS_URL + USER_ID)
+                .with(userHttpBasic(ADMIN)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        assertThrows(NotFoundException.class, () -> userService.get(USER_ID));
+    }
 
+    @Test
+    void deleteNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_ADMIN_USERS_URL + 1)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 }
