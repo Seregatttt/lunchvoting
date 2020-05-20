@@ -4,34 +4,22 @@ import ru.javawebinar.lunchvoting.model.Role;
 import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
-import java.util.Collections;
-import java.util.Date;
-
-//import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
-
 public class UserTestData {
     public static TestMatcher<User> USER_MATCHER
-            = TestMatcher.usingFieldsComparator(User.class,  "password");
+            = TestMatcher.usingFieldsComparator(User.class, "password");
 
     public static String jsonWithPassword(User user, String passw) {
         return JsonUtil.writeAdditionProps(user, "password", passw);
     }
 
+    public static final User ADMIN = new User(100, "Admin", "admin@mail.ru", "password", Role.ROLE_ADMIN);
+    public static final User USER = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
+    public static final User USER2 = new User(102, "User2", "user2@mail.ru", "password2", Role.ROLE_USER);
+    public static final User NEW_USER = new User(null, "new_user", "new_user@mail.ru", "new_pass", Role.ROLE_USER);
+    public static final User NEW_USER_DOUBLE_EMAIL = new User(null, "DuplicateEmail", "user1@mail.ru", "newPass", Role.ROLE_USER);
+    public static final User UPDATE_USER1_NEW_PASS = new User(101, "User1", "user1@mail.ru", "newPass", Role.ROLE_USER);
+    public static final User UPDATE_ADMIN_NEW_EMAIL = new User(100, "Admin", "super-admin@mail.ru", "admin", Role.ROLE_ADMIN);
+    public static final User UPDATE_ADMIN_DOUBLE_EMAIL = new User(100, "Admin", "user1@mail.ru", "password1", Role.ROLE_ADMIN);
     public static final int USER_ID = 101;
     public static final int ADMIN_ID = 100;
-
-    public static final User USER = new User(USER_ID, "User", "user@yandex.ru", "password",  Role.ROLE_USER);
-    public static final User ADMIN =
-            new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin",  Role.ROLE_ADMIN, Role.ROLE_USER);
-
-//    public static User getNew() {
-//        return new User(null, "New", "new@gmail.com", "newPass", 1 false, new Date(), Collections.singleton(Role.USER));
-//    }
-
-    public static User getUpdated() {
-        User updated = new User(USER);
-        updated.setName("UpdatedName");
-        updated.setRoles(Collections.singletonList(Role.ROLE_USER));
-        return updated;
-    }
 }

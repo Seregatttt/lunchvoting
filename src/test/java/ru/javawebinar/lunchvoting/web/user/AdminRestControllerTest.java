@@ -15,40 +15,24 @@ import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.UserTestData.USER_MATCHER;
-import static ru.javawebinar.lunchvoting.UserTestData.jsonWithPassword;
-
-//import ru.javawebinar.lunchvoting.UserTestData;
-//import static ru.javawebinar.lunchvoting.util.exception.ErrorType.VALIDATION_ERROR;
-//import static ru.javawebinar.lunchvoting.web.ExceptionInfoHandler.EXCEPTION_DUPLICATE_EMAIL;
+import static ru.javawebinar.lunchvoting.UserTestData.*;
 
 class AdminRestControllerTest extends AbstractControllerTest {
-
     private static final String REST_ADMIN_USERS_URL = AdminRestController.REST_ADMIN_USERS + '/';
-
-    public static User ADMIN = new User(100, "Admin", "admin@mail.ru", "password", Role.ROLE_ADMIN);
-    public static User USER = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
-    public static User USER2 = new User(102, "User2", "user2@mail.ru", "password2", Role.ROLE_USER);
-    public static User NEW_USER = new User(null, "new_user", "new_user@mail.ru", "new_pass", Role.ROLE_USER);
-    public static User NEW_USER_DOUBLE_EMAIL = new User(null, "DuplicateEmail", "user1@mail.ru", "newPass", Role.ROLE_USER);
-    public static User UPDATE_USER1_NEW_PASS = new User(101, "User1", "user1@mail.ru", "newPass", Role.ROLE_USER);
-    public static User UPDATE_ADMIN_NEW_EMAIL = new User(100, "Admin", "super-admin@mail.ru", "admin", Role.ROLE_ADMIN);
-    public static User UPDATE_ADMIN_DOUBLE_EMAIL = new User(100, "Admin", "user1@mail.ru", "password1", Role.ROLE_ADMIN);
-    public static final int USER_ID = 101;
-    public static final int ADMIN_ID = 100;
 
     @Autowired
     private UserService userService;
 
     @Test
     void createWithLocation() throws Exception {
-        User newUser = NEW_USER;
+        User newUser = new User(null, "new_user", "new_user@mail.ru", "new_pass", Role.ROLE_USER);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_ADMIN_USERS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
@@ -65,7 +49,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void createDuplicate() throws Exception {
-        User expected = NEW_USER_DOUBLE_EMAIL;
+        User expected = new User(null, "DuplicateEmail", "user1@mail.ru", "newPass", Role.ROLE_USER);
         perform(MockMvcRequestBuilders.post(REST_ADMIN_USERS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
