@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,25 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.javawebinar.lunchvoting.util.ValidationUtil;
-//import ru.javawebinar.lunchvoting.util.exception.ErrorInfo;
-//import ru.javawebinar.lunchvoting.util.exception.ErrorType;
 import ru.javawebinar.lunchvoting.util.exception.ErrorInfo;
 import ru.javawebinar.lunchvoting.util.exception.IllegalRequestDataException;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-import java.util.function.Function;
-
-//import static ru.javawebinar.lunchvoting.util.exception.ErrorType.*;
 
 @RestControllerAdvice(annotations = RestController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
     private static final Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
-
-  //  public static final String EXCEPTION_DUPLICATE_EMAIL = "exception user duplicateEmail";
-  //  public static final String EXCEPTION_DUPLICATE_DATETIME = "exception meal duplicateDateTime";
 
     private static final Map<String, String> CONSTRAINS_I18N_MAP = Map.of(
             "users_unique_email_idx", "exception user duplicateEmail",
@@ -51,7 +42,7 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
-        Throwable throwable= ValidationUtil.getRootCause(e);
+        Throwable throwable = ValidationUtil.getRootCause(e);
         String rootMsg = throwable.getMessage();
         if (rootMsg != null) {
             String lowerCaseMsg = rootMsg.toLowerCase();
@@ -72,7 +63,7 @@ public class ExceptionInfoHandler {
                 ((BindException) e).getBindingResult() : ((MethodArgumentNotValidException) e).getBindingResult();
 
         String[] details = result.getFieldErrors().stream()
-                .map(key -> String.format("[Field %s %s]", key.getField(),key.getDefaultMessage()))
+                .map(key -> String.format("[Field %s %s]", key.getField(), key.getDefaultMessage()))
                 .toArray(String[]::new);
 
         return logAndGetErrorInfo(req, e, false, "VALIDATION_ERROR", details);
@@ -93,7 +84,7 @@ public class ExceptionInfoHandler {
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
     private ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, String errorType, String... details) {
         Throwable rootCause = ValidationUtil.logAndGetRootCause(log, req, e, logException, errorType);
-        return new ErrorInfo(req.getRequestURL(), errorType ,
+        return new ErrorInfo(req.getRequestURL(), errorType,
                 details.length != 0 ? details : new String[]{ValidationUtil.getMessage(rootCause)});
     }
 }

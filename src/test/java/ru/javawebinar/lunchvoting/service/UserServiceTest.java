@@ -64,7 +64,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     void getByEmail() {
         User user = service.getByEmail("admin@mail.ru");
-        //  USER_MATCHER.assertMatch(user, 100);
+        assertEquals(user, ADMIN);
     }
 
     @Test

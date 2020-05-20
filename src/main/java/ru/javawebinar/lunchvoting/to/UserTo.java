@@ -1,9 +1,6 @@
 package ru.javawebinar.lunchvoting.to;
 
-import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.SafeHtml;
-//import ru.javawebinar.lunchvoting.HasIdAndEmail;
-//import ru.javawebinar.lunchvoting.util.UserUtil;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-public class UserTo  implements Serializable {
+public class UserTo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull

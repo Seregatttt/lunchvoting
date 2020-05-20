@@ -8,10 +8,8 @@ import ru.javawebinar.lunchvoting.service.UserService;
 
 import java.util.List;
 
+import static ru.javawebinar.lunchvoting.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNew;
-
-//import static ru.javawebinar.lunchvoting.util.ValidationUtil.assureIdConsistent;
-//import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNew;
 
 public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -42,7 +40,7 @@ public abstract class AbstractUserController {
 
     public void update(User user, int id) {
         log.info("update {} with id={}", user, id);
-      //  assureIdConsistent(user, id);
+        assureIdConsistent(user, id);
         service.update(user);
     }
 
