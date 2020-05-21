@@ -1,7 +1,5 @@
 package ru.javawebinar.lunchvoting.model;
 
-//import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -16,7 +14,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
-//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @NamedQueries({
         @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
         @NamedQuery(name = User.BY_EMAIL, query = "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=?1"),
@@ -29,11 +27,8 @@ public class User implements HasId {
 
     @Id
     @SequenceGenerator(name = "global_seq_users", sequenceName = "global_seq_users", allocationSize = 1, initialValue = START_USERS_SEQ)
-    //    @Column(name = "id", unique = true, nullable = false, columnDefinition = "integer default nextval('global_seq')")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_users")
     protected Integer id;
-//  See https://hibernate.atlassian.net/browse/HHH-3718 and https://hibernate.atlassian.net/browse/HHH-12034
-//  Proxy initialization when accessing its identifier managed now by JPA_PROXY_COMPLIANCE setting
 
     @NotBlank
     @Size(min = 2, max = 100)
@@ -53,11 +48,9 @@ public class User implements HasId {
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 100)
-    // https://stackoverflow.com/a/12505165/548473
-   // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-   // @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique_idx")})

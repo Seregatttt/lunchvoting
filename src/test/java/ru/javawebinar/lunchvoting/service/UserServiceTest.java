@@ -2,6 +2,7 @@ package ru.javawebinar.lunchvoting.service;
 
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -28,7 +29,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Autowired
     private CacheManager cacheManager;
 
-    @Before("")
+    @BeforeEach
     public void setUp() throws Exception {
         cacheManager.getCache("users").clear();
     }

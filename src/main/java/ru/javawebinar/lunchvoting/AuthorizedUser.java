@@ -2,7 +2,7 @@ package ru.javawebinar.lunchvoting;
 
 import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.to.UserTo;
-import ru.javawebinar.lunchvoting.util.UserUtil;
+import ru.javawebinar.lunchvoting.util.ToUtil;
 
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
     private static final long serialVersionUID = 1L;
@@ -12,7 +12,7 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
     public AuthorizedUser(User user) {
         super(user.getEmail(), user.getPassword(), true, true,
                 true, true, user.getRoles());
-        this.userTo = UserUtil.asTo(user);
+        this.userTo = ToUtil.asTo(user);
     }
 
     public int getId() {
