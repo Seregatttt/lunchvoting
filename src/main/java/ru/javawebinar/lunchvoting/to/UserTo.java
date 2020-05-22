@@ -1,28 +1,22 @@
 package ru.javawebinar.lunchvoting.to;
 
-import org.hibernate.validator.constraints.SafeHtml;
+import ru.javawebinar.lunchvoting.HasId;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-public class UserTo implements Serializable {
+public class UserTo extends BaseTo implements HasId, Serializable {
     private static final long serialVersionUID = 1L;
-
-    @NotNull
-    protected Integer id;
 
     @NotBlank
     @Size(min = 2, max = 100)
-    @SafeHtml
     private String name;
 
     @Email
     @NotBlank
     @Size(max = 100)
-    @SafeHtml // https://stackoverflow.com/questions/17480809
     private String email;
 
     @NotBlank
@@ -37,14 +31,6 @@ public class UserTo implements Serializable {
         this.name = name;
         this.email = email;
         this.password = password;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getPassword() {

@@ -3,8 +3,12 @@ package ru.javawebinar.lunchvoting.web.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindException;
+import ru.javawebinar.lunchvoting.HasId;
 import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.service.UserService;
+import ru.javawebinar.lunchvoting.to.UserTo;
+import ru.javawebinar.lunchvoting.util.UserUtil;
 
 import java.util.List;
 
@@ -15,7 +19,7 @@ public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     public List<User> getAll() {
         log.info("getAll");
@@ -33,6 +37,11 @@ public abstract class AbstractUserController {
         return service.create(user);
     }
 
+    public User create(UserTo userTo) {
+        log.info("create from to {}", userTo);
+        return create(UserUtil.createNewFromTo(userTo));
+    }
+
     public void delete(int id) {
         log.info("delete {}", id);
         service.delete(id);
@@ -44,8 +53,25 @@ public abstract class AbstractUserController {
         service.update(user);
     }
 
+    public void update(UserTo userTo, int id) {
+        log.info("update {} with id={}", userTo, id);
+        assureIdConsistent(userTo, id);
+        //checkModificationAllowed(id);
+        service.update(userTo);
+    }
+
     public User getByMail(String email) {
         log.info("getByEmail {}", email);
         return service.getByEmail(email);
+    }
+
+    protected void checkAndValidateForUpdate(HasId user, int id) throws BindException {
+        log.info("update {} with id={}", user, id);
+        assureIdConsistent(user, id);
+        // checkModificationAllowed(id);
+        // binder.validate();
+        //   if (binder.getBindingResult().hasErrors()) {
+        //      throw new BindException(binder.getBindingResult());
+        //   }
     }
 }

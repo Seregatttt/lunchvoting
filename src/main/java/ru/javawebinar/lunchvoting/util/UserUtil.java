@@ -4,7 +4,7 @@ import ru.javawebinar.lunchvoting.model.Role;
 import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.to.UserTo;
 
-public class ToUtil {
+public class UserUtil {
 
     public static UserTo asTo(User user) {
         return new UserTo(user.getId(), user.getName(), user.getEmail(), user.getPassword());
@@ -20,4 +20,6 @@ public class ToUtil {
         user.setPassword(userTo.getPassword());
         return user;
     }
+
+
 }

@@ -9,10 +9,13 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.lunchvoting.AuthorizedUser;
 import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.repository.UserRepository;
+import ru.javawebinar.lunchvoting.to.UserTo;
+import ru.javawebinar.lunchvoting.util.UserUtil;
 
 import java.util.List;
 
@@ -66,6 +69,13 @@ public class UserService implements UserDetailsService {
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
         repository.save(user);
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
+    @Transactional
+    public void update(UserTo userTo) {
+        User user = get(userTo.getId());
+        repository.save(UserUtil.updateFromTo(user, userTo));
     }
 
     @Override
