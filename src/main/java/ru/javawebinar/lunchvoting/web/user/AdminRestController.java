@@ -17,6 +17,15 @@ public class AdminRestController extends AbstractUserController {
 
     static final String REST_ADMIN_USERS = "/rest/admin/users";
 
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
+        User created = super.create(user);
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_ADMIN_USERS + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(created);
+    }
+
     @GetMapping
     public List<User> getAll() {
         return super.getAll();
@@ -28,20 +37,9 @@ public class AdminRestController extends AbstractUserController {
         return super.get(id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
-        User created = super.create(user);
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_ADMIN_USERS + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(created);
-    }
-
-    @Override
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
-           super.delete(id);
+    @GetMapping("/by")
+    public User getByMail(@RequestParam String email) {
+        return super.getByMail(email);
     }
 
     @Override
@@ -51,8 +49,10 @@ public class AdminRestController extends AbstractUserController {
         super.update(user, id);
     }
 
-    @GetMapping("/by")
-    public User getByMail(@RequestParam String email) {
-        return super.getByMail(email);
+    @Override
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int id) {
+        super.delete(id);
     }
 }

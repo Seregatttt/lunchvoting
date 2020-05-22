@@ -19,18 +19,6 @@ import java.net.URI;
 public class ProfileRestController extends AbstractUserController {
     static final String REST_URL = "/rest/profile";
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
-        AuthorizedUser authorizedUser = authUser;
-        return super.get(authorizedUser.getId());
-    }
-
-    @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal AuthorizedUser authUser) {
-        super.delete(authUser.getId());
-    }
-
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
@@ -40,10 +28,22 @@ public class ProfileRestController extends AbstractUserController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
+        AuthorizedUser authorizedUser = authUser;
+        return super.get(authorizedUser.getId());
+    }
+
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal AuthorizedUser authUser) throws BindException {
         checkAndValidateForUpdate(userTo, authUser.getId());
         service.update(userTo);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@AuthenticationPrincipal AuthorizedUser authUser) {
+        super.delete(authUser.getId());
     }
 }
