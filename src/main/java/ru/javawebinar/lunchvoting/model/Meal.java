@@ -7,9 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import ru.javawebinar.lunchvoting.HasId;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 //@NamedQueries({
@@ -42,7 +40,7 @@ public class Meal implements HasId {
     private String name;
 
     @NotNull
-    @Size(min = 0)
+    @DecimalMin("0.01")
     @Column(name = "price", nullable = false)
     protected float price;
 
