@@ -1,8 +1,10 @@
 package ru.javawebinar.lunchvoting.service;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import ru.javawebinar.lunchvoting.model.Meal;
 import ru.javawebinar.lunchvoting.repository.MealRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
@@ -20,11 +22,20 @@ public class MealServiceTest extends AbstractServiceTest {
     public static final Meal MEAL1 = new Meal(1003, "cake", 1.05f);//(10001, 'cake', 1.05), menu= (11, '2020-05-01'),--10001
     public static final Meal MEAL2 = new Meal(1004, "tea", 3.05f);//(10001, 'tea', 3.05),
     public static final List<Meal> MEALS = List.of(MEAL1, MEAL2);
+
     @Autowired
     protected MealService service;
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     private MealRepository repository;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        cacheManager.getCache("users").clear();
+    }
 
     @Test
     void create() throws Exception {
@@ -33,12 +44,12 @@ public class MealServiceTest extends AbstractServiceTest {
         int newId = created.id();
         newMeal.setId(newId);
         MEAL_MATCHER.assertMatch(created, newMeal);
-        //  MEAL_MATCHER.assertMatch(service.get(newId, USER_ID), newMeal);
+        MEAL_MATCHER.assertMatch(service.get(newId, MENU_ID_MEAL1_ID), newMeal);
     }
 
     @Test
     void getAll() throws Exception {
-        List<Meal> meals = service.getAll(MEAL1_ID);
+        List<Meal> meals = service.getAll(MENU_ID_MEAL1_ID);
         assertEquals(meals.size(), 2);
         MEAL_MATCHER.assertMatch(meals, MEALS);
     }
@@ -63,19 +74,15 @@ public class MealServiceTest extends AbstractServiceTest {
 
     @Test
     void update() throws Exception {
-        Meal updated = new Meal(1001, "update salad", 555);
+        Meal updated = new Meal(MEAL1_ID, "update salad", 555f);
         service.update(updated, 10001);
-        // MEAL_MATCHER.assertMatch(service.get(MEAL1_ID, USER_ID), updated);
+        MEAL_MATCHER.assertMatch(service.get(MEAL1_ID, 10001), updated);
     }
 
     @Test
     void updateNotFound() throws Exception {
         NotFoundException ex = assertThrows(NotFoundException.class,
-                () -> service.update(MEAL1, 10001));
-        String msg = ex.getMessage();
-        // assertTrue(msg.contains(ErrorType.DATA_NOT_FOUND.name()));
-        // assertTrue(msg.contains(NotFoundException.NOT_FOUND_EXCEPTION));
-        //  assertTrue(msg.contains(String.valueOf(MEAL1_ID)));
+                () -> service.update(MEAL1, 11));
     }
 
     @Test

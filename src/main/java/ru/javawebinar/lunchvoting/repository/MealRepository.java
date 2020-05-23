@@ -4,18 +4,17 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.lunchvoting.model.Meal;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public class MealRepository {
 
     private final CrudMealRepository crudMealRepository;
-   // private final CrudUserRepository crudMenuRepository;
+    private final CrudMenuRepository crudMenuRepository;
 
-    public MealRepository(CrudMealRepository crudMealRepository, CrudUserRepository crudUserRepository) {
+    public MealRepository(CrudMealRepository crudMealRepository, CrudMenuRepository crudMenuRepository) {
         this.crudMealRepository = crudMealRepository;
-    //    this.crudUserRepository = crudUserRepository;
+        this.crudMenuRepository = crudMenuRepository;
     }
 
     @Transactional
@@ -23,12 +22,8 @@ public class MealRepository {
         if (!meal.isNew() && get(meal.id(), menuId) == null) {
             return null;
         }
-      //  meal.setMenu(crudMenuRepository.getOne(menuId));
+        meal.setMenu(crudMenuRepository.getOne(menuId));
         return crudMealRepository.save(meal);
-    }
-
-    public boolean delete(int id, int menuId) {
-        return crudMealRepository.delete(id, menuId) != 0;
     }
 
     public Meal get(int id, int menuId) {
@@ -41,6 +36,10 @@ public class MealRepository {
 
     public Meal getWithMenu(int id, int menuId) {
         return crudMealRepository.getWithMenu(id, menuId);
+    }
+
+    public boolean delete(int id, int menuId) {
+        return crudMealRepository.delete(id, menuId) != 0;
     }
     //    public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
 //        return crudMealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
