@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.lunchvoting.model.User;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 public interface CrudUserRepository extends JpaRepository<User, Integer> {
     @Transactional
@@ -17,8 +19,10 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
 
     User getByEmail(String email);
 
-    //TODO    https://stackoverflow.com/a/46013654/548473
-    @EntityGraph(attributePaths = {"meals"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT u FROM User u WHERE u.id=?1")
-    User getWithMeals(int id);
+    // https://stackoverflow.com/a/46013654/548473
+  //  @EntityGraph(attributePaths = {"votes"}, type = EntityGraph.EntityGraphType.LOAD)
+   // @Query("SELECT u FROM Vote u WHERE u.id=?1")
+  //  User getWithVotes(int id);
+
+
 }

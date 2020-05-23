@@ -15,11 +15,11 @@ import java.util.EnumSet;
 import java.util.Set;
 
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@NamedQueries({
-        @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
-        @NamedQuery(name = User.BY_EMAIL, query = "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=?1"),
-        @NamedQuery(name = User.ALL_SORTED, query = "SELECT u FROM User u ORDER BY u.name, u.email"),
-})
+//@NamedQueries({
+//        @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
+//        @NamedQuery(name = User.BY_EMAIL, query = "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=?1"),
+//        @NamedQuery(name = User.ALL_SORTED, query = "SELECT u FROM User u ORDER BY u.name, u.email"),
+//})
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User implements HasId {
@@ -35,9 +35,9 @@ public class User implements HasId {
     @Column(name = "name", nullable = false)
     protected String name;
 
-    public static final String DELETE = "User.delete";
-    public static final String BY_EMAIL = "User.getByEmail";
-    public static final String ALL_SORTED = "User.getAllSorted";
+//    public static final String DELETE = "User.delete";
+//    public static final String BY_EMAIL = "User.getByEmail";
+//    public static final String ALL_SORTED = "User.getAllSorted";
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
