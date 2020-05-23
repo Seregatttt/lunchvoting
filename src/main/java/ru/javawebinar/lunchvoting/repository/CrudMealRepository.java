@@ -1,4 +1,4 @@
-package ru.javawebinar.lunchvoting.repository.datajpa;
+package ru.javawebinar.lunchvoting.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
