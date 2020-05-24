@@ -2,6 +2,7 @@ package ru.javawebinar.lunchvoting.repository;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Restaurant;
 
 import java.util.List;
@@ -32,8 +33,7 @@ public class RestRepository {
         return crudRepository.findAll(SORT);
     }
 
-    //  @Override
-    //  public User getWithMeals(int id) {
-    //      return crudRepository.getWithMeals(id);
-    //  }
+    public Restaurant getWithMenus(int id) {
+        return crudRepository.getWithMenus(id);
+    }
 }

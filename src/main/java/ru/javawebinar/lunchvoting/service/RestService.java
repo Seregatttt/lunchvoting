@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Restaurant;
 import ru.javawebinar.lunchvoting.repository.RestRepository;
 
@@ -52,6 +53,10 @@ public class RestService {
     public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, "user must not be null");
         repository.save(restaurant);
+    }
+
+    public Restaurant getWithMenus(int id) {
+        return checkNotFoundWithId(repository.getWithMenus(id), id);
     }
 
 //    @CacheEvict(value = "users", allEntries = true)
