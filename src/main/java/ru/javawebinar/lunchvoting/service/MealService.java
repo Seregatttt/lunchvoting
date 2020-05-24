@@ -40,7 +40,7 @@ public class MealService {
         return repository.save(meal, menuId);
     }
 
-    public Meal getWithUser(int id, int menuId) {
+    public Meal getWithMenu(int id, int menuId) {
         return checkNotFoundWithId(repository.getWithMenu(id, menuId), id);
     }
 }

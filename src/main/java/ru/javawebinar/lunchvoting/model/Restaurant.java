@@ -38,8 +38,8 @@ public class Restaurant implements HasId {
     @Size(min = 5, max = 100)
     private String address;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Menu> menus;
+   // @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
+   // private List<Menu> menus;
 
     public Restaurant() {
     }
@@ -78,13 +78,13 @@ public class Restaurant implements HasId {
         this.address = address;
     }
 
-    public List<Menu> getMenus() {
-        return menus;
-    }
-
-    public void setMenus(List<Menu> menus) {
-        this.menus = menus;
-    }
+//    public List<Menu> getMenus() {
+//        return menus;
+//    }
+//
+//    public void setMenus(List<Menu> menus) {
+//        this.menus = menus;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -105,7 +105,7 @@ public class Restaurant implements HasId {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", menus=" + menus +
+               // ", menus=" + menus +
                 '}';
     }
 }

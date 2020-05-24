@@ -1,5 +1,7 @@
 package ru.javawebinar.lunchvoting.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.lunchvoting.model.Meal;
@@ -8,7 +10,7 @@ import java.util.List;
 
 @Repository
 public class MealRepository {
-
+    protected final Logger log = LoggerFactory.getLogger(getClass());
     private final CrudMealRepository crudMealRepository;
     private final CrudMenuRepository crudMenuRepository;
 
@@ -35,7 +37,8 @@ public class MealRepository {
     }
 
     public Meal getWithMenu(int id, int menuId) {
-        return crudMealRepository.getWithMenu(id, menuId);
+        log.debug("id={} menuId={}",id,menuId);
+        return crudMealRepository.getWithMenu(id);
     }
 
     public boolean delete(int id, int menuId) {

@@ -30,13 +30,16 @@ public class Menu implements HasId {
     @Id
     @SequenceGenerator(name = "global_seq_menus", sequenceName = "global_seq_menus", allocationSize = 1, initialValue = START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_menus")
-    protected Integer id;
+    private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rest_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
-    protected Restaurant restaurant;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "rest_id", nullable = false)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @NotNull
+//    protected Restaurant restaurant;
+
+    @Column(name = "rest_id", nullable = false)
+    private int  restId;
 
     @Column(name = "date_menu", nullable = false)
     @NotBlank
@@ -49,9 +52,29 @@ public class Menu implements HasId {
     public Menu() {
     }
 
+    public Menu(Menu m) {
+        this.id = m.getId();
+        this.restId = m.getRestId();
+        this.dateMenu = m.getDateMenu();
+    }
+
     public Menu(Integer id, LocalDate dateMenu) {
         this.id = id;
         this.dateMenu = dateMenu;
+    }
+
+    public Menu(Integer id,int  restId,LocalDate dateMenu) {
+        this.id = id;
+        this.restId=restId;
+        this.dateMenu = dateMenu;
+    }
+
+    public int getRestId() {
+        return restId;
+    }
+
+    public void setRestId(int restId) {
+        this.restId = restId;
     }
 
     public void setId(Integer id) {
@@ -62,13 +85,13 @@ public class Menu implements HasId {
         return id;
     }
 
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
+//    public Restaurant getRestaurant() {
+//        return restaurant;
+//    }
+//
+//    public void setRestaurant(Restaurant restaurant) {
+//        this.restaurant = restaurant;
+//    }
 
     public List<Meal> getMeals() {
         return meals;
@@ -103,9 +126,8 @@ public class Menu implements HasId {
     public String toString() {
         return "Menu{" +
                 "id=" + id +
-                ", restaurant=" + restaurant +
+                ", restId=" + restId +
                 ", dateMenu=" + dateMenu +
-                ", meals=" + meals +
                 '}';
     }
 }

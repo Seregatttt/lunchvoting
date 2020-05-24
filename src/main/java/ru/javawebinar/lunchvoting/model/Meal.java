@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.javawebinar.lunchvoting.HasId;
+import ru.javawebinar.lunchvoting.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -26,13 +27,7 @@ public class Meal implements HasId {
     @Id
     @SequenceGenerator(name = "global_seq_meals", sequenceName = "global_seq_meals", allocationSize = 1, initialValue = START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_meals")
-    protected Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
-    protected Menu menu;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     @NotBlank
@@ -42,7 +37,13 @@ public class Meal implements HasId {
     @NotNull
     @DecimalMin("0.01")
     @Column(name = "price", nullable = false)
-    protected float price;
+    private float price;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull(groups = View.Persist.class)
+    private Menu menu;
 
     public Meal() {
     }
@@ -61,14 +62,6 @@ public class Meal implements HasId {
         return id;
     }
 
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
-
     public String getName() {
         return name;
     }
@@ -85,17 +78,12 @@ public class Meal implements HasId {
         this.price = price;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Meal meal = (Meal) o;
-        return id.equals(meal.id);
+    public Menu getMenu() {
+        return menu;
     }
 
-    @Override
-    public int hashCode() {
-        return id == null ? 0 : id;
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 
     @Override

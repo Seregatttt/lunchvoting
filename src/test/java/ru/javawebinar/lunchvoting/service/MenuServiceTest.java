@@ -30,6 +30,9 @@ public class MenuServiceTest extends AbstractServiceTest {
     public static final Menu MENU3 = new Menu(MENU3_ID,  of(2020, Month.MAY, 02));
     public static final Menu MENU6 = new Menu(MENU6_ID,  of(2020, Month.MAY, 03));
     public static final List<Menu> MENUS = List.of(MENU, MENU3,MENU6);
+    public static final Meal MEAL1 = new Meal(1000, "Salad", 5.50f);
+    public static final Meal MEAL2 = new Meal(1001, "juice", 4.50f);
+    public static final Meal MEAL3 = new Meal(1002, "soup", 3.05f);
 
     @Autowired
     protected MenuService service;
@@ -66,6 +69,14 @@ public class MenuServiceTest extends AbstractServiceTest {
     void get() throws Exception {
         Menu actual = service.get(MENU_ID, REST_ID_MENU);
         MENU_MATCHER.assertMatch(actual, MENU);
+    }
+
+    @Test
+    void getWithMeals() throws Exception {
+        Menu actual = service.getWithMeal(MENU_ID, REST_ID_MENU);
+        MENU_MATCHER.assertMatch(actual, new Menu(MENU_ID, 10, of(2020, Month.MAY, 01)));
+        List<Meal> meals = List.of(MEAL1,MEAL2,MEAL3);
+        MEAL_MATCHER.assertMatch(actual.getMeals(), meals);
     }
 
     @Test

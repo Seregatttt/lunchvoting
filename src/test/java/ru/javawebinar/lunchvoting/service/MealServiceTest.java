@@ -6,19 +6,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import ru.javawebinar.lunchvoting.model.Meal;
+import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.repository.MealRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
+import java.time.Month;
 import java.util.List;
 
+import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.lunchvoting.TestData.MEAL_MATCHER;
+import static ru.javawebinar.lunchvoting.TestData.MENU_MATCHER;
 
 
 public class MealServiceTest extends AbstractServiceTest {
     public static final int MEAL1_ID = 1003;
     public static final int MENU_ID_MEAL1_ID = 10001;
+    public static final Menu MENU1 = new Menu(MENU_ID_MEAL1_ID,  of(2020, Month.MAY, 01));
     public static final Meal MEAL1 = new Meal(1003, "cake", 1.05f);//(10001, 'cake', 1.05), menu= (11, '2020-05-01'),--10001
     public static final Meal MEAL2 = new Meal(1004, "tea", 3.05f);//(10001, 'tea', 3.05),
     public static final List<Meal> MEALS = List.of(MEAL1, MEAL2);
@@ -27,10 +32,10 @@ public class MealServiceTest extends AbstractServiceTest {
     protected MealService service;
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    private MealRepository repository;
+    protected MealRepository repository;
 
     @Autowired
-    private CacheManager cacheManager;
+    protected CacheManager cacheManager;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -58,6 +63,13 @@ public class MealServiceTest extends AbstractServiceTest {
     void get() throws Exception {
         Meal actual = service.get(MEAL1_ID, MENU_ID_MEAL1_ID);
         MEAL_MATCHER.assertMatch(actual, MEAL1);
+    }
+
+    @Test
+    void getWithMenu() throws Exception {
+        Meal actual = service.getWithMenu(MEAL1_ID, MENU_ID_MEAL1_ID);
+        MEAL_MATCHER.assertMatch(actual, MEAL1);
+        MENU_MATCHER.assertMatch(actual.getMenu(), MENU1);
     }
 
     @Test

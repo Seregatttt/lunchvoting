@@ -14,7 +14,7 @@ public class TestData {
             = TestMatcher.usingFieldsComparator(Meal.class, "menu");
 
     public static TestMatcher<Menu> MENU_MATCHER
-            = TestMatcher.usingFieldsComparator(Menu.class, "restaurant");
+            = TestMatcher.usingFieldsComparator(Menu.class, "restaurant","meals","restId");
 
     public static String jsonWithPassword(User user, String passw) {
         return JsonUtil.writeAdditionProps(user, "password", passw);

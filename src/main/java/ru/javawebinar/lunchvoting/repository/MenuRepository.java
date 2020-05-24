@@ -30,16 +30,20 @@ public class MenuRepository {
         return crudMenuRepository.delete(id, menuId) != 0;
     }
 
+//    public Menu get(int id, int menuId) {
+//        return crudMenuRepository.findById(id).filter(menu -> menu.getRestaurant().getId() == menuId).orElse(null);
+//    }
+
     public Menu get(int id, int menuId) {
-        return crudMenuRepository.findById(id).filter(menu -> menu.getRestaurant().getId() == menuId).orElse(null);
+        return crudMenuRepository.findById(id).orElse(null);
     }
 
     public List<Menu> getAll(int menuId) {
         return crudMenuRepository.getAll(menuId);
     }
 
-    public Menu getWithMenu(int id, int menuId) {
-        return crudMenuRepository.getWithMenu(id, menuId);
+    public Menu getWithMeal(int id, int menuId) {
+        return crudMenuRepository.getWithMeals(id);
     }
     //    public List<Menu> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
 //        return crudMealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
