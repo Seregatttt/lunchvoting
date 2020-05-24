@@ -1,9 +1,6 @@
 package ru.javawebinar.lunchvoting;
 
-import ru.javawebinar.lunchvoting.model.Meal;
-import ru.javawebinar.lunchvoting.model.Menu;
-import ru.javawebinar.lunchvoting.model.Role;
-import ru.javawebinar.lunchvoting.model.User;
+import ru.javawebinar.lunchvoting.model.*;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
 public class TestData {
@@ -14,7 +11,10 @@ public class TestData {
             = TestMatcher.usingFieldsComparator(Meal.class, "menu");
 
     public static TestMatcher<Menu> MENU_MATCHER
-            = TestMatcher.usingFieldsComparator(Menu.class, "restaurant","meals","restId");
+            = TestMatcher.usingFieldsComparator(Menu.class, "restaurant","meals");
+
+    public static TestMatcher<Restaurant> REST_MATCHER
+            = TestMatcher.usingFieldsComparator(Restaurant.class, "menus");
 
     public static String jsonWithPassword(User user, String passw) {
         return JsonUtil.writeAdditionProps(user, "password", passw);

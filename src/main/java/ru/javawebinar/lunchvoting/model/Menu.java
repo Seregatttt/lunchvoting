@@ -7,43 +7,31 @@ import org.hibernate.annotations.OnDeleteAction;
 import ru.javawebinar.lunchvoting.HasId;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-//@NamedQueries({
-//        @NamedQuery(name = Menu.DELETE, query = "DELETE FROM Menu t WHERE t.id=:id"),
-//        //  @NamedQuery(name = Restaurant.BY_MENU, query = "SELECT DISTINCT t FROM Restaurant t LEFT JOIN FETCH t.menus WHERE u.email=?1"),
-//        @NamedQuery(name = Menu.ALL_SORTED, query = "SELECT t FROM Menu t ORDER BY t.id"),
-//})
 @Entity
 @Table(name = "menus")
 public class Menu implements HasId {
     public static final int START_SEQ = 10000;
-//    public static final String DELETE = "Menu.delete";
-//    public static final String BY_MEALS = "Menu.getByMeals";
-//    public static final String ALL_SORTED = "Menu.getAllSorted";
 
     @Id
     @SequenceGenerator(name = "global_seq_menus", sequenceName = "global_seq_menus", allocationSize = 1, initialValue = START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_menus")
     private Integer id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "rest_id", nullable = false)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @NotNull
-//    protected Restaurant restaurant;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rest_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
+    private Restaurant restaurant;
 
-    @Column(name = "rest_id", nullable = false)
-    private int  restId;
+    //@Column(name = "rest_id", nullable = false)
+    // private int  restId;
 
     @Column(name = "date_menu", nullable = false)
-    @NotBlank
-    @Size(min = 5, max = 100)
     private LocalDate dateMenu;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -54,7 +42,6 @@ public class Menu implements HasId {
 
     public Menu(Menu m) {
         this.id = m.getId();
-        this.restId = m.getRestId();
         this.dateMenu = m.getDateMenu();
     }
 
@@ -63,19 +50,19 @@ public class Menu implements HasId {
         this.dateMenu = dateMenu;
     }
 
-    public Menu(Integer id,int  restId,LocalDate dateMenu) {
+    public Menu(Integer id, Restaurant rest, LocalDate dateMenu) {
         this.id = id;
-        this.restId=restId;
+        this.restaurant = rest;
         this.dateMenu = dateMenu;
     }
 
-    public int getRestId() {
-        return restId;
-    }
-
-    public void setRestId(int restId) {
-        this.restId = restId;
-    }
+//    public int getRestId() {
+//        return restId;
+//    }
+//
+//    public void setRestId(int restId) {
+//        this.restId = restId;
+//    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -85,13 +72,13 @@ public class Menu implements HasId {
         return id;
     }
 
-//    public Restaurant getRestaurant() {
-//        return restaurant;
-//    }
-//
-//    public void setRestaurant(Restaurant restaurant) {
-//        this.restaurant = restaurant;
-//    }
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 
     public List<Meal> getMeals() {
         return meals;
@@ -126,7 +113,6 @@ public class Menu implements HasId {
     public String toString() {
         return "Menu{" +
                 "id=" + id +
-                ", restId=" + restId +
                 ", dateMenu=" + dateMenu +
                 '}';
     }

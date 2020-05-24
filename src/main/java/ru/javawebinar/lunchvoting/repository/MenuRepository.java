@@ -10,11 +10,11 @@ import java.util.List;
 public class MenuRepository {
 
     private final CrudMenuRepository crudMenuRepository;
-    // private final CrudUserRepository crudMenuRepository;
+    private final CrudRestRepository crudRestRepository;
 
-    public MenuRepository(CrudMenuRepository crudMenuRepository, CrudUserRepository crudUserRepository) {
+    public MenuRepository(CrudMenuRepository crudMenuRepository, CrudRestRepository crudRestRepository) {
         this.crudMenuRepository = crudMenuRepository;
-        //    this.crudUserRepository = crudUserRepository;
+        this.crudRestRepository = crudRestRepository;
     }
 
     @Transactional
@@ -22,7 +22,7 @@ public class MenuRepository {
         if (!menu.isNew() && get(menu.id(), restId) == null) {
             return null;
         }
-        //  Menu.setMenu(crudMenuRepository.getOne(menuId));
+        menu.setRestaurant(crudRestRepository.getOne(restId));
         return crudMenuRepository.save(menu);
     }
 
@@ -30,21 +30,22 @@ public class MenuRepository {
         return crudMenuRepository.delete(id, menuId) != 0;
     }
 
-//    public Menu get(int id, int menuId) {
-//        return crudMenuRepository.findById(id).filter(menu -> menu.getRestaurant().getId() == menuId).orElse(null);
-//    }
-
-    public Menu get(int id, int menuId) {
-        return crudMenuRepository.findById(id).orElse(null);
+    public Menu get(int id, int restId) {
+        return crudMenuRepository.findById(id).filter(m -> m.getRestaurant().getId() == restId).orElse(null);
     }
 
     public List<Menu> getAll(int menuId) {
         return crudMenuRepository.getAll(menuId);
     }
 
-    public Menu getWithMeal(int id, int menuId) {
+    public Menu getWithMeals(int id, int menuId) {
         return crudMenuRepository.getWithMeals(id);
     }
+
+    public Menu getWithRest(int id, int restId) {
+        return crudMenuRepository.getWithRest(id, restId);
+    }
+
     //    public List<Menu> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
 //        return crudMealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
 //    }
