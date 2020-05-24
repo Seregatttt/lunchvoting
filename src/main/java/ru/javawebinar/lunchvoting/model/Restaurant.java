@@ -44,7 +44,11 @@ public class Restaurant implements HasId {
     public Restaurant() {
     }
 
-    public Restaurant(Integer id, String name, String email, String address) {
+    public Restaurant(Restaurant r) {
+        this(r.getId(), r.getName(), r.getAddress());
+    }
+
+    public Restaurant(Integer id, String name, String address) {
         this.id = id;
         this.name = name;
         this.address = address;

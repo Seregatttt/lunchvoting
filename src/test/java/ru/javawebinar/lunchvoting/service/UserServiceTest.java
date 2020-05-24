@@ -15,7 +15,7 @@ import java.util.List;
 import static java.util.List.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javawebinar.lunchvoting.UserTestData.*;
+import static ru.javawebinar.lunchvoting.TestData.*;
 
 public class UserServiceTest extends AbstractServiceTest {
 

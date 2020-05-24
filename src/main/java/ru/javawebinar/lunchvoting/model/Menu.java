@@ -49,7 +49,7 @@ public class Menu implements HasId {
     public Menu() {
     }
 
-    public Menu(Integer id, int restId, LocalDate dateMenu) {
+    public Menu(Integer id, LocalDate dateMenu) {
         this.id = id;
         this.dateMenu = dateMenu;
     }

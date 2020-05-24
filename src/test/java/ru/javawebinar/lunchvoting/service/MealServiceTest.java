@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javawebinar.lunchvoting.UserTestData.MEAL_MATCHER;
+import static ru.javawebinar.lunchvoting.TestData.MEAL_MATCHER;
 
 
 public class MealServiceTest extends AbstractServiceTest {
@@ -103,12 +103,6 @@ public class MealServiceTest extends AbstractServiceTest {
                 () -> service.delete(MEAL1_ID, -1));
     }
 
-
-//    @Test
-//    void getBetweenWithNullDates() throws Exception {
-//        MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), MEALS);
-//    }
-
 //    @Test
 //    void createWithException() throws Exception {
 //        validateRootCause(() -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "  ", 300), USER_ID), ConstraintViolationException.class);
@@ -116,12 +110,5 @@ public class MealServiceTest extends AbstractServiceTest {
 //        validateRootCause(() -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Description", 9), USER_ID), ConstraintViolationException.class);
 //        validateRootCause(() -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Description", 5001), USER_ID), ConstraintViolationException.class);
 //    }
-//
-//    @Test
-//    void getBetweenInclusive() throws Exception {
-//        MEAL_MATCHER.assertMatch(service.getBetweenInclusive(
-//                LocalDate.of(2020, Month.JANUARY, 30),
-//                LocalDate.of(2020, Month.JANUARY, 30), USER_ID),
-//                MEAL3, MEAL2, MEAL1);
-//    }
+
 }
