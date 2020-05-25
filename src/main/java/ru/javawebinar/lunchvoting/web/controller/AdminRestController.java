@@ -1,4 +1,4 @@
-package ru.javawebinar.lunchvoting.web.user;
+package ru.javawebinar.lunchvoting.web.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

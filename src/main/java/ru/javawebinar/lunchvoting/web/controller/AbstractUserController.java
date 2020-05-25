@@ -1,9 +1,8 @@
-package ru.javawebinar.lunchvoting.web.user;
+package ru.javawebinar.lunchvoting.web.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindException;
 import ru.javawebinar.lunchvoting.HasId;
 import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.service.UserService;
@@ -65,13 +64,8 @@ public abstract class AbstractUserController {
         return service.getByEmail(email);
     }
 
-    protected void checkAndValidateForUpdate(HasId user, int id) throws BindException {
+    protected void checkAndValidateForUpdate(HasId user, int id) {
         log.info("update {} with id={}", user, id);
         assureIdConsistent(user, id);
-        // checkModificationAllowed(id);
-        // binder.validate();
-        //   if (binder.getBindingResult().hasErrors()) {
-        //      throw new BindException(binder.getBindingResult());
-        //   }
     }
 }

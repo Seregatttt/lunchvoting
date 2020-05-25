@@ -1,4 +1,4 @@
-package ru.javawebinar.lunchvoting.web.user;
+package ru.javawebinar.lunchvoting.web.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
 import static ru.javawebinar.lunchvoting.TestData.*;
-import static ru.javawebinar.lunchvoting.web.user.ProfileRestController.REST_URL;
+import static ru.javawebinar.lunchvoting.web.controller.ProfileRestController.REST_URL;
 
 class ProfileRestControllerTest extends AbstractControllerTest {
 

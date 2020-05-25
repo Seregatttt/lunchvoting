@@ -1,4 +1,4 @@
-package ru.javawebinar.lunchvoting.web.user;
+package ru.javawebinar.lunchvoting.web.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
