@@ -28,6 +28,9 @@ public interface CrudMenuRepository extends JpaRepository<Menu, Integer> {
     @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.id = ?1 and m.restaurant.id = ?2 ")
     Menu getWithRest(int id, int restId);
 
+    @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant LEFT JOIN FETCH m.meals WHERE m.id = ?1 and m.restaurant.id = ?2 ")
+    Menu getWithRestAndMeals(int id, int restId);
+
     //@Query("SELECT m from Meal m WHERE m.user.id=:userId AND m.dateTime >= :startDate AND m.dateTime < :endDate ORDER BY m.dateTime DESC")
     //List<Meal> getBetweenHalfOpen(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") int userId);
 

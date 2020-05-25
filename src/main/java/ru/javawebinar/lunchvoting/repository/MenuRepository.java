@@ -46,7 +46,11 @@ public class MenuRepository {
         return crudMenuRepository.getWithRest(id, restId);
     }
 
+    public Menu getWithRestAndMeals(int id, int restId) {
+        return crudMenuRepository.getWithRestAndMeals(id, restId);
+    }
+
     //    public List<Menu> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
 //        return crudMealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
-//    }
+//    } getWithRestAndMeals
 }

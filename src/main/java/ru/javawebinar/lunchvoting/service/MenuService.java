@@ -50,4 +50,8 @@ public class MenuService {
         return checkNotFoundWithId(repository.getWithRest(id, restId), id);
     }
 
+    public Menu getWithRestAndMeals(int id, int restId) {
+        return checkNotFoundWithId(repository.getWithRestAndMeals(id, restId), id);
+    }
+
 }
