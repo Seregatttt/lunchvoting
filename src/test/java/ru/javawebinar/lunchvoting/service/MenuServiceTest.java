@@ -12,6 +12,7 @@ import ru.javawebinar.lunchvoting.model.Restaurant;
 import ru.javawebinar.lunchvoting.repository.MenuRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
@@ -143,17 +144,15 @@ public class MenuServiceTest extends AbstractServiceTest {
                 () -> service.delete(MENU_ID, -1));
     }
 
+    @Test
+    void getBetweenInclude() throws Exception {
+        MENU_MATCHER.assertMatch(service.getBetweenInclude(
+                LocalDate.of(2020, Month.MAY, 01),
+                LocalDate.of(2020, Month.MAY, 02), 10), List.of(MENU3, MENU));
+    }
 
-//    @Test
-//    void getBetweenWithNullDates() throws Exception {
-//        MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), MEALS);
-//    }
-//
-//    @Test
-//    void getBetweenInclusive() throws Exception {
-//        MEAL_MATCHER.assertMatch(service.getBetweenInclusive(
-//                LocalDate.of(2020, Month.JANUARY, 30),
-//                LocalDate.of(2020, Month.JANUARY, 30), USER_ID),
-//                MEAL3, MEAL2, MEAL1);
-//    }
+    @Test
+    void getBetweenWithNullDates() throws Exception {
+        MENU_MATCHER.assertMatch(service.getBetweenInclude(null, null, 10), List.of(MENU6,MENU3, MENU));
+    }
 }

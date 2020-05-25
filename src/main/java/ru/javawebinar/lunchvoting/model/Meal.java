@@ -5,7 +5,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.javawebinar.lunchvoting.HasId;
-import ru.javawebinar.lunchvoting.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -42,7 +41,7 @@ public class Meal implements HasId {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull(groups = View.Persist.class)
+    @NotNull
     private Menu menu;
 
     public Meal() {

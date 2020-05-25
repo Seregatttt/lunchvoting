@@ -1,12 +1,13 @@
 package ru.javawebinar.lunchvoting.service;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import ru.javawebinar.lunchvoting.model.Meal;
 import ru.javawebinar.lunchvoting.model.Menu;
-import ru.javawebinar.lunchvoting.repository.MealRepository;
 import ru.javawebinar.lunchvoting.repository.MenuRepository;
+import ru.javawebinar.lunchvoting.util.DateUtil;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithId;
@@ -54,4 +55,7 @@ public class MenuService {
         return checkNotFoundWithId(repository.getWithRestAndMeals(id, restId), id);
     }
 
+    public List<Menu> getBetweenInclude(@Nullable LocalDate startDateTime, @Nullable LocalDate endDateTime, int userId) {
+        return repository.getBetweenInclude(DateUtil.atStartOfDayOrMin(startDateTime), DateUtil.atStartOfDayOrMax(endDateTime), userId);
+    }
 }

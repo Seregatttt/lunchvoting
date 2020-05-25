@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.lunchvoting.model.Menu;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -50,7 +51,7 @@ public class MenuRepository {
         return crudMenuRepository.getWithRestAndMeals(id, restId);
     }
 
-    //    public List<Menu> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-//        return crudMealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
-//    } getWithRestAndMeals
+    public List<Menu> getBetweenInclude(LocalDate startDateTime, LocalDate endDateTime, int userId) {
+        return crudMenuRepository.getBetweenInclude(startDateTime, endDateTime, userId);
+    }
 }
