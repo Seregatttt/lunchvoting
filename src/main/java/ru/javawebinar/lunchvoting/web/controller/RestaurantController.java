@@ -21,6 +21,7 @@ import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNew;
 @RequestMapping(value = RestaurantController.REST_ADMIN_RESTAURANTS, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
+
     static final String REST_ADMIN_RESTAURANTS = "/rest/admin/restaurants";
 
     protected final RestService service;

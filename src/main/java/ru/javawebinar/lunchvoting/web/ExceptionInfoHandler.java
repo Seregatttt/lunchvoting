@@ -30,6 +30,7 @@ public class ExceptionInfoHandler {
 
     private static final Map<String, String> CONSTRAINS_I18N_MAP = Map.of(
             "users_unique_email_idx", "exception user duplicateEmail",
+            "menu_date_idx", "exception menu duplicate date",
             "meals_unique_user_datetime_idx", "exception meal duplicateDateTime");
 
     //  http://stackoverflow.com/a/22358422/548473

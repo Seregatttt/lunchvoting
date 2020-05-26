@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.javawebinar.lunchvoting.HasId;
+import ru.javawebinar.lunchvoting.View;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,13 +26,11 @@ public class Menu implements HasId {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rest_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     private Restaurant restaurant;
 
-    //@Column(name = "rest_id", nullable = false)
-    // private int  restId;
-
     @Column(name = "date_menu", nullable = false)
+    @NotNull
     private LocalDate dateMenu;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -55,14 +54,6 @@ public class Menu implements HasId {
         this.restaurant = rest;
         this.dateMenu = dateMenu;
     }
-
-//    public int getRestId() {
-//        return restId;
-//    }
-//
-//    public void setRestId(int restId) {
-//        this.restId = restId;
-//    }
 
     public void setId(Integer id) {
         this.id = id;

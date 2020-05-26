@@ -38,16 +38,16 @@ public class MenuService {
         checkNotFoundWithId(repository.save(menu, restId), menu.id());
     }
 
-    public Menu create(Menu menu, int menuId) {
+    public Menu create(Menu menu, int restId) {
         Assert.notNull(menu, "meal must not be null");
-        return repository.save(menu, menuId);
+        return repository.save(menu, restId);
     }
 
-    public Menu getWithMeals(int id, int menuId) {
-        return checkNotFoundWithId(repository.getWithMeals(id, menuId), id);
+    public Menu getWithMeals(int id, int restId) {
+        return checkNotFoundWithId(repository.getWithMeals(id, restId), id);
     }
 
-     public Menu getWithRest(int id, int restId) {
+    public Menu getWithRest(int id, int restId) {
         return checkNotFoundWithId(repository.getWithRest(id, restId), id);
     }
 

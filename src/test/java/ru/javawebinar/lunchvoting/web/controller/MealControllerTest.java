@@ -7,108 +7,95 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javawebinar.lunchvoting.model.Restaurant;
+import ru.javawebinar.lunchvoting.model.Meal;
+import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Role;
 import ru.javawebinar.lunchvoting.model.User;
-import ru.javawebinar.lunchvoting.service.RestService;
+import ru.javawebinar.lunchvoting.service.MealService;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
+import java.time.Month;
 import java.util.List;
 
+import static java.time.LocalDate.of;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.javawebinar.lunchvoting.TestData.REST_MATCHER;
+import static ru.javawebinar.lunchvoting.TestData.MEAL_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
+import static ru.javawebinar.lunchvoting.web.controller.MenuControllerTest.ADMIN;
 
-class RestaurantControllerTest extends AbstractControllerTest {
-    private static final String REST_ADMIN_RESTAURANTS_URL = RestaurantController.REST_ADMIN_RESTAURANTS + '/';
+class MealControllerTest extends AbstractControllerTest {
+    private static final String REST_MENUS_MEALS_URL = MealController.REST_MENUS_MEALS + '/';
 
-    public static final Restaurant REST = new Restaurant(10, "Celler de Can Roca", "Spain");
-    public static final Restaurant REST1 = new Restaurant(11, "Noma", "Copenhagen");
-    public static final Restaurant REST2 = new Restaurant(12, "Sato", "Mexico");
-    public static final List<Restaurant> RESTAURANTS = List.of(REST, REST1, REST2);
-    public static final User ADMIN = new User(100, "Admin", "admin@mail.ru", "password", Role.ROLE_ADMIN);
+    public static final Menu MENU1 = new Menu(1001, of(2020, Month.MAY, 01));
+    public static final Meal MEAL3 = new Meal(1003, "cake", 1.05f);
+    public static final Meal MEAL4 = new Meal(1004, "tea", 3.05f);
     public static final User USER = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
-    public static final Restaurant UPDATE_REST_NEW_ADDR = new Restaurant(10, "Celler de Can Roca", "newAdr");
 
     @Autowired
-    private RestService restService;
+    private MealService service;
 
     @Test
     void createWithLocation() throws Exception {
-        Restaurant newCreate = new Restaurant(null, "new_rest", "new_addr");
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL)
+        Meal newCreate = new Meal(null, "super-tea", 999.05f);
+        ResultActions action = perform(MockMvcRequestBuilders.post("/rest/admin/menus/10001/meals")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isCreated())
                 .andDo(print());
 
-        Restaurant created = readFromJson(action, Restaurant.class);
+        Meal created = readFromJson(action, Meal.class);
         int newId = created.getId();
         newCreate.setId(newId);
-        REST_MATCHER.assertMatch(created, newCreate);
-        REST_MATCHER.assertMatch(restService.get(newId), newCreate);
+        MEAL_MATCHER.assertMatch(created, newCreate);
+        MEAL_MATCHER.assertMatch(service.get(newId, 10001), newCreate);
     }
 
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void createNewRestWithId() throws Exception {
-        Restaurant newCreate = new Restaurant(10, "new_rest", "new_addr");
-        perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL)
+        Meal newCreate = new Meal(1233, "super-tea", 999.05f);
+        perform(MockMvcRequestBuilders.post("/rest/admin/menus/10001/meals")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
-                .andExpect(jsonPath("$.details", hasItem("Restaurant must be new (id=null)")))
-                .andDo(print());
-    }
-
-    @Test
-    void createInvalid() throws Exception {
-        Restaurant newCreate = new Restaurant(null, " ", null);
-        perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
-                .content(JsonUtil.writeValue(newCreate)))
-                .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
-                .andExpect(jsonPath("$.details", hasItem("[Field address must not be blank]")))
-                .andExpect(jsonPath("$.details", hasItem("[Field name size must be between 2 and 100]")))
+                .andExpect(jsonPath("$.details", hasItem("Meal must be new (id=null)")))
                 .andDo(print());
     }
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL)
+        perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(REST_MATCHER.contentJson(RESTAURANTS))
+                .andExpect(MEAL_MATCHER.contentJson(List.of(MEAL3, MEAL4)))
                 .andDo(print());
     }
 
     @Test
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + REST.getId())
+        perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals/" + 1003)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(REST_MATCHER.contentJson(REST))
+                .andExpect(MEAL_MATCHER.contentJson(MEAL3))
                 .andDo(print());
     }
 
     @Test
     void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + 1)
+        perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals/" + 2)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
@@ -116,57 +103,55 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL))
+        perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals/" + 1003))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void getForbidden() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL)
+        perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals/" + 1003)
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void update() throws Exception {
-        Restaurant updated = UPDATE_REST_NEW_ADDR;
-        updated.setId(null);
-        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + 10)
+        Meal updated = new Meal(1003, "update salad", 555f);
+        perform(MockMvcRequestBuilders.put("/rest/admin/menus/10001/meals/" + 1003)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
-        updated.setId(10);
-        REST_MATCHER.assertMatch(restService.get(10), updated);
+        MEAL_MATCHER.assertMatch(service.get(1003, 10001), updated);
     }
 
     @Test
     void updateInvalid() throws Exception {
-        Restaurant updated = UPDATE_REST_NEW_ADDR;
-        updated.setName("");
-        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + 10)
+        Meal updated = new Meal(1003, "update salad", 555f);
+        updated.setPrice(0f);
+        perform(MockMvcRequestBuilders.put("/rest/admin/menus/10001/meals/" + 1003)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
-                .andExpect(jsonPath("$.details", hasItem("[Field name size must be between 2 and 100]")))
+                .andExpect(jsonPath("$.details", hasItem("[Field price must be greater than or equal to 0.01]")))
                 .andDo(print());
     }
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + 12)
+        perform(MockMvcRequestBuilders.delete("/rest/admin/menus/10004/meals/" + 1010)
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> restService.get(12));
+        assertThrows(NotFoundException.class, () -> service.get(1010, 10004));
     }
 
     @Test
     void deleteNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + 1)
+        perform(MockMvcRequestBuilders.delete("/rest/admin/menus/10004/meals/" + 99)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());

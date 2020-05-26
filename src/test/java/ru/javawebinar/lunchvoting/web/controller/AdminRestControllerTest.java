@@ -20,9 +20,9 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static ru.javawebinar.lunchvoting.TestData.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.TestData.*;
 
 class AdminRestControllerTest extends AbstractControllerTest {
     private static final String REST_ADMIN_USERS_URL = AdminRestController.REST_ADMIN_USERS + '/';

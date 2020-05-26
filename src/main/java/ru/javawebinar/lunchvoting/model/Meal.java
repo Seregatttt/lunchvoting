@@ -5,23 +5,19 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.javawebinar.lunchvoting.HasId;
+import ru.javawebinar.lunchvoting.View;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-//@NamedQueries({
-//        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal t WHERE t.id=:id"),
-//        //  @NamedQuery(name = Restaurant.BY_MENU, query = "SELECT DISTINCT t FROM Restaurant t LEFT JOIN FETCH t.menus WHERE u.email=?1"),
-//        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT t FROM Meal t ORDER BY t.id"),
-//})
 @Entity
 @Table(name = "meals")
 public class Meal implements HasId {
     public static final int START_SEQ = 1000;
-    //public static final String DELETE = "Menu.delete";
-    // public static final String BY_MEALS = "Menu.getByMeals";
-    //public static final String ALL_SORTED = "Menu.getAllSorted";
 
     @Id
     @SequenceGenerator(name = "global_seq_meals", sequenceName = "global_seq_meals", allocationSize = 1, initialValue = START_SEQ)
@@ -41,7 +37,7 @@ public class Meal implements HasId {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     private Menu menu;
 
     public Meal() {
