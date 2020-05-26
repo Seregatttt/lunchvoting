@@ -54,6 +54,8 @@ VALUES (10000, 'Salad', 5.50),
        (10004, 'soup', 10.05),
        (10005, 'fat in chocolate', 55.55);
 
+ALTER SEQUENCE global_seq_votes RESTART WITH 0;
+
 INSERT INTO votes (user_id, menu_id,date_menu,date_reg)
 VALUES (101, 10000,'2020-05-01','2020-05-01 09:00:00'),
        (102, 10001,'2020-05-01','2020-05-01 12:00:00'),
