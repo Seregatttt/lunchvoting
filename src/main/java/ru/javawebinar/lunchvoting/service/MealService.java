@@ -18,16 +18,21 @@ public class MealService {
         this.repository = repository;
     }
 
-    public Meal get(int id, int menuId) {
-        return checkNotFoundWithId(repository.get(id, menuId), id);
-    }
-
-    public void delete(int id, int menuId) {
-        checkNotFoundWithId(repository.delete(id, menuId), id);
+    public Meal create(Meal meal, int menuId) {
+        Assert.notNull(meal, "meal must not be null");
+        return repository.save(meal, menuId);
     }
 
     public List<Meal> getAll(int menuId) {
         return repository.getAll(menuId);
+    }
+
+    public Meal get(int id, int menuId) {
+        return checkNotFoundWithId(repository.get(id, menuId), id);
+    }
+
+    public Meal getWithMenu(int id, int menuId) {
+        return checkNotFoundWithId(repository.getWithMenu(id, menuId), id);
     }
 
     public void update(Meal meal, int menuId) {
@@ -35,12 +40,7 @@ public class MealService {
         checkNotFoundWithId(repository.save(meal, menuId), meal.id());
     }
 
-    public Meal create(Meal meal, int menuId) {
-        Assert.notNull(meal, "meal must not be null");
-        return repository.save(meal, menuId);
-    }
-
-    public Meal getWithMenu(int id, int menuId) {
-        return checkNotFoundWithId(repository.getWithMenu(id, menuId), id);
+    public void delete(int id, int menuId) {
+        checkNotFoundWithId(repository.delete(id, menuId), id);
     }
 }

@@ -39,14 +39,9 @@ public class UserService implements UserDetailsService {
         return repository.save(user);
     }
 
-    @CacheEvict(value = "users", allEntries = true)
-    public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
-    }
-
-    //specially comment for test enabled @CacheEvict(value = "users", allEntries = true)
-    public void deleteUseCache(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+    @Cacheable("users")
+    public List<User> getAll() {
+        return repository.getAll();
     }
 
     public User get(int id) {
@@ -60,11 +55,6 @@ public class UserService implements UserDetailsService {
         return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
-    @Cacheable("users")
-    public List<User> getAll() {
-        return repository.getAll();
-    }
-
     @CacheEvict(value = "users", allEntries = true)
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
@@ -76,6 +66,16 @@ public class UserService implements UserDetailsService {
     public void update(UserTo userTo) {
         User user = get(userTo.getId());
         repository.save(UserUtil.updateFromTo(user, userTo));
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
+    public void delete(int id) {
+        checkNotFoundWithId(repository.delete(id), id);
+    }
+
+    //specially comment for test enabled @CacheEvict(value = "users", allEntries = true)
+    public void deleteUseCache(int id) {
+        checkNotFoundWithId(repository.delete(id), id);
     }
 
     @Override

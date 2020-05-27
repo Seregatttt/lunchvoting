@@ -21,27 +21,25 @@ public class MenuService {
         this.repository = repository;
     }
 
-    public Menu get(int id, int restId) {
-        return checkNotFoundWithId(repository.get(id, restId), id);
-    }
-
-    public void delete(int id, int restId) {
-        checkNotFoundWithId(repository.delete(id, restId), id);
+    public Menu create(Menu menu, int restId) {
+        Assert.notNull(menu, "menu must not be null");
+        return repository.save(menu, restId);
     }
 
     public List<Menu> getAll(int restId) {
         return repository.getAll(restId);
     }
 
+    public Menu get(int id, int restId) {
+        return checkNotFoundWithId(repository.get(id, restId), id);
+    }
+
     public void update(Menu menu, int restId) {
-        Assert.notNull(menu, "meal must not be null");
+        Assert.notNull(menu, "menu must not be null");
         checkNotFoundWithId(repository.save(menu, restId), menu.id());
     }
 
-    public Menu create(Menu menu, int restId) {
-        Assert.notNull(menu, "meal must not be null");
-        return repository.save(menu, restId);
-    }
+
 
     public Menu getWithMeals(int id, int restId) {
         return checkNotFoundWithId(repository.getWithMeals(id, restId), id);
@@ -57,5 +55,9 @@ public class MenuService {
 
     public List<Menu> getBetweenInclude(@Nullable LocalDate startDateTime, @Nullable LocalDate endDateTime, int userId) {
         return repository.getBetweenInclude(DateUtil.atStartOfDayOrMin(startDateTime), DateUtil.atStartOfDayOrMax(endDateTime), userId);
+    }
+
+    public void delete(int id, int restId) {
+        checkNotFoundWithId(repository.delete(id, restId), id);
     }
 }

@@ -23,20 +23,13 @@ public class RestService {
         this.repository = repository;
     }
 
-    //@CacheEvict(value = "users", allEntries = true)
     public Restaurant create(Restaurant restaurant) {
-        Assert.notNull(restaurant, "user must not be null");
+        Assert.notNull(restaurant, "restaurant must not be null");
         return repository.save(restaurant);
     }
 
-   // @CacheEvict(value = "users", allEntries = true)
-    public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
-    }
-
-    //specially comment for test enabled @CacheEvict(value = "users", allEntries = true)
-    public void deleteUseCache(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+    public List<Restaurant> getAll() {
+        return repository.getAll();
     }
 
     public Restaurant get(int id) {
@@ -44,14 +37,8 @@ public class RestService {
         return checkNotFoundWithId(repository.get(id), id);
     }
 
-    //@Cacheable("users")
-    public List<Restaurant> getAll() {
-        return repository.getAll();
-    }
-
-    //@CacheEvict(value = "users", allEntries = true)
     public void update(Restaurant restaurant) {
-        Assert.notNull(restaurant, "user must not be null");
+        Assert.notNull(restaurant, "restaurant must not be null");
         repository.save(restaurant);
     }
 
@@ -59,10 +46,7 @@ public class RestService {
         return checkNotFoundWithId(repository.getWithMenus(id), id);
     }
 
-//    @CacheEvict(value = "users", allEntries = true)
-//    @Transactional
-//    public void update(UserTo userTo) {
-//        User user = get(userTo.getId());
-//        repository.save(UserUtil.updateFromTo(user, userTo));
-//    }
+    public void delete(int id) {
+        checkNotFoundWithId(repository.delete(id), id);
+    }
 }
