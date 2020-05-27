@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Vote;
 import ru.javawebinar.lunchvoting.repository.VoteRepository;
 
@@ -22,9 +23,9 @@ public class VoteService {
         this.repository = repository;
     }
 
-    public Vote create(Vote vote, int userId) {
-        Assert.notNull(vote, "vote must not be null");
-        return repository.save(vote, userId);
+    public Vote create(Menu menu, int userId) {
+        Assert.notNull(menu, "menu must not be null");
+        return repository.save(menu, userId);
     }
 
     public List<Vote> getAll(int userId) {
@@ -36,10 +37,10 @@ public class VoteService {
         return checkNotFoundWithId(repository.get(id, userId), id);
     }
 
-    public void update(Vote vote, int userId) {
-        Assert.notNull(vote, "user must not be null");
-        repository.save(vote, userId);
-    }
+//    public void update(Vote vote, int userId) {
+//        Assert.notNull(vote, "user must not be null");
+//        repository.save(vote, userId);
+//    }
 
     public Vote getWithMenu(int id, int userId) {
         return checkNotFoundWithId(repository.getWithMenu(id, userId), id);

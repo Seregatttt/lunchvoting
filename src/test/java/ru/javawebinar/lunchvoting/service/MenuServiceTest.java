@@ -47,11 +47,6 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Autowired
     private CacheManager cacheManager;
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        cacheManager.getCache("users").clear();
-    }
-
     @Test
     void create() throws Exception {
         Menu newMenu = new Menu(null, of(2020, Month.MAY, 05));

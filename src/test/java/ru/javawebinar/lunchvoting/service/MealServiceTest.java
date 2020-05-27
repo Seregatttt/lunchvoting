@@ -37,11 +37,6 @@ public class MealServiceTest extends AbstractServiceTest {
     @Autowired
     protected CacheManager cacheManager;
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        cacheManager.getCache("users").clear();
-    }
-
     @Test
     void create() throws Exception {
         Meal newMeal = new Meal(null, "new meal", 5.55f);

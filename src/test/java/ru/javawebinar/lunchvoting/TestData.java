@@ -16,6 +16,9 @@ public class TestData {
     public static TestMatcher<Restaurant> REST_MATCHER
             = TestMatcher.usingFieldsComparator(Restaurant.class, "menus");
 
+    public static TestMatcher<Vote> VOTE_MATCHER
+            = TestMatcher.usingFieldsComparator(Vote.class, "menus", "users","dateTimeReg");
+
     public static String jsonWithPassword(User user, String passw) {
         return JsonUtil.writeAdditionProps(user, "password", passw);
     }

@@ -37,7 +37,7 @@ public class Vote implements HasId {
     private Menu menu;
 
     @Column(name = "date_menu", nullable = false)
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     private LocalDate dateLunch;
 
     @Column(name = "date_reg", nullable = false)
@@ -61,12 +61,10 @@ public class Vote implements HasId {
         this.dateTimeReg = LocalDateTime.now();
     }
 
-    @Override
     public Integer getId() {
         return id;
     }
 
-    @Override
     public void setId(Integer id) {
         this.id = id;
     }
