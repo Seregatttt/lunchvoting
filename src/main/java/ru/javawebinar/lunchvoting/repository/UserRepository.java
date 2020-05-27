@@ -20,10 +20,6 @@ public class UserRepository {
         return crudRepository.save(user);
     }
 
-    public boolean delete(int id) {
-        return crudRepository.delete(id) != 0;
-    }
-
     public User get(int id) {
         return crudRepository.findById(id).orElse(null);
     }
@@ -36,8 +32,11 @@ public class UserRepository {
         return crudRepository.findAll(SORT_NAME_EMAIL);
     }
 
-    //  @Override
-    //  public User getWithMeals(int id) {
-    //      return crudRepository.getWithMeals(id);
+    //  public User getWithVotes(int id) {
+    //      return crudRepository.getWithVotes(id);
     //  }
+
+    public boolean delete(int id) {
+        return crudRepository.delete(id) != 0;
+    }
 }

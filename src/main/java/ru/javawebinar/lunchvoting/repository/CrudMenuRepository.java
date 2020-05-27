@@ -34,5 +34,4 @@ public interface CrudMenuRepository extends JpaRepository<Menu, Integer> {
     @Query("SELECT m from Menu m WHERE m.restaurant.id=:restId AND m.dateMenu >= :startDate "
             + " AND m.dateMenu <= :endDate ORDER BY m.dateMenu DESC")
     List<Menu> getBetweenInclude(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("restId") int restId);
-
 }

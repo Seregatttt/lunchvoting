@@ -16,7 +16,7 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
 
     User getByEmail(String email);
 
-    // https://stackoverflow.com/a/46013654/548473
+    // https://stackoverflow.com/a/46013654/548473  for double rows ROLE_USER and POLE_ADMIN
     //  @EntityGraph(attributePaths = {"votes"}, type = EntityGraph.EntityGraphType.LOAD)
     // @Query("SELECT u FROM Vote u WHERE u.id=?1")
     //  User getWithVotes(int id);

@@ -9,6 +9,7 @@ DROP SEQUENCE global_seq_users IF EXISTS;
 DROP SEQUENCE global_seq_rest IF EXISTS;
 DROP SEQUENCE global_seq_menus IF EXISTS;
 DROP SEQUENCE global_seq_meals IF EXISTS;
+DROP SEQUENCE global_seq_votes IF EXISTS;
 
 CREATE SEQUENCE global_seq_users AS INTEGER START WITH 100;
 

@@ -27,19 +27,15 @@ public class MenuRepository {
         return crudMenuRepository.save(menu);
     }
 
-    public boolean delete(int id, int menuId) {
-        return crudMenuRepository.delete(id, menuId) != 0;
+    public List<Menu> getAll(int restId) {
+        return crudMenuRepository.getAll(restId);
     }
 
     public Menu get(int id, int restId) {
         return crudMenuRepository.findById(id).filter(m -> m.getRestaurant().getId() == restId).orElse(null);
     }
 
-    public List<Menu> getAll(int menuId) {
-        return crudMenuRepository.getAll(menuId);
-    }
-
-    public Menu getWithMeals(int id, int menuId) {
+    public Menu getWithMeals(int id, int restId) {
         return crudMenuRepository.getWithMeals(id);
     }
 
@@ -53,5 +49,9 @@ public class MenuRepository {
 
     public List<Menu> getBetweenInclude(LocalDate startDateTime, LocalDate endDateTime, int userId) {
         return crudMenuRepository.getBetweenInclude(startDateTime, endDateTime, userId);
+    }
+
+    public boolean delete(int id, int menuId) {
+        return crudMenuRepository.delete(id, menuId) != 0;
     }
 }

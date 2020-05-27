@@ -21,19 +21,19 @@ public class RestRepository {
         return crudRepository.save(rest);
     }
 
-    public boolean delete(int id) {
-        return crudRepository.delete(id) != 0;
+    public List<Restaurant> getAll() {
+        return crudRepository.findAll(SORT);
     }
 
     public Restaurant get(int id) {
         return crudRepository.findById(id).orElse(null);
     }
 
-    public List<Restaurant> getAll() {
-        return crudRepository.findAll(SORT);
-    }
-
     public Restaurant getWithMenus(int id) {
         return crudRepository.getWithMenus(id);
+    }
+
+    public boolean delete(int id) {
+        return crudRepository.delete(id) != 0;
     }
 }

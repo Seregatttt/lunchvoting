@@ -28,12 +28,12 @@ public class MealRepository {
         return crudMealRepository.save(meal);
     }
 
-    public Meal get(int id, int menuId) {
-        return crudMealRepository.findById(id).filter(meal -> meal.getMenu().getId() == menuId).orElse(null);
-    }
-
     public List<Meal> getAll(int menuId) {
         return crudMealRepository.getAll(menuId);
+    }
+
+    public Meal get(int id, int menuId) {
+        return crudMealRepository.findById(id).filter(meal -> meal.getMenu().getId() == menuId).orElse(null);
     }
 
     public Meal getWithMenu(int id, int menuId) {
@@ -44,7 +44,4 @@ public class MealRepository {
     public boolean delete(int id, int menuId) {
         return crudMealRepository.delete(id, menuId) != 0;
     }
-    //    public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-//        return crudMealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
-//    }
 }

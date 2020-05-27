@@ -18,5 +18,4 @@ public interface CrudRestRepository extends JpaRepository<Restaurant, Integer> {
 
     @Query("SELECT m FROM Restaurant m LEFT JOIN FETCH m.menus WHERE m.id = ?1")
     Restaurant getWithMenus(int id);
-
 }
