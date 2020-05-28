@@ -48,11 +48,11 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Test
     void create() {
         Vote create = NEW_VOTE;
-        Vote created = service.create(MENU6, 102);
+        Vote created = service.create(10006, 102);
         int newId = created.getId();
         create.setId(newId);
         assertEquals(created, create);
-        assertEquals(service.get(newId, 102), create);
+        assertEquals(service.get(10006, 102), create);
     }
 
     @Test
@@ -63,13 +63,13 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void get() {
-        Vote vote = service.get(VOTE.getId(),101);
+        Vote vote = service.get(10000,101);
         assertEquals(vote, VOTE);
     }
 
     @Test
     void getWithUserAndMenu() throws Exception {
-        Vote actual = service.getWithUserAndMenu(VOTE.getId(),101);
+        Vote actual = service.getWithUserAndMenu(10000,101);
         VOTE_MATCHER.assertMatch(actual, VOTE);
         MENU_MATCHER.assertMatch(actual.getMenu(), MENU);
     }
@@ -88,8 +88,8 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     public void delete() {
-        service.delete(VOTE2.getId(), 101);
-        Assertions.assertNull(repository.get(VOTE2.getId(), 101));
+        service.delete(10000, 101);
+        Assertions.assertNull(repository.get(10000, 101));
     }
 
     @Test

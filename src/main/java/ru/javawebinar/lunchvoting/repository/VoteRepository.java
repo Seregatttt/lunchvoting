@@ -1,16 +1,20 @@
 package ru.javawebinar.lunchvoting.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Vote;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class VoteRepository {
     private static final Sort SORT = Sort.by(Sort.Direction.ASC, "id");
+
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private final CrudVoteRepository crudVoteRepository;
     private final CrudUserRepository crudUserRepository;
@@ -25,44 +29,40 @@ public class VoteRepository {
     }
 
     @Transactional
-    public Vote save(Menu menu, int userId) {
-//        if (get(menu.id(), userId) == null) {
-//            return null;
-//        }
-        Vote vote = new Vote(null, crudUserRepository.getOne(userId), menu);
+    public Vote save(int menuId, int userId) {
+        log.debug("save vote with  meniId={} and userId={}", menuId, userId);
+        Vote vote = new Vote(null, crudUserRepository.getOne(userId), crudMenuRepository.getOne(menuId));
         return crudVoteRepository.save(vote);
     }
 
     public List<Vote> getAll(int userId) {
+        log.debug("getAll vote for userId={}", userId);
         return crudVoteRepository.getAll(userId);
     }
 
-    public Vote get(int id, int userId) {
-        return crudVoteRepository.findById(id).orElse(null);
+    public Vote get(int menuId, int userId) {
+        log.debug("get vote with  meniId={} and userId={}", menuId, userId);
+        Optional<Vote> vote = Optional.ofNullable(crudVoteRepository.get(menuId, userId));
+        return vote.orElse(null);
     }
 
-    public Vote getWithMenu(int id, int userId) {
-        return crudVoteRepository.getWithMenu(id, userId);
+    public Vote getWithMenu(int menuId, int userId) {
+        log.debug("getWithMenu vote with  meniId={} and userId={}", menuId, userId);
+        return crudVoteRepository.getWithMenu(menuId, userId);
     }
 
-    public Vote getWithUser(int id, int userId) {
-        return crudVoteRepository.getWithUser(id, userId);
+    public Vote getWithUser(int menuId, int userId) {
+        log.debug("getWithUser vote with  meniId={} and userId={}", menuId, userId);
+        return crudVoteRepository.getWithUser(menuId, userId);
     }
 
-    public Vote getWithUserAndMenu(int id, int userId) {
-        return crudVoteRepository.getWithUserAndMenu(id, userId);
+    public Vote getWithUserAndMenu(int menuId, int userId) {
+        log.debug("getWithUserAndMenu vote with  meniId={} and userId={}", menuId, userId);
+        return crudVoteRepository.getWithUserAndMenu(menuId, userId);
     }
 
-//    @Transactional
-//    public Vote update(Menu menu, int userId) {
-//        if (get(menu.id(), userId) == null) {
-//            return null;
-//        }
-//        Vote vote = new Vote(null, crudUserRepository.getOne(userId), menu);
-//        return crudVoteRepository.save(vote);
-//    }
-
-    public boolean delete(int id, int userId) {
-        return crudVoteRepository.delete(id, userId) != 0;
+    public boolean delete(int menuId, int userId) {
+        log.debug("delete vote with  meniId={} and userId={}", menuId, userId);
+        return crudVoteRepository.delete(menuId, userId) != 0;
     }
 }

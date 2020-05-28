@@ -14,19 +14,22 @@ public interface CrudVoteRepository extends JpaRepository<Vote, Integer> {
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Vote t WHERE t.id=:id and t.user.id = :userId")
-    int delete(@Param("id") int id, @Param("userId") int userId);
+    @Query("DELETE FROM Vote t WHERE t.menu.id=:menuId and t.user.id = :userId")
+    int delete(@Param("menuId") int id, @Param("userId") int userId);
 
     @Query("SELECT m FROM Vote m WHERE m.user.id=:userId ORDER BY m.dateLunch DESC")
     List<Vote> getAll(@Param("userId") int userId);
 
-    @Query("SELECT m FROM Vote m JOIN FETCH m.menu WHERE m.id = ?1 and m.user.id = ?2")
-    Vote getWithMenu(int id, int userId);
+    @Query("SELECT t FROM Vote t WHERE t.id=:menuId and t.user.id = :userId")
+    Vote get(@Param("menuId") int id, @Param("userId") int userId);
 
-    @Query("SELECT m FROM Vote m JOIN FETCH m.user WHERE m.id = ?1 and m.user.id = ?2")
-    Vote getWithUser(int id, int userId);
+    @Query("SELECT m FROM Vote m JOIN FETCH m.menu WHERE m.menu.id = ?1 and m.user.id = ?2")
+    Vote getWithMenu(int menuId, int userId);
+
+    @Query("SELECT m FROM Vote m JOIN FETCH m.user WHERE m.menu.id = ?1 and m.user.id = ?2")
+    Vote getWithUser(int menuId, int userId);
 
     //@EntityGraph(attributePaths = {"menus","users"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT m FROM Vote m JOIN FETCH m.user JOIN FETCH m.menu WHERE m.id = ?1 and m.user.id = ?2")
-    Vote getWithUserAndMenu(int id, int userId);
+    @Query("SELECT m FROM Vote m JOIN FETCH m.user JOIN FETCH m.menu WHERE m.menu.id = ?1 and m.user.id = ?2")
+    Vote getWithUserAndMenu(int menuId, int userId);
 }

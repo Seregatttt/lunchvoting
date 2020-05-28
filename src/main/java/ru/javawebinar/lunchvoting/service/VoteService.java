@@ -23,18 +23,18 @@ public class VoteService {
         this.repository = repository;
     }
 
-    public Vote create(Menu menu, int userId) {
-        Assert.notNull(menu, "menu must not be null");
-        return repository.save(menu, userId);
+    public Vote create(int menuId, int userId) {
+       // Assert.notNull(menu, "menu must not be null");
+        return repository.save(menuId, userId);
     }
 
     public List<Vote> getAll(int userId) {
         return repository.getAll(userId);
     }
 
-    public Vote get(int id, int userId) {
-        log.debug("get id={}", id);
-        return checkNotFoundWithId(repository.get(id, userId), id);
+    public Vote get(int menuId, int userId) {
+        log.debug("get meniId={}", menuId);
+        return checkNotFoundWithId(repository.getWithUserAndMenu(menuId, userId), menuId);
     }
 
 //    public void update(Vote vote, int userId) {
@@ -50,11 +50,11 @@ public class VoteService {
         return checkNotFoundWithId(repository.getWithUser(id, userId), id);
     }
 
-    public Vote getWithUserAndMenu(int id, int userId) {
-        return checkNotFoundWithId(repository.getWithUserAndMenu(id, userId), id);
+    public Vote getWithUserAndMenu(int menuId, int userId) {
+        return checkNotFoundWithId(repository.getWithUserAndMenu(menuId, userId), menuId);
     }
 
-    public void delete(int id, int userId) {
-        checkNotFoundWithId(repository.delete(id, userId), id);
+    public void delete(int menuId, int userId) {
+        checkNotFoundWithId(repository.delete(menuId, userId), menuId);
     }
 }
