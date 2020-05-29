@@ -5,15 +5,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javawebinar.lunchvoting.model.Menu;
+import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.model.Vote;
+import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class VoteRepository {
-    private static final Sort SORT = Sort.by(Sort.Direction.ASC, "id");
-
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private final CrudVoteRepository crudVoteRepository;
@@ -30,8 +32,12 @@ public class VoteRepository {
 
     @Transactional
     public Vote save(int menuId, int userId) {
-        log.debug("save vote with  meniId={} and userId={}", menuId, userId);
-        Vote vote = new Vote(null, crudUserRepository.getOne(userId), crudMenuRepository.getOne(menuId));
+        log.debug("save vote with  menuId {} and userId {}", menuId, userId);
+        User user = crudUserRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Not found user for prepare save vote with userId " + userId));
+        Menu menu = crudMenuRepository.findById(menuId)
+                .orElseThrow(() -> new NotFoundException("Not found menu for prepare save vote with menuId " + menuId));
+        Vote vote = new Vote(null, user, menu);
         return crudVoteRepository.save(vote);
     }
 
@@ -41,28 +47,45 @@ public class VoteRepository {
     }
 
     public Vote get(int menuId, int userId) {
-        log.debug("get vote with  meniId={} and userId={}", menuId, userId);
+        log.debug("get vote with  menuId={} and userId={}", menuId, userId);
         Optional<Vote> vote = Optional.ofNullable(crudVoteRepository.get(menuId, userId));
         return vote.orElse(null);
     }
 
+    public Vote getByDateLunch(LocalDate dateLunch, int userId) {
+        log.debug("getByDateLunch vote with  dateLunch={} and userId={}", dateLunch, userId);
+        Optional<Vote> vote = Optional.ofNullable(crudVoteRepository.getByDateLunch(dateLunch, userId));
+        return vote.orElse(null);
+    }
+
     public Vote getWithMenu(int menuId, int userId) {
-        log.debug("getWithMenu vote with  meniId={} and userId={}", menuId, userId);
+        log.debug("getWithMenu vote with  menuId={} and userId={}", menuId, userId);
         return crudVoteRepository.getWithMenu(menuId, userId);
     }
 
     public Vote getWithUser(int menuId, int userId) {
-        log.debug("getWithUser vote with  meniId={} and userId={}", menuId, userId);
+        log.debug("getWithUser vote with  menuId={} and userId={}", menuId, userId);
         return crudVoteRepository.getWithUser(menuId, userId);
     }
 
     public Vote getWithUserAndMenu(int menuId, int userId) {
-        log.debug("getWithUserAndMenu vote with  meniId={} and userId={}", menuId, userId);
+        log.debug("getWithUserAndMenu vote with  menuId={} and userId={}", menuId, userId);
         return crudVoteRepository.getWithUserAndMenu(menuId, userId);
     }
 
+    @Transactional
+    public void update(int menuId, int userId) {
+        log.debug("update vote with  menuId={} and userId={}", menuId, userId);
+        Menu newMenu = crudMenuRepository.findById(menuId)
+                .orElseThrow(() -> new NotFoundException("Not found menu with " + menuId));
+        Vote voteOld = Optional.of(getByDateLunch(newMenu.getDateMenu(), userId))
+                .orElseThrow(() -> new NotFoundException("Not found vote for update with " + menuId));
+        crudVoteRepository.deleteByIdUserId(voteOld.getId(), userId);
+        save(menuId, userId);
+    }
+
     public boolean delete(int menuId, int userId) {
-        log.debug("delete vote with  meniId={} and userId={}", menuId, userId);
+        log.debug("delete vote with  menuId={} and userId={}", menuId, userId);
         return crudVoteRepository.delete(menuId, userId) != 0;
     }
 }

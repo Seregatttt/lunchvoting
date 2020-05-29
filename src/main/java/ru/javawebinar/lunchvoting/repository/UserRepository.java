@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public class UserRepository {
-    private static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
+    private static final Sort SORT_NAME = Sort.by(Sort.Direction.ASC, "name");
 
     private final CrudUserRepository crudRepository;
 
@@ -29,7 +29,7 @@ public class UserRepository {
     }
 
     public List<User> getAll() {
-        return crudRepository.findAll(SORT_NAME_EMAIL);
+        return crudRepository.findAll(SORT_NAME);
     }
 
     //  public User getWithVotes(int id) {

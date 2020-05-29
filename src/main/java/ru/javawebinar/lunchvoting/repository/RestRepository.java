@@ -2,14 +2,13 @@ package ru.javawebinar.lunchvoting.repository;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Restaurant;
 
 import java.util.List;
 
 @Repository
 public class RestRepository {
-    private static final Sort SORT = Sort.by(Sort.Direction.ASC, "id");
+    private static final Sort SORT = Sort.by(Sort.Direction.ASC, "name");
 
     private final CrudRestRepository crudRepository;
 

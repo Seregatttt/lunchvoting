@@ -1,12 +1,13 @@
 package ru.javawebinar.lunchvoting.service;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.dao.DataAccessException;
 import ru.javawebinar.lunchvoting.model.*;
-import ru.javawebinar.lunchvoting.repository.RestRepository;
 import ru.javawebinar.lunchvoting.repository.VoteRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
@@ -16,9 +17,11 @@ import java.util.List;
 import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javawebinar.lunchvoting.TestData.*;
+import static ru.javawebinar.lunchvoting.TestData.MENU_MATCHER;
+import static ru.javawebinar.lunchvoting.TestData.VOTE_MATCHER;
 
 public class VoteServiceTest extends AbstractServiceTest {
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     public static final Restaurant REST = new Restaurant(10, "Celler de Can Roca", "Spain");
     public static final Restaurant REST1 = new Restaurant(11, "Noma", "Copenhagen");
@@ -34,6 +37,8 @@ public class VoteServiceTest extends AbstractServiceTest {
     public static final User USER2 = new User(102, "User2", "user2@mail.ru", "password2", Role.ROLE_USER);
     public static final Vote NEW_VOTE = new Vote(null, USER2, MENU6);
     public static final Vote VOTE = new Vote(0, USER1, MENU);
+    public static final Menu MENU2 = new Menu(10001, of(2020, Month.MAY, 01));
+    public static final Vote VOTE_UPDATE = new Vote(null, USER1, MENU2);
     public static final Vote VOTE2 = new Vote(2, USER1, MENU3);
 
     @Autowired
@@ -41,9 +46,6 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Autowired
     private VoteRepository repository;
-
-    @Autowired
-    private CacheManager cacheManager;
 
     @Test
     void create() {
@@ -56,6 +58,22 @@ public class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    void createNotFoundMenu() {
+            assertThrows(NotFoundException.class, () -> service.create(777, 102));
+    }
+
+    @Test
+    void createNotFoundUser() {
+        assertThrows(NotFoundException.class, () -> service.create(10006, 999999));
+    }
+
+    @Test
+    void duplicateDateCreate() throws Exception {
+        assertThrows(DataAccessException.class, () ->
+                service.create(10001, 101));
+    }
+
+    @Test
     void getAll() {
         List<Vote> all = service.getAll(101);
         assertEquals(all, List.of(VOTE2, VOTE));
@@ -63,13 +81,13 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void get() {
-        Vote vote = service.get(10000,101);
+        Vote vote = service.get(10000, 101);
         assertEquals(vote, VOTE);
     }
 
     @Test
     void getWithUserAndMenu() throws Exception {
-        Vote actual = service.getWithUserAndMenu(10000,101);
+        Vote actual = service.getWithUserAndMenu(10000, 101);
         VOTE_MATCHER.assertMatch(actual, VOTE);
         MENU_MATCHER.assertMatch(actual.getMenu(), MENU);
     }
@@ -79,12 +97,21 @@ public class VoteServiceTest extends AbstractServiceTest {
         assertThrows(NotFoundException.class, () -> service.get(99999, 101));
     }
 
-//    @Test
-//    void update() {
-//        Vote updated = UPDATE_REST2_ADDRESS;
-//        service.update(new Vote(updated));
-//        assertEquals(service.get(REST2.getId()), updated);
-//    }
+    @Test// update if exist old vote on date
+    void update() {
+        Vote updated = VOTE_UPDATE;
+        service.update(10001, 101);
+        Vote afterUpdate = repository.getWithUser(10001, 101);
+        updated.setId(afterUpdate.getId());
+        log.debug("update vote with  menuId={} and userId={} : afterUpdate = {}", 10001, 101, afterUpdate);
+        log.debug("votes for user {} : afterUpdate = {}", 101, service.getAll(101));
+        assertEquals(afterUpdate, updated);
+    }
+
+    @Test// not update - only save
+    void updateNotFoundVote() {
+        assertThrows(NotFoundException.class, () -> service.update(99, 101));
+    }
 
     @Test
     public void delete() {

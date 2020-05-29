@@ -48,7 +48,7 @@ public class VoteController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable int menuId) {
         log.info("update menuId={} ", menuId);
-        //   service.update(menuId, SecurityUtil.authUserId());
+        service.update(menuId, SecurityUtil.authUserId());
     }
 
     @DeleteMapping
