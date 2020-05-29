@@ -8,10 +8,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.lunchvoting.model.*;
-import ru.javawebinar.lunchvoting.service.VoteService;
+import ru.javawebinar.lunchvoting.repository.VoteRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
-import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
 import java.time.Month;
 
@@ -33,9 +32,6 @@ class VoteControllerTest extends AbstractControllerTest {
     public static final User USER = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
     public static final Restaurant REST1 = new Restaurant(11, "Noma", "Copenhagen");
     public static final Restaurant REST2 = new Restaurant(12, "Sato", "Mexico");
-    // public static final Menu MENU = new Menu(10000, of(2020, Month.MAY, 01));
-    //  public static final Menu MENU3 = new Menu(10003, of(2020, Month.MAY, 02));
-    //public static final Menu MENU6 = new Menu(10006, of(2020, Month.MAY, 03));
     public static final User USER1 = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
     public static final User USER2 = new User(102, "User2", "user2@mail.ru", "password2", Role.ROLE_USER);
     public static final Vote NEW_VOTE = new Vote(null, USER2, MENU6);
@@ -43,9 +39,8 @@ class VoteControllerTest extends AbstractControllerTest {
     public static final Vote VOTE1 = new Vote(1, USER1, MENU1);
     public static final Vote VOTE2 = new Vote(2, USER1, MENU3);
 
-
     @Autowired
-    private VoteService service;
+    private VoteRepository repository;
 
     @Test
     void createWithLocation() throws Exception {
@@ -60,7 +55,7 @@ class VoteControllerTest extends AbstractControllerTest {
         int newId = created.getId();
         newCreate.setId(newId);
         VOTE_MATCHER.assertMatch(created, newCreate);
-        VOTE_MATCHER.assertMatch(service.get(10006, 101), newCreate);
+        VOTE_MATCHER.assertMatch(repository.get(10006, 101), newCreate);
     }
 
     @Test
@@ -76,16 +71,6 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andDo(print());
     }
 
-    //    @Test
-//    void getAll() throws Exception {
-//        perform(MockMvcRequestBuilders.get("/rest/profile/votes" )
-//                .with(userHttpBasic(USER)))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(VOTE_MATCHER.contentJson(List.of(VOTE2, VOTE)))
-//                .andDo(print());
-//    }
-//
     @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get("/rest/profile/restaurants/10002/votes")
@@ -111,41 +96,13 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    //
-//    @Test
-//    void update() throws Exception {
-//        Menu updated = new Menu(10002, of(2020, Month.MAY, 11));
-//        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + "12/menus/" + 10002)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .with(userHttpBasic(ADMIN))
-//                .content(JsonUtil.writeValue(updated)))
-//                .andExpect(status().isNoContent())
-//                .andDo(print());
-//        updated.setId(10002);
-//        MENU_MATCHER.assertMatch(service.get(10002, 12), updated);
-//    }
-//
-//    @Test
-//    void updateInvalid() throws Exception {
-//        Menu updated = new Menu(10002, of(2020, Month.MAY, 11));
-//        updated.setDateMenu(null);
-//        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + "12/menus/" + 10002)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .with(userHttpBasic(ADMIN))
-//                .content(JsonUtil.writeValue(updated)))
-//                .andExpect(status().isUnprocessableEntity())
-//                .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
-//                .andExpect(jsonPath("$.details", hasItem("[Field dateMenu must not be null]")))
-//                .andDo(print());
-//    }
-//
     @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete("/rest/profile/restaurants/10003/votes")
                 .with(userHttpBasic(USER2)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> service.get(10003, 102));
+        assertThrows(NotFoundException.class, () -> repository.get(10003, 102));
     }
 
     @Test

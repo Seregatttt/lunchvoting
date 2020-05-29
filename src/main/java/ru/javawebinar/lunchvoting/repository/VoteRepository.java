@@ -14,6 +14,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithId;
+
 @Repository
 public class VoteRepository {
     protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -48,8 +50,10 @@ public class VoteRepository {
 
     public Vote get(int menuId, int userId) {
         log.debug("get vote with  menuId={} and userId={}", menuId, userId);
-        Optional<Vote> vote = Optional.ofNullable(crudVoteRepository.get(menuId, userId));
-        return vote.orElse(null);
+        Vote vote = Optional.ofNullable(crudVoteRepository.get(menuId, userId))
+                .orElseThrow(() -> new NotFoundException("Not found vote with menuId " + menuId + " and userId " +userId));
+      //  return checkNotFoundWithId(repository.get(menuId, userId), menuId);
+        return vote;
     }
 
     public Vote getByDateLunch(LocalDate dateLunch, int userId) {
@@ -70,7 +74,8 @@ public class VoteRepository {
 
     public Vote getWithUserAndMenu(int menuId, int userId) {
         log.debug("getWithUserAndMenu vote with  menuId={} and userId={}", menuId, userId);
-        return crudVoteRepository.getWithUserAndMenu(menuId, userId);
+        // return checkNotFoundWithId(repository.getWithUserAndMenu(menuId, userId), menuId);
+        return checkNotFoundWithId(crudVoteRepository.getWithUserAndMenu(menuId, userId),menuId );
     }
 
     @Transactional
@@ -84,8 +89,9 @@ public class VoteRepository {
         save(menuId, userId);
     }
 
-    public boolean delete(int menuId, int userId) {
+    public void delete(int menuId, int userId) {
         log.debug("delete vote with  menuId={} and userId={}", menuId, userId);
-        return crudVoteRepository.delete(menuId, userId) != 0;
+        checkNotFoundWithId(crudVoteRepository.delete(menuId, userId)!= 0, menuId);
+      //  return crudVoteRepository.delete(menuId, userId) != 0;
     }
 }

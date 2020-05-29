@@ -42,85 +42,84 @@ public class VoteServiceTest extends AbstractServiceTest {
     public static final Vote VOTE2 = new Vote(2, USER1, MENU3);
 
     @Autowired
-    protected VoteService service;
-
-    @Autowired
     private VoteRepository repository;
 
     @Test
     void create() {
         Vote create = NEW_VOTE;
-        Vote created = service.create(10006, 102);
+        Vote created = repository.save(10006, 102);
         int newId = created.getId();
         create.setId(newId);
         assertEquals(created, create);
-        assertEquals(service.get(10006, 102), create);
+        assertEquals(repository.get(10006, 102), create);
     }
 
     @Test
     void createNotFoundMenu() {
-            assertThrows(NotFoundException.class, () -> service.create(777, 102));
+            assertThrows(NotFoundException.class, () -> repository.save(777, 102));
     }
 
     @Test
     void createNotFoundUser() {
-        assertThrows(NotFoundException.class, () -> service.create(10006, 999999));
+        assertThrows(NotFoundException.class, () -> repository.save(10006, 999999));
     }
 
     @Test
     void duplicateDateCreate() throws Exception {
         assertThrows(DataAccessException.class, () ->
-                service.create(10001, 101));
+                repository.save(10001, 101));
     }
 
     @Test
     void getAll() {
-        List<Vote> all = service.getAll(101);
+        List<Vote> all = repository.getAll(101);
         assertEquals(all, List.of(VOTE2, VOTE));
     }
 
     @Test
     void get() {
-        Vote vote = service.get(10000, 101);
+        Vote vote = repository.get(10000, 101);
         assertEquals(vote, VOTE);
     }
 
     @Test
     void getWithUserAndMenu() throws Exception {
-        Vote actual = service.getWithUserAndMenu(10000, 101);
+        Vote actual = repository.getWithUserAndMenu(10000, 101);
         VOTE_MATCHER.assertMatch(actual, VOTE);
         MENU_MATCHER.assertMatch(actual.getMenu(), MENU);
     }
 
     @Test
     void getNotFound() {
-        assertThrows(NotFoundException.class, () -> service.get(99999, 101));
+        assertThrows(NotFoundException.class, () -> repository.get(99999, 101));
     }
 
     @Test// update if exist old vote on date
     void update() {
         Vote updated = VOTE_UPDATE;
-        service.update(10001, 101);
+        repository.update(10001, 101);
         Vote afterUpdate = repository.getWithUser(10001, 101);
         updated.setId(afterUpdate.getId());
         log.debug("update vote with  menuId={} and userId={} : afterUpdate = {}", 10001, 101, afterUpdate);
-        log.debug("votes for user {} : afterUpdate = {}", 101, service.getAll(101));
+        log.debug("votes for user {} : afterUpdate = {}", 101, repository.getAll(101));
         assertEquals(afterUpdate, updated);
     }
 
     @Test// not update - only save
     void updateNotFoundVote() {
-        assertThrows(NotFoundException.class, () -> service.update(99, 101));
+        assertThrows(NotFoundException.class, () -> repository.update(99, 101));
     }
 
     @Test
     public void delete() {
-        service.delete(10000, 101);
-        Assertions.assertNull(repository.get(10000, 101));
+       // service.delete(10000, 101);
+        repository.delete(10000, 101);
+        assertThrows(NotFoundException.class, () ->repository.get(10000, 101));
     }
 
     @Test
     void deletedNotFound() {
-        assertThrows(NotFoundException.class, () -> service.delete(9999, 102));
+        //assertThrows(NotFoundException.class, () -> service.delete(9999, 102));
+        assertThrows(NotFoundException.class, () -> repository.delete(9999, 102));
     }
 }
