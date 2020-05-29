@@ -1,4 +1,4 @@
-package ru.javawebinar.lunchvoting.service;
+package ru.javawebinar.lunchvoting.repository;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.lunchvoting.TestData.MENU_MATCHER;
 import static ru.javawebinar.lunchvoting.TestData.VOTE_MATCHER;
 
-public class VoteServiceTest extends AbstractServiceTest {
+public class VoteRepositoryTest extends AbstractRepositoryTest {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     public static final Restaurant REST = new Restaurant(10, "Celler de Can Roca", "Spain");
@@ -56,7 +56,7 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void createNotFoundMenu() {
-            assertThrows(NotFoundException.class, () -> repository.save(777, 102));
+        assertThrows(NotFoundException.class, () -> repository.save(777, 102));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     public void delete() {
-       // service.delete(10000, 101);
+        // service.delete(10000, 101);
         repository.delete(10000, 101);
         assertThrows(NotFoundException.class, () ->repository.get(10000, 101));
     }
