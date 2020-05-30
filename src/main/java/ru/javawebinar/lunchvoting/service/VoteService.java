@@ -2,9 +2,11 @@ package ru.javawebinar.lunchvoting.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.lunchvoting.model.Vote;
 import ru.javawebinar.lunchvoting.repository.VoteRepository;
+import ru.javawebinar.lunchvoting.util.DateUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,8 +29,9 @@ public class VoteService {
         return repository.save(menuId, userId);
     }
 
-    public List<Vote> getAll(int userId) {
-        return repository.getAll(userId);
+    public List<Vote> getLunchVotesBetweenInclude(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
+        return repository.getLunchVotesBetweenInclude(DateUtil.atStartOfDayOrMin(startDate),
+                DateUtil.atStartOfDayOrMax(endDate), userId);
     }
 
     public Vote get(int menuId, int userId) {

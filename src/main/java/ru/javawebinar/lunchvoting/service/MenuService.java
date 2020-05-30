@@ -40,7 +40,6 @@ public class MenuService {
     }
 
 
-
     public Menu getWithMeals(int id, int restId) {
         return checkNotFoundWithId(repository.getWithMeals(id, restId), id);
     }
@@ -53,8 +52,8 @@ public class MenuService {
         return checkNotFoundWithId(repository.getWithRestAndMeals(id, restId), id);
     }
 
-    public List<Menu> getBetweenInclude(@Nullable LocalDate startDateTime, @Nullable LocalDate endDateTime, int userId) {
-        return repository.getBetweenInclude(DateUtil.atStartOfDayOrMin(startDateTime), DateUtil.atStartOfDayOrMax(endDateTime), userId);
+    public List<Menu> getBetweenInclude(@Nullable LocalDate startDate, @Nullable LocalDate endDate) {
+        return repository.getBetweenInclude(DateUtil.atStartOfDayOrMin(startDate), DateUtil.atStartOfDayOrMax(endDate));
     }
 
     public void delete(int id, int restId) {

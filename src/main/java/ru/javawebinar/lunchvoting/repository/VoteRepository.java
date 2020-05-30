@@ -41,21 +41,19 @@ public class VoteRepository {
         return crudVoteRepository.save(vote);
     }
 
-    public List<Vote> getAll(int userId) {
+    public List<Vote> getLunchVotesBetweenInclude(LocalDate startDate, LocalDate endDate, int userId) {
         log.debug("getAll vote for userId={}", userId);
-        return crudVoteRepository.getAll(userId);
+        return crudVoteRepository.getLunchVotesBetweenInclude(startDate, endDate, userId);
     }
 
     public Vote get(int menuId, int userId) {
         log.debug("get vote with  menuId={} and userId={}", menuId, userId);
-        Optional<Vote> vote = Optional.ofNullable(crudVoteRepository.get(menuId, userId));
-        return vote.orElse(null);
+        return Optional.ofNullable(crudVoteRepository.get(menuId, userId)).orElse(null);
     }
 
     public Vote getByDateLunch(LocalDate dateLunch, int userId) {
         log.debug("getByDateLunch vote with  dateLunch={} and userId={}", dateLunch, userId);
-        Optional<Vote> vote = Optional.ofNullable(crudVoteRepository.getByDateLunch(dateLunch, userId));
-        return vote.orElse(null);
+        return Optional.ofNullable(crudVoteRepository.getByDateLunch(dateLunch, userId)).orElse(null);
     }
 
     public Vote getWithMenu(int menuId, int userId) {

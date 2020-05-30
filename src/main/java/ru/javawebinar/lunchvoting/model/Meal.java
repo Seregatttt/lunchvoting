@@ -1,5 +1,6 @@
 package ru.javawebinar.lunchvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
@@ -38,6 +39,7 @@ public class Meal implements HasId {
     @JoinColumn(name = "menu_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull(groups = View.Persist.class)
+    @JsonIgnore
     private Menu menu;
 
     public Meal() {

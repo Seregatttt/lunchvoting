@@ -1,5 +1,6 @@
 package ru.javawebinar.lunchvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
@@ -34,6 +35,7 @@ public class Menu implements HasId {
     private LocalDate dateMenu;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
+   // @JsonIgnore
     private List<Meal> meals;
 
     public Menu() {

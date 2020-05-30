@@ -51,7 +51,8 @@ public class MenuController {
     @GetMapping("/{id}")
     public Menu get(@PathVariable int restId, @PathVariable int id) {
         log.info("get restId {}  menuId {}", restId, id);
-        return service.get(id, restId);
+        Menu menu = service.get(id, restId);
+        return menu;
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -47,8 +47,8 @@ public class MenuRepository {
         return crudMenuRepository.getWithRestAndMeals(id, restId);
     }
 
-    public List<Menu> getBetweenInclude(LocalDate startDateTime, LocalDate endDateTime, int userId) {
-        return crudMenuRepository.getBetweenInclude(startDateTime, endDateTime, userId);
+    public List<Menu> getBetweenInclude(LocalDate startDate, LocalDate endDate) {
+        return crudMenuRepository.getBetweenInclude(startDate, endDate);
     }
 
     public boolean delete(int id, int menuId) {

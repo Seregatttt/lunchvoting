@@ -2,7 +2,6 @@ package ru.javawebinar.lunchvoting.service;
 
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -26,8 +25,12 @@ public class MenuServiceTest extends AbstractServiceTest {
     public static final int MENU_ID = 10000;//(10, '2020-05-01'),--10001
     public static final int MENU3_ID = 10003;// (10, '2020-05-02'),--10003
     public static final int MENU6_ID = 10006;//  (10, '2020-05-03');--10006
-    public static final Menu MENU = new Menu(MENU_ID, of(2020, Month.MAY, 01));
-    public static final Menu MENU3 = new Menu(MENU3_ID, of(2020, Month.MAY, 02));
+    public static final Menu MENU = new Menu(10000, of(2020, Month.MAY, 01));
+    public static final Menu MENU1 = new Menu(10001, of(2020, Month.MAY, 01));
+    public static final Menu MENU2 = new Menu(10002, of(2020, Month.MAY, 01));
+    public static final Menu MENU3 = new Menu(10003, of(2020, Month.MAY, 02));
+    public static final Menu MENU4 = new Menu(10004, of(2020, Month.MAY, 02));
+    public static final Menu MENU5 = new Menu(10005, of(2020, Month.MAY, 02));
     public static final Menu MENU6 = new Menu(MENU6_ID, of(2020, Month.MAY, 03));
     public static final List<Menu> MENUS = List.of(MENU, MENU3, MENU6);
     public static final Meal MEAL1 = new Meal(1000, "Salad", 5.50f);
@@ -36,7 +39,6 @@ public class MenuServiceTest extends AbstractServiceTest {
     public static final Restaurant REST = new Restaurant(10, "Celler de Can Roca", "Spain");
     public static final Restaurant REST2 = new Restaurant(12, "Sato", "Mexico");
     public static final int MENU2_ID = 10002;//(12, '2020-05-01'),--10002   (10002, 'coffee', 4.05), (10002, 'ice cream', 5.05),
-    public static final Menu MENU2 = new Menu(MENU2_ID, of(2020, Month.MAY, 01));
     public static final Menu MENU_WITH_REST = new Menu(MENU_ID, REST, of(2020, Month.MAY, 01));
     @Autowired
     protected MenuService service;
@@ -142,12 +144,13 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     void getBetweenInclude() throws Exception {
         MENU_MATCHER.assertMatch(service.getBetweenInclude(
-                LocalDate.of(2020, Month.MAY, 01),
-                LocalDate.of(2020, Month.MAY, 02), 10), List.of(MENU3, MENU));
+                LocalDate.of(2020, Month.MAY, 02),
+                LocalDate.of(2020, Month.MAY, 02)), List.of(MENU5, MENU4, MENU3));
     }
 
     @Test
     void getBetweenWithNullDates() throws Exception {
-        MENU_MATCHER.assertMatch(service.getBetweenInclude(null, null, 10), List.of(MENU6,MENU3, MENU));
+        MENU_MATCHER.assertMatch(service.getBetweenInclude(null, null),
+                List.of(MENU6, MENU5, MENU4, MENU3, MENU2, MENU1, MENU));
     }
 }

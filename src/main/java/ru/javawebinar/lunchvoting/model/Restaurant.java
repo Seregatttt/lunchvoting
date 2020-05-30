@@ -1,5 +1,6 @@
 package ru.javawebinar.lunchvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import ru.javawebinar.lunchvoting.HasId;
@@ -31,6 +32,7 @@ public class Restaurant implements HasId {
     private String address;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
     private List<Menu> menus;
 
     public Restaurant() {

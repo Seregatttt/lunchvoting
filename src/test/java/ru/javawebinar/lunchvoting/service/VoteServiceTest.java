@@ -73,11 +73,11 @@ public class VoteServiceTest extends AbstractServiceTest {
                 service.create(10001, 101));
     }
 
-    @Test
-    void getAll() {
-        List<Vote> all = service.getAll(101);
-        assertEquals(all, List.of(VOTE2, VOTE));
-    }
+//    @Test
+//    void getAll() {
+//        List<Vote> all = service.getAll(101);
+//        assertEquals(all, List.of(VOTE2, VOTE));
+//    }
 
     @Test
     void get() {
@@ -104,7 +104,7 @@ public class VoteServiceTest extends AbstractServiceTest {
         Vote afterUpdate = repository.getWithUser(10001, 101);
         updated.setId(afterUpdate.getId());
         log.debug("update vote with  menuId={} and userId={} : afterUpdate = {}", 10001, 101, afterUpdate);
-        log.debug("votes for user {} : afterUpdate = {}", 101, service.getAll(101));
+       // log.debug("votes for user {} : afterUpdate = {}", 101, service.getAll(101));
         assertEquals(afterUpdate, updated);
     }
 
