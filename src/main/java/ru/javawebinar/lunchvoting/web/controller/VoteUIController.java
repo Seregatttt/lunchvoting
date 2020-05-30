@@ -33,7 +33,7 @@ public class VoteUIController {
         this.menuService = menuService;
     }
 
-    @GetMapping("/lunchVotes")
+    @GetMapping("/historyLunchVotes")
     public List<Vote> getLunchVotesBetweenInclude(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate endDate) {

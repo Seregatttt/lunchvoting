@@ -23,7 +23,8 @@ public interface CrudVoteRepository extends JpaRepository<Vote, Integer> {
     @Query("DELETE FROM Vote t WHERE t.id=:id and t.user.id = :userId")
     int deleteByIdUserId(@Param("id") int id, @Param("userId") int userId);
 
-    @Query("SELECT m FROM Vote m WHERE m.user.id=:userId AND m.dateLunch >= :startDate " +
+    @Query("SELECT m FROM Vote m JOIN FETCH m.menu  " +
+            " WHERE m.user.id=:userId AND m.dateLunch >= :startDate " +
             " AND m.dateLunch <= :endDate ORDER BY m.dateLunch DESC")
     List<Vote> getLunchVotesBetweenInclude(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,@Param("userId") int userId);
 

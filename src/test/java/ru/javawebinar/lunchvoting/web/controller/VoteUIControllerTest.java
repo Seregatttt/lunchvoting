@@ -24,7 +24,7 @@ class VoteUIControllerTest extends AbstractControllerTest {
 
     @Test
     void getLunchVotes() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/profile/lunchVotes")
+        perform(MockMvcRequestBuilders.get("/rest/profile/historyLunchVotes")
                 .param("startDate", "2020-05-01")
                 .param("endDate", "2020-05-01")
                 .with(userHttpBasic(USER)))
@@ -37,7 +37,7 @@ class VoteUIControllerTest extends AbstractControllerTest {
 
     @Test
     void getLunchVotesAllDate() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/profile/lunchVotes")
+        perform(MockMvcRequestBuilders.get("/rest/profile/historyLunchVotes")
                 //.param("startDate", "2020-05-01")
                 // .param("endDate", "2020-05-01")
                 .with(userHttpBasic(USER)))
