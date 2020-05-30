@@ -5,12 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.lunchvoting.model.*;
 import ru.javawebinar.lunchvoting.repository.VoteRepository;
+import ru.javawebinar.lunchvoting.util.exception.IllegalRequestDataException;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
 
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.lunchvoting.TestData.MENU_MATCHER;
 import static ru.javawebinar.lunchvoting.TestData.VOTE_MATCHER;
+import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
 
 public class VoteServiceTest extends AbstractServiceTest {
     protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -59,7 +62,7 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void createNotFoundMenu() {
-            assertThrows(NotFoundException.class, () -> service.create(777, 102));
+        assertThrows(NotFoundException.class, () -> service.create(777, 102));
     }
 
     @Test
@@ -97,18 +100,54 @@ public class VoteServiceTest extends AbstractServiceTest {
         assertThrows(NotFoundException.class, () -> service.get(99999, 101));
     }
 
-    @Test// update if exist old vote on date
+    @Test
+// update if exist old vote on date
     void update() {
+        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 00);
         Vote updated = VOTE_UPDATE;
         service.update(10001, 101);
         Vote afterUpdate = repository.getWithUser(10001, 101);
         updated.setId(afterUpdate.getId());
         log.debug("update vote with  menuId={} and userId={} : afterUpdate = {}", 10001, 101, afterUpdate);
-       // log.debug("votes for user {} : afterUpdate = {}", 101, service.getAll(101));
+        // log.debug("votes for user {} : afterUpdate = {}", 101, service.getAll(101));
         assertEquals(afterUpdate, updated);
     }
 
-    @Test// not update - only save
+    @Test
+    void updateOldVote() {
+        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 30);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 00);
+        assertThrows(IllegalRequestDataException.class, () -> service.update(10001, 101));
+    }
+
+    @Test
+    void updateAfterCriticalTimeNow() {
+        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(13, 00);
+        assertThrows(IllegalRequestDataException.class, () -> service.update(10001, 101));
+    }
+
+    @Test
+// update if exist old vote on date
+    void updateFutureDate() {
+        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 02, 01);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(14, 00);
+        Vote updated = VOTE_UPDATE;
+        service.update(10001, 101);
+        Vote afterUpdate = repository.getWithUser(10001, 101);
+        updated.setId(afterUpdate.getId());
+        log.debug("update vote with  menuId={} and userId={} : afterUpdate = {}", 10001, 101, afterUpdate);
+        // log.debug("votes for user {} : afterUpdate = {}", 101, service.getAll(101));
+        assertEquals(afterUpdate, updated);
+    }
+
+    @Test
+// not update - only save
     void updateNotFoundVote() {
         assertThrows(NotFoundException.class, () -> service.update(99, 101));
     }
