@@ -6,6 +6,7 @@ import ru.javawebinar.lunchvoting.util.exception.IllegalRequestDataException;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 
 public class ValidationUtil {
 
@@ -17,8 +18,17 @@ public class ValidationUtil {
         return object;
     }
 
+    public static <T> T checkNotFoundWithLocalDate(T object, LocalDate ld) {
+        checkNotFoundWithId(object != null, ld);
+        return object;
+    }
+
+    public static void checkNotFoundWithId(boolean found, LocalDate ld) {
+        checkNotFound(found, "LocalDate = " + ld);
+    }
+
     public static void checkNotFoundWithId(boolean found, int id) {
-        checkNotFound(found, "id=" + id);
+        checkNotFound(found, "id = " + id);
     }
 
     public static <T> T checkNotFound(T object, String msg) {
