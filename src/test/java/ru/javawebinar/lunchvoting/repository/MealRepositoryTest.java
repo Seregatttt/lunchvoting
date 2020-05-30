@@ -1,4 +1,4 @@
-package ru.javawebinar.lunchvoting.service;
+package ru.javawebinar.lunchvoting.repository;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +8,8 @@ import org.springframework.cache.CacheManager;
 import ru.javawebinar.lunchvoting.model.Meal;
 import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.repository.MealRepository;
+import ru.javawebinar.lunchvoting.service.AbstractServiceTest;
+import ru.javawebinar.lunchvoting.service.MealService;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
 import java.time.Month;
@@ -20,7 +22,7 @@ import static ru.javawebinar.lunchvoting.TestData.MEAL_MATCHER;
 import static ru.javawebinar.lunchvoting.TestData.MENU_MATCHER;
 
 
-public class MealServiceTest extends AbstractServiceTest {
+public class MealRepositoryTest extends AbstractRepositoryTest {
     public static final int MEAL1_ID = 1003;
     public static final int MENU_ID_MEAL1_ID = 10001;
     public static final Menu MENU1 = new Menu(MENU_ID_MEAL1_ID,  of(2020, Month.MAY, 01));
@@ -33,9 +35,6 @@ public class MealServiceTest extends AbstractServiceTest {
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     protected MealRepository repository;
-
-    @Autowired
-    protected CacheManager cacheManager;
 
     @Test
     void create() throws Exception {
@@ -56,7 +55,7 @@ public class MealServiceTest extends AbstractServiceTest {
 
     @Test
     void get() throws Exception {
-        Meal actual = service.get(MEAL1_ID, MENU_ID_MEAL1_ID);
+        Meal actual = repository.get(MEAL1_ID, MENU_ID_MEAL1_ID);
         MEAL_MATCHER.assertMatch(actual, MEAL1);
     }
 
@@ -94,28 +93,19 @@ public class MealServiceTest extends AbstractServiceTest {
 
     @Test
     void delete() throws Exception {
-        service.delete(MEAL1_ID, MENU_ID_MEAL1_ID);
+        repository.delete(MEAL1_ID, MENU_ID_MEAL1_ID);
         Assertions.assertNull(repository.get(MEAL1_ID, MENU_ID_MEAL1_ID));
     }
 
     @Test
     void deleteNotFound() throws Exception {
         assertThrows(NotFoundException.class,
-                () -> service.delete(1, MENU_ID_MEAL1_ID));
+                () -> repository.delete(1, MENU_ID_MEAL1_ID));
     }
 
     @Test
     void deleteNotMenu() throws Exception {
         assertThrows(NotFoundException.class,
-                () -> service.delete(MEAL1_ID, -1));
+                () -> repository.delete(MEAL1_ID, -1));
     }
-
-//    @Test
-//    void createWithException() throws Exception {
-//        validateRootCause(() -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "  ", 300), USER_ID), ConstraintViolationException.class);
-//        validateRootCause(() -> service.create(new Meal(null, null, "Description", 300), USER_ID), ConstraintViolationException.class);
-//        validateRootCause(() -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Description", 9), USER_ID), ConstraintViolationException.class);
-//        validateRootCause(() -> service.create(new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Description", 5001), USER_ID), ConstraintViolationException.class);
-//    }
-
 }

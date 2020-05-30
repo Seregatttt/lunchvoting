@@ -40,7 +40,7 @@ public class MealService {
         checkNotFoundWithId(repository.save(meal, menuId), meal.id());
     }
 
-    public void delete(int id, int menuId) {
-        checkNotFoundWithId(repository.delete(id, menuId), id);
-    }
+//    public void delete(int id, int menuId) {
+//        checkNotFoundWithId(repository.delete(id, menuId), id);
+//    }
 }

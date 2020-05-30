@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.lunchvoting.model.Meal;
+import ru.javawebinar.lunchvoting.repository.MealRepository;
 import ru.javawebinar.lunchvoting.service.MealService;
 
 import javax.validation.Valid;
@@ -27,8 +28,11 @@ public class MealController {
 
     protected final MealService service;
 
-    public MealController(MealService service) {
+    protected final MealRepository repository;
+
+    public MealController(MealService service, MealRepository repository) {
         this.service = service;
+        this.repository = repository;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -66,6 +70,6 @@ public class MealController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int menuId, @PathVariable int id) {
         log.info("delete {} {}", menuId, id);
-        service.delete(id, menuId);
+        repository.delete(id, menuId);
     }
 }

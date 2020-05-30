@@ -5,8 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.lunchvoting.model.Meal;
+import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
 import java.util.List;
+
+import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithId;
 
 @Repository
 public class MealRepository {
@@ -33,15 +36,20 @@ public class MealRepository {
     }
 
     public Meal get(int id, int menuId) {
-        return crudMealRepository.findById(id).filter(meal -> meal.getMenu().getId() == menuId).orElse(null);
+        // return checkNotFoundWithId(repository.get(id, menuId), id);
+        Meal meal = crudMealRepository.findById(id).filter(m -> m.getMenu().getId() == menuId)
+                .orElse(null);
+        return meal;
+           //     .orElseThrow(() -> new NotFoundException("Not found meal with id " + id + " and userId " + menuId));
     }
 
     public Meal getWithMenu(int id, int menuId) {
-        log.debug("id={} menuId={}",id,menuId);
+        log.debug("id={} menuId={}", id, menuId);
         return crudMealRepository.getWithMenu(id);
     }
 
-    public boolean delete(int id, int menuId) {
-        return crudMealRepository.delete(id, menuId) != 0;
+    public void delete(int id, int menuId) {
+        // checkNotFoundWithId(repository.delete(id, menuId), id);
+        checkNotFoundWithId(crudMealRepository.delete(id, menuId) != 0, id);
     }
 }
