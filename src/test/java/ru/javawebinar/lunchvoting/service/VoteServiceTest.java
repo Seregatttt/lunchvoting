@@ -76,12 +76,6 @@ public class VoteServiceTest extends AbstractServiceTest {
                 service.create(10001, 101));
     }
 
-//    @Test
-//    void getAll() {
-//        List<Vote> all = service.getAll(101);
-//        assertEquals(all, List.of(VOTE2, VOTE));
-//    }
-
     @Test
     void get() {
         Vote vote = service.get(10000, 101);
@@ -100,8 +94,8 @@ public class VoteServiceTest extends AbstractServiceTest {
         assertThrows(NotFoundException.class, () -> service.get(99999, 101));
     }
 
+    // update if exist old vote on date
     @Test
-// update if exist old vote on date
     void update() {
         TIME_CHANGE_VOTE = LocalTime.of(11, 00);
         DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
@@ -111,7 +105,6 @@ public class VoteServiceTest extends AbstractServiceTest {
         Vote afterUpdate = repository.getWithUser(10001, 101);
         updated.setId(afterUpdate.getId());
         log.debug("update vote with  menuId={} and userId={} : afterUpdate = {}", 10001, 101, afterUpdate);
-        // log.debug("votes for user {} : afterUpdate = {}", 101, service.getAll(101));
         assertEquals(afterUpdate, updated);
     }
 
@@ -131,8 +124,8 @@ public class VoteServiceTest extends AbstractServiceTest {
         assertThrows(IllegalRequestDataException.class, () -> service.update(10001, 101));
     }
 
+    // update if exist old vote on date
     @Test
-// update if exist old vote on date
     void updateFutureDate() {
         TIME_CHANGE_VOTE = LocalTime.of(11, 00);
         DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 02, 01);
@@ -142,12 +135,10 @@ public class VoteServiceTest extends AbstractServiceTest {
         Vote afterUpdate = repository.getWithUser(10001, 101);
         updated.setId(afterUpdate.getId());
         log.debug("update vote with  menuId={} and userId={} : afterUpdate = {}", 10001, 101, afterUpdate);
-        // log.debug("votes for user {} : afterUpdate = {}", 101, service.getAll(101));
         assertEquals(afterUpdate, updated);
     }
 
     @Test
-// not update - only save
     void updateNotFoundVote() {
         assertThrows(NotFoundException.class, () -> service.update(99, 101));
     }

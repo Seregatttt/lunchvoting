@@ -13,9 +13,12 @@ import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 
 import static java.time.LocalDate.of;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -23,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.lunchvoting.TestData.VOTE_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
+import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
 
 class VoteControllerTest extends AbstractControllerTest {
     public static final Menu MENU = new Menu(10000, of(2020, Month.MAY, 01));
@@ -72,20 +76,10 @@ class VoteControllerTest extends AbstractControllerTest {
                 //.content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.type", is("CONSTRAINS_ERROR")))
-                // .andExpect(jsonPath("$.details", hasItem("Menu must be new (id=null)")))
+                .andExpect(jsonPath("$.details", hasItem("exception user lunch duplicate date")))
                 .andDo(print());
     }
 
-    //    @Test
-//    void getAll() throws Exception {
-//        perform(MockMvcRequestBuilders.get("/rest/profile/votes" )
-//                .with(userHttpBasic(USER)))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(VOTE_MATCHER.contentJson(List.of(VOTE2, VOTE)))
-//                .andDo(print());
-//    }
-//
     @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get("/rest/profile/restaurants/10002/votes")
@@ -111,34 +105,55 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    //
-//    @Test
-//    void update() throws Exception {
-//        Menu updated = new Menu(10002, of(2020, Month.MAY, 11));
-//        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + "12/menus/" + 10002)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .with(userHttpBasic(ADMIN))
-//                .content(JsonUtil.writeValue(updated)))
-//                .andExpect(status().isNoContent())
-//                .andDo(print());
-//        updated.setId(10002);
-//        MENU_MATCHER.assertMatch(service.get(10002, 12), updated);
-//    }
-//
-//    @Test
-//    void updateInvalid() throws Exception {
-//        Menu updated = new Menu(10002, of(2020, Month.MAY, 11));
-//        updated.setDateMenu(null);
-//        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + "12/menus/" + 10002)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .with(userHttpBasic(ADMIN))
-//                .content(JsonUtil.writeValue(updated)))
-//                .andExpect(status().isUnprocessableEntity())
-//                .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
-//                .andExpect(jsonPath("$.details", hasItem("[Field dateMenu must not be null]")))
-//                .andDo(print());
-//    }
-//
+    // this test is change vote in 10:00
+    @Test
+    void update() throws Exception {
+        // prepare for testing
+        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 00);
+
+        perform(MockMvcRequestBuilders.put("/rest/profile/restaurants/10001/votes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER1)))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+    }
+
+    // this test is change old vote in last time
+    @Test
+    void updateOldVote() throws Exception {
+        // prepare for testing  change vote
+        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 30);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 00);
+
+        perform(MockMvcRequestBuilders.put("/rest/profile/restaurants/10001/votes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER1)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
+                .andExpect(jsonPath("$.details", hasItem("date is Before now() menuId=10001")))
+                .andDo(print());
+    }
+
+    // this test is change old vote in 13:00 time
+    @Test
+    void updateAfterCriticalTimeNow() throws Exception {
+        // prepare for testing  change vote
+        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(13, 00);
+
+        perform(MockMvcRequestBuilders.put("/rest/profile/restaurants/10001/votes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER1)))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
+                .andExpect(jsonPath("$.details", hasItem("time is after 11:00 for update menuId 10001")))
+                .andDo(print());
+    }
+
     @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete("/rest/profile/restaurants/10003/votes")

@@ -10,6 +10,8 @@
     <ul>
         <li><a href="login">Login page</a></li>
         <li><a href="rest/admin/users">rest/admin/users</a></li>
+        <li><a href="rest/profile/historyLunchVotes">rest/profile/historyLunchVotes</a></li>
+        <li><a href="rest/profile/showMenuAndRestaurant">rest/profile/showMenuAndRestaurant</a></li>
     </ul>
 </div>
 </body>
