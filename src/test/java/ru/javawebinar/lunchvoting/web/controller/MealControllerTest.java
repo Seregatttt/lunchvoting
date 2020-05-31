@@ -8,35 +8,25 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.lunchvoting.model.Meal;
-import ru.javawebinar.lunchvoting.model.Menu;
-import ru.javawebinar.lunchvoting.model.Role;
-import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.service.MealService;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
+import ru.javawebinar.lunchvoting.web.DataForTest;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
-import java.time.Month;
 import java.util.List;
 
-import static java.time.LocalDate.of;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.javawebinar.lunchvoting.web.DataForTest.MEAL_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
 import static ru.javawebinar.lunchvoting.web.DataForTest.ADMIN;
+import static ru.javawebinar.lunchvoting.web.DataForTest.MEAL_MATCHER;
 
 class MealControllerTest extends AbstractControllerTest {
-    private static final String REST_MENUS_MEALS_URL = MealController.REST_MENUS_MEALS + '/';
-
-    public static final Menu MENU1 = new Menu(1001, of(2020, Month.MAY, 01));
-    public static final Meal MEAL3 = new Meal(1003, "cake", 1.05f);
-    public static final Meal MEAL4 = new Meal(1004, "tea", 3.05f);
-    public static final User USER = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
 
     @Autowired
     private MealService service;
@@ -78,7 +68,7 @@ class MealControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_MATCHER.contentJson(List.of(MEAL3, MEAL4)))
+                .andExpect(MEAL_MATCHER.contentJson(List.of(DataForTest.MEAL3, DataForTest.MEAL4)))
                 .andDo(print());
     }
 
@@ -89,7 +79,7 @@ class MealControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_MATCHER.contentJson(MEAL3))
+                .andExpect(MEAL_MATCHER.contentJson(DataForTest.MEAL3))
                 .andDo(print());
     }
 
@@ -110,7 +100,7 @@ class MealControllerTest extends AbstractControllerTest {
     @Test
     void getForbidden() throws Exception {
         perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals/" + 1003)
-                .with(userHttpBasic(USER)))
+                .with(userHttpBasic(DataForTest.USER)))
                 .andExpect(status().isForbidden());
     }
 
