@@ -43,9 +43,10 @@ class VoteUIControllerTest extends AbstractControllerTest {
 
     @Test
     void getSelectRestaurant() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/profile/showMenuAndRestaurant")
-                .param("startDate", "2020-05-02")
-                .param("endDate", "2020-05-02")
+        perform(MockMvcRequestBuilders
+                .get("/rest/profile/showMenuAndRestaurant?startDate=2020-05-02&endDate=2020-05-02")
+              //  .param("startDate", "2020-05-02")
+             //   .param("endDate", "2020-05-02")
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
