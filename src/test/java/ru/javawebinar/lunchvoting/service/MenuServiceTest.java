@@ -22,13 +22,14 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Autowired
     protected MenuService service;
+
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     private MenuRepository repository;
 
     @Test
     void create() throws Exception {
-        Menu newMenu = new Menu(null, of(2020, Month.MAY, 05));
+        Menu newMenu = new Menu(null, of(2020, Month.MAY, 5));
         newMenu.setRestaurant(REST);
         Menu created = service.create(newMenu, REST_ID_MENU);
         int newId = created.id();
@@ -53,7 +54,7 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     void getWithMeals() throws Exception {
         Menu actual = service.getWithMeals(MENU_ID, REST_ID_MENU);
-        MENU_MATCHER.assertMatch(actual, new Menu(MENU_ID, of(2020, Month.MAY, 01)));
+        MENU_MATCHER.assertMatch(actual, new Menu(MENU_ID, of(2020, Month.MAY, 1)));
         List<Meal> meals = List.of(MEAL, MEAL1, MEAL2);
         MEAL_MATCHER.assertMatch(actual.getMeals(), meals);
     }
@@ -61,7 +62,7 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     void getWithRestAndMeals() throws Exception {
         Menu actual = service.getWithRestAndMeals(MENU_ID, 10);
-        MENU_MATCHER.assertMatch(actual, new Menu(MENU_ID, of(2020, Month.MAY, 01)));
+        MENU_MATCHER.assertMatch(actual, new Menu(MENU_ID, of(2020, Month.MAY, 1)));
         REST_MATCHER.assertMatch(actual.getRestaurant(), REST);
         List<Meal> meals = List.of(MEAL, MEAL1, MEAL2);
         MEAL_MATCHER.assertMatch(actual.getMeals(), meals);
@@ -70,7 +71,7 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     void getWithRest() throws Exception {
         Menu actual = service.getWithRest(MENU_ID, 10);
-        MENU_MATCHER.assertMatch(actual, new Menu(MENU_ID, of(2020, Month.MAY, 01)));
+        MENU_MATCHER.assertMatch(actual, new Menu(MENU_ID, of(2020, Month.MAY, 1)));
         REST_MATCHER.assertMatch(actual.getRestaurant(), REST);
     }
 
@@ -121,8 +122,8 @@ public class MenuServiceTest extends AbstractServiceTest {
     @Test
     void getBetweenInclude() throws Exception {
         MENU_MATCHER.assertMatch(service.getBetweenInclude(
-                LocalDate.of(2020, Month.MAY, 02),
-                LocalDate.of(2020, Month.MAY, 02)), List.of(MENU5, MENU4, MENU3));
+                LocalDate.of(2020, Month.MAY, 2),
+                LocalDate.of(2020, Month.MAY, 2)), List.of(MENU5, MENU4, MENU3));
     }
 
     @Test

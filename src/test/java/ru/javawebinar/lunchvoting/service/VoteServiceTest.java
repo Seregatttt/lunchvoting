@@ -16,10 +16,8 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
 import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
-import static ru.javawebinar.lunchvoting.DataForTestUnits.MENU_MATCHER;
-import static ru.javawebinar.lunchvoting.DataForTestUnits.VOTE_MATCHER;
+import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
 
 public class VoteServiceTest extends AbstractServiceTest {
     protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -77,9 +75,9 @@ public class VoteServiceTest extends AbstractServiceTest {
     // update if exist old vote on date
     @Test
     void update() {
-        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 00);
+        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 5, 1);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 0);
         Vote updated = VOTE_UPDATE;
         service.update(10001, 101);
         Vote afterUpdate = repository.getWithUser(10001, 101);
@@ -90,26 +88,26 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void updateOldVote() {
-        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 30);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 00);
+        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 5, 30);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 0);
         assertThrows(IllegalRequestDataException.class, () -> service.update(10001, 101));
     }
 
     @Test
     void updateAfterCriticalTimeNow() {
-        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(13, 00);
+        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 5, 1);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(13, 0);
         assertThrows(IllegalRequestDataException.class, () -> service.update(10001, 101));
     }
 
     // update if exist old vote on date
     @Test
     void updateFutureDate() {
-        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 02, 01);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(14, 00);
+        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 2, 1);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(14, 0);
         Vote updated = VOTE_UPDATE;
         service.update(10001, 101);
         Vote afterUpdate = repository.getWithUser(10001, 101);
