@@ -29,9 +29,6 @@ import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
 import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
 
 class VoteControllerTest extends AbstractControllerTest {
-    public static final Menu MENU = new Menu(10000, of(2020, Month.MAY, 01));
-    public static final Menu MENU1 = new Menu(1001, of(2020, Month.MAY, 01));
-
 
     @Autowired
     private VoteService service;

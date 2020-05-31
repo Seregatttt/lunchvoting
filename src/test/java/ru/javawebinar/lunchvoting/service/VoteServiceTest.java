@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import ru.javawebinar.lunchvoting.model.*;
+import ru.javawebinar.lunchvoting.model.Vote;
 import ru.javawebinar.lunchvoting.repository.VoteRepository;
 import ru.javawebinar.lunchvoting.util.exception.IllegalRequestDataException;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
@@ -15,12 +15,11 @@ import ru.javawebinar.lunchvoting.web.DataForTest;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
 import static ru.javawebinar.lunchvoting.web.DataForTest.MENU_MATCHER;
 import static ru.javawebinar.lunchvoting.web.DataForTest.VOTE_MATCHER;
-import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
 
 public class VoteServiceTest extends AbstractServiceTest {
     protected final Logger log = LoggerFactory.getLogger(getClass());

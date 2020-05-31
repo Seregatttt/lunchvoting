@@ -8,14 +8,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.lunchvoting.model.Restaurant;
-import ru.javawebinar.lunchvoting.model.Role;
-import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.service.RestService;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
+import ru.javawebinar.lunchvoting.web.DataForTest;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
-
-import java.util.List;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
@@ -27,15 +24,7 @@ import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
 
 class RestaurantControllerTest extends AbstractControllerTest {
-    private static final String REST_ADMIN_RESTAURANTS_URL = RestaurantController.REST_ADMIN_RESTAURANTS + '/';
-
-    public static final Restaurant REST = new Restaurant(10, "Celler de Can Roca", "Spain");
-    public static final Restaurant REST1 = new Restaurant(11, "Noma", "Copenhagen");
-    public static final Restaurant REST2 = new Restaurant(12, "Sato", "Mexico");
-    public static final List<Restaurant> RESTAURANTS = List.of(REST, REST1, REST2);
-    public static final User ADMIN = new User(100, "Admin", "admin@mail.ru", "password", Role.ROLE_ADMIN);
-    public static final User USER = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
-    public static final Restaurant UPDATE_REST_NEW_ADDR = new Restaurant(10, "Celler de Can Roca", "newAdr");
+    public static final String REST_ADMIN_RESTAURANTS_URL = RestaurantController.REST_ADMIN_RESTAURANTS + '/';
 
     @Autowired
     private RestService restService;
@@ -45,7 +34,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
         Restaurant newCreate = new Restaurant(null, "new_rest", "new_addr");
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
+                .with(userHttpBasic(DataForTest.ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isCreated())
                 .andDo(print());
@@ -63,7 +52,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
         Restaurant newCreate = new Restaurant(10, "new_rest", "new_addr");
         perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
+                .with(userHttpBasic(DataForTest.ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
@@ -76,7 +65,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
         Restaurant newCreate = new Restaurant(null, " ", null);
         perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
+                .with(userHttpBasic(DataForTest.ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
@@ -88,28 +77,28 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL)
-                .with(userHttpBasic(ADMIN)))
+                .with(userHttpBasic(DataForTest.ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(REST_MATCHER.contentJson(RESTAURANTS))
+                .andExpect(REST_MATCHER.contentJson(DataForTest.RESTAURANTS))
                 .andDo(print());
     }
 
     @Test
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + REST.getId())
-                .with(userHttpBasic(ADMIN)))
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + DataForTest.REST.getId())
+                .with(userHttpBasic(DataForTest.ADMIN)))
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(REST_MATCHER.contentJson(REST))
+                .andExpect(REST_MATCHER.contentJson(DataForTest.REST))
                 .andDo(print());
     }
 
     @Test
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + 1)
-                .with(userHttpBasic(ADMIN)))
+                .with(userHttpBasic(DataForTest.ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
@@ -123,17 +112,17 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void getForbidden() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL)
-                .with(userHttpBasic(USER)))
+                .with(userHttpBasic(DataForTest.USER)))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void update() throws Exception {
-        Restaurant updated = UPDATE_REST_NEW_ADDR;
+        Restaurant updated = DataForTest.UPDATE_REST_NEW_ADDR;
         updated.setId(null);
         perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + 10)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
+                .with(userHttpBasic(DataForTest.ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
@@ -143,11 +132,11 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void updateInvalid() throws Exception {
-        Restaurant updated = UPDATE_REST_NEW_ADDR;
+        Restaurant updated = DataForTest.UPDATE_REST_NEW_ADDR;
         updated.setName("");
         perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + 10)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(ADMIN))
+                .with(userHttpBasic(DataForTest.ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
@@ -158,7 +147,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + 12)
-                .with(userHttpBasic(ADMIN)))
+                .with(userHttpBasic(DataForTest.ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> restService.get(12));
@@ -167,7 +156,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void deleteNotFound() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + 1)
-                .with(userHttpBasic(ADMIN)))
+                .with(userHttpBasic(DataForTest.ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }

@@ -9,7 +9,6 @@ import ru.javawebinar.lunchvoting.model.Restaurant;
 import ru.javawebinar.lunchvoting.repository.RestRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
-import java.time.Month;
 import java.util.List;
 
 import static java.time.LocalDate.of;
@@ -18,15 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.lunchvoting.web.DataForTest.*;
 
 public class RestServiceTest extends AbstractServiceTest {
-    public static final Restaurant NEW_REST = new Restaurant(null, "New Restaurant", "Moscow");
-    public static final Restaurant REST = new Restaurant(10, "Celler de Can Roca", "Spain");
-    public static final Restaurant REST1 = new Restaurant(11, "Noma", "Copenhagen");
-    public static final Restaurant REST2 = new Restaurant(12, "Sato", "Mexico");
-    public static final Restaurant UPDATE_REST2_ADDRESS = new Restaurant(12, "Sato", "Update city");
-    public static final List<Restaurant> RESTAURANTS = List.of(REST, REST1, REST2);
-    public static final Menu MENU = new Menu(10000, of(2020, Month.MAY, 01));
-    public static final Menu MENU3 = new Menu(10003, of(2020, Month.MAY, 02));
-    public static final Menu MENU6 = new Menu(10006, of(2020, Month.MAY, 03));
     @Autowired
     protected RestService service;
 
