@@ -11,7 +11,6 @@ import ru.javawebinar.lunchvoting.model.Restaurant;
 import ru.javawebinar.lunchvoting.service.RestService;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
-import ru.javawebinar.lunchvoting.web.DataForTest;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
 import static org.hamcrest.Matchers.hasItem;
@@ -19,8 +18,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.javawebinar.lunchvoting.web.DataForTest.*;
-import static ru.javawebinar.lunchvoting.web.DataForTest.REST_MATCHER;
+import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
+import static ru.javawebinar.lunchvoting.DataForTestUnits.REST_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
 

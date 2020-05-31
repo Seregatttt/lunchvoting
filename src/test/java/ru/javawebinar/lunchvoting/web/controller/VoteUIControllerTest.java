@@ -4,17 +4,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
-import ru.javawebinar.lunchvoting.web.DataForTest;
 
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javawebinar.lunchvoting.web.DataForTest.*;
-import static ru.javawebinar.lunchvoting.web.DataForTest.VOTE_MATCHER;
+import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
+import static ru.javawebinar.lunchvoting.DataForTestUnits.VOTE_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.web.DataForTest.USER;
+import static ru.javawebinar.lunchvoting.DataForTestUnits.USER;
 
 class VoteUIControllerTest extends AbstractControllerTest {
 

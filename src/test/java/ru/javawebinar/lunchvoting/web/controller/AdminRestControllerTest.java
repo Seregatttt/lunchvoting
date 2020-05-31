@@ -7,7 +7,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javawebinar.lunchvoting.web.DataForTest;
+import ru.javawebinar.lunchvoting.DataForTestUnits;
 import ru.javawebinar.lunchvoting.model.Role;
 import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.service.UserService;
@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.javawebinar.lunchvoting.web.DataForTest.*;
+import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
 
@@ -36,7 +36,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_ADMIN_USERS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
-                .content(DataForTest.jsonWithPassword(newUser, "newPass")))
+                .content(DataForTestUnits.jsonWithPassword(newUser, "newPass")))
                 .andExpect(status().isCreated());
 
         User created = readFromJson(action, User.class);
@@ -145,7 +145,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.put(REST_ADMIN_USERS_URL + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
-                .content(DataForTest.jsonWithPassword(updated, "newPass")))
+                .content(DataForTestUnits.jsonWithPassword(updated, "newPass")))
                 .andExpect(status().isNoContent());
         updated.setId(USER.getId());
         USER_MATCHER.assertMatch(userService.get(USER_ID), updated);

@@ -11,7 +11,6 @@ import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.service.MenuService;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
-import ru.javawebinar.lunchvoting.web.DataForTest;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
 import java.time.Month;
@@ -25,8 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.web.DataForTest.*;
-import static ru.javawebinar.lunchvoting.web.DataForTest.MENU_MATCHER;
+import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
+import static ru.javawebinar.lunchvoting.DataForTestUnits.MENU_MATCHER;
 
 class MenuControllerTest extends AbstractControllerTest {
     public static final String REST_ADMIN_RESTAURANTS_URL = RestaurantController.REST_ADMIN_RESTAURANTS + '/';
