@@ -10,7 +10,7 @@ import ru.javawebinar.lunchvoting.model.*;
 import ru.javawebinar.lunchvoting.repository.VoteRepository;
 import ru.javawebinar.lunchvoting.util.exception.IllegalRequestDataException;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
-import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
+import ru.javawebinar.lunchvoting.web.DataForTest;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,8 +18,8 @@ import java.time.LocalTime;
 import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javawebinar.lunchvoting.web.TestData.MENU_MATCHER;
-import static ru.javawebinar.lunchvoting.web.TestData.VOTE_MATCHER;
+import static ru.javawebinar.lunchvoting.web.DataForTest.MENU_MATCHER;
+import static ru.javawebinar.lunchvoting.web.DataForTest.VOTE_MATCHER;
 import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
 
 public class VoteServiceTest extends AbstractServiceTest {
@@ -33,7 +33,7 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Vote create = AbstractControllerTest.NEW_VOTE;
+        Vote create = DataForTest.NEW_VOTE;
         Vote created = service.create(10006, 102);
         int newId = created.getId();
         create.setId(newId);
@@ -60,14 +60,14 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Test
     void get() {
         Vote vote = service.get(10000, 101);
-        assertEquals(vote, AbstractControllerTest.VOTE);
+        assertEquals(vote, DataForTest.VOTE);
     }
 
     @Test
     void getWithUserAndMenu() throws Exception {
         Vote actual = service.getWithUserAndMenu(10000, 101);
-        VOTE_MATCHER.assertMatch(actual, AbstractControllerTest.VOTE);
-        MENU_MATCHER.assertMatch(actual.getMenu(), AbstractControllerTest.MENU);
+        VOTE_MATCHER.assertMatch(actual, DataForTest.VOTE);
+        MENU_MATCHER.assertMatch(actual.getMenu(), DataForTest.MENU);
     }
 
     @Test
@@ -81,7 +81,7 @@ public class VoteServiceTest extends AbstractServiceTest {
         TIME_CHANGE_VOTE = LocalTime.of(11, 00);
         DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
         TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 00);
-        Vote updated = AbstractControllerTest.VOTE_UPDATE;
+        Vote updated = DataForTest.VOTE_UPDATE;
         service.update(10001, 101);
         Vote afterUpdate = repository.getWithUser(10001, 101);
         updated.setId(afterUpdate.getId());
@@ -111,7 +111,7 @@ public class VoteServiceTest extends AbstractServiceTest {
         TIME_CHANGE_VOTE = LocalTime.of(11, 00);
         DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 02, 01);
         TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(14, 00);
-        Vote updated = AbstractControllerTest.VOTE_UPDATE;
+        Vote updated = DataForTest.VOTE_UPDATE;
         service.update(10001, 101);
         Vote afterUpdate = repository.getWithUser(10001, 101);
         updated.setId(afterUpdate.getId());

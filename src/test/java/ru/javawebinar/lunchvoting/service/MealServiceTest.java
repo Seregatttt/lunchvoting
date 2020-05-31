@@ -15,8 +15,8 @@ import java.util.List;
 import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javawebinar.lunchvoting.web.TestData.MEAL_MATCHER;
-import static ru.javawebinar.lunchvoting.web.TestData.MENU_MATCHER;
+import static ru.javawebinar.lunchvoting.web.DataForTest.MEAL_MATCHER;
+import static ru.javawebinar.lunchvoting.web.DataForTest.MENU_MATCHER;
 
 
 public class MealServiceTest extends AbstractServiceTest {

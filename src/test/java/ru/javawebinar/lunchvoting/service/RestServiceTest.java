@@ -15,7 +15,7 @@ import java.util.List;
 import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javawebinar.lunchvoting.web.TestData.*;
+import static ru.javawebinar.lunchvoting.web.DataForTest.*;
 
 public class RestServiceTest extends AbstractServiceTest {
     public static final Restaurant NEW_REST = new Restaurant(null, "New Restaurant", "Moscow");

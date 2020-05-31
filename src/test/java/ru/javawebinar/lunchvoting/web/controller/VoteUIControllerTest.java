@@ -4,15 +4,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
+import ru.javawebinar.lunchvoting.web.DataForTest;
 
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javawebinar.lunchvoting.web.TestData.VOTE_MATCHER;
+import static ru.javawebinar.lunchvoting.web.DataForTest.VOTE_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.web.controller.VoteControllerTest.USER;
+import static ru.javawebinar.lunchvoting.web.DataForTest.USER;
 
 class VoteUIControllerTest extends AbstractControllerTest {
 
@@ -25,7 +26,7 @@ class VoteUIControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_MATCHER.contentJson(List.of(VOTE)))
+                .andExpect(VOTE_MATCHER.contentJson(List.of(DataForTest.VOTE)))
                 .andDo(print());
     }
 
@@ -38,7 +39,7 @@ class VoteUIControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_MATCHER.contentJson(List.of(VOTE2, VOTE)))
+                .andExpect(VOTE_MATCHER.contentJson(List.of(DataForTest.VOTE2, DataForTest.VOTE)))
                 .andDo(print());
     }
 
