@@ -36,7 +36,7 @@ public class RestaurantController {
         checkNew(rest);
         Restaurant created = service.create(rest);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_ADMIN_RESTAURANTS + "/{id}")//TODO
+                .path(REST_ADMIN_RESTAURANTS + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }

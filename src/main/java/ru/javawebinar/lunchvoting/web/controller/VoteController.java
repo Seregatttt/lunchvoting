@@ -13,8 +13,6 @@ import ru.javawebinar.lunchvoting.web.SecurityUtil;
 
 import java.net.URI;
 
-import static ru.javawebinar.lunchvoting.web.controller.RestaurantController.REST_ADMIN_RESTAURANTS;
-
 @RestController
 @RequestMapping(value = VoteController.REST_PROFILE_RESTAURANTS_VOTES, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteController {
@@ -33,7 +31,7 @@ public class VoteController {
         log.info("create menuId {}", menuId);
         Vote created = service.create(menuId, SecurityUtil.authUserId());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_ADMIN_RESTAURANTS + "/{id}")//TODO
+                .path(REST_PROFILE_RESTAURANTS_VOTES)
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }

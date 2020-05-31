@@ -46,7 +46,6 @@ public class VoteUIController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate endDate) {
         log.info("get selectRestaurant ");
-        List<Menu> menus = menuService.getBetweenInclude(startDate, endDate);
-        return menus;
+        return menuService.getBetweenInclude(startDate, endDate);
     }
 }

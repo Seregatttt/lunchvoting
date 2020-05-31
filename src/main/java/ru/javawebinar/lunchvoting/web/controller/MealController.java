@@ -16,7 +16,6 @@ import java.util.List;
 
 import static ru.javawebinar.lunchvoting.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNew;
-import static ru.javawebinar.lunchvoting.web.controller.RestaurantController.REST_ADMIN_RESTAURANTS;
 
 @RestController
 @RequestMapping(value = MealController.REST_MENUS_MEALS, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,8 +36,8 @@ public class MealController {
         checkNew(meal);
         Meal created = service.create(meal, menuId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_ADMIN_RESTAURANTS + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
+                .path(REST_MENUS_MEALS + "/{id}")
+                .buildAndExpand(menuId, created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 

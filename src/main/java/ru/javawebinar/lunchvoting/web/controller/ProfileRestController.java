@@ -29,8 +29,7 @@ public class ProfileRestController extends AbstractUserController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
-        AuthorizedUser authorizedUser = authUser;
-        return super.get(authorizedUser.getId());
+        return super.get(authUser.getId());
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

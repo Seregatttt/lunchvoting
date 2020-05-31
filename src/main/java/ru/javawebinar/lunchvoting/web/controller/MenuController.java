@@ -37,8 +37,8 @@ public class MenuController {
         checkNew(menu);
         Menu created = service.create(menu, restId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_ADMIN_RESTAURANTS + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
+                .path(REST_ADMIN_RESTAURANTS + "/{restId}/menus/{id}")
+                .buildAndExpand(restId, created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
@@ -51,8 +51,7 @@ public class MenuController {
     @GetMapping("/{id}")
     public Menu get(@PathVariable int restId, @PathVariable int id) {
         log.info("get restId {}  menuId {}", restId, id);
-        Menu menu = service.get(id, restId);
-        return menu;
+        return service.get(id, restId);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
