@@ -37,7 +37,7 @@ public class MealRepository {
     }
 
     public Meal getWithMenu(int id, int menuId) {
-        log.debug("id={} menuId={}",id,menuId);
+        log.debug("id={} menuId={}", id, menuId);
         return crudMealRepository.getWithMenu(id);
     }
 

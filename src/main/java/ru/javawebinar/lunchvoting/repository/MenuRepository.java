@@ -36,7 +36,7 @@ public class MenuRepository {
     }
 
     public Menu getWithMeals(int id, int restId) {
-        return crudMenuRepository.getWithMeals(id);
+        return crudMenuRepository.getWithMeals(id, restId);
     }
 
     public Menu getWithRest(int id, int restId) {

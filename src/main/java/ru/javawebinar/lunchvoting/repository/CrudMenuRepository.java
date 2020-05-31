@@ -25,8 +25,8 @@ public interface CrudMenuRepository extends JpaRepository<Menu, Integer> {
     @Query("SELECT m FROM Menu m WHERE m.id = ?1")
     Menu get(int id);
 
-    @Query("SELECT m FROM Menu m LEFT JOIN FETCH m.meals WHERE m.id = ?1")
-    Menu getWithMeals(int id);
+    @Query("SELECT m FROM Menu m LEFT JOIN FETCH m.meals WHERE m.id = ?1 and m.restaurant.id = ?2")
+    Menu getWithMeals(int id, int restId);
 
     @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.id = ?1 and m.restaurant.id = ?2 ")
     Menu getWithRest(int id, int restId);

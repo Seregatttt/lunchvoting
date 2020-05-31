@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithId;
-import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithLocalDate;
 
 @Service
 public class VoteService {
@@ -37,19 +36,6 @@ public class VoteService {
     public Vote get(int menuId, int userId) {
         log.debug("get menuId={}", menuId);
         return checkNotFoundWithId(repository.get(menuId, userId), menuId);
-    }
-
-    public Vote getByDateLunch(LocalDate dateLunch, int userId) {
-        log.debug("get dateLunch={}", dateLunch);
-        return checkNotFoundWithLocalDate(repository.getByDateLunch(dateLunch, userId), dateLunch);
-    }
-
-    public Vote getWithMenu(int id, int userId) {
-        return checkNotFoundWithId(repository.getWithMenu(id, userId), id);
-    }
-
-    public Vote getWithUser(int id, int userId) {
-        return checkNotFoundWithId(repository.getWithUser(id, userId), id);
     }
 
     public Vote getWithUserAndMenu(int menuId, int userId) {

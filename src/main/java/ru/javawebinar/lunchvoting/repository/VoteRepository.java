@@ -17,9 +17,9 @@ import java.util.Optional;
 
 @Repository
 public class VoteRepository {
-    public static LocalTime TIME_CHANGE_VOTE = LocalTime.of(11, 00);
-    public static LocalDate DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
-    public static LocalTime TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(11, 00);
+    public static LocalTime TIME_CHANGE_VOTE = LocalTime.of(11, 1);
+    public static LocalDate DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 5, 1);
+    public static LocalTime TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(11, 0);
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 

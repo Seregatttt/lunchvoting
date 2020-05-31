@@ -32,10 +32,6 @@ public class UserRepository {
         return crudRepository.findAll(SORT_NAME);
     }
 
-    //  public User getWithVotes(int id) {
-    //      return crudRepository.getWithVotes(id);
-    //  }
-
     public boolean delete(int id) {
         return crudRepository.delete(id) != 0;
     }
