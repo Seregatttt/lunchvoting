@@ -22,10 +22,9 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
-import static ru.javawebinar.lunchvoting.DataForTestUnits.MENU_MATCHER;
 
 class MenuControllerTest extends AbstractControllerTest {
     public static final String REST_ADMIN_RESTAURANTS_URL = RestaurantController.REST_ADMIN_RESTAURANTS + '/';
@@ -67,7 +66,7 @@ class MenuControllerTest extends AbstractControllerTest {
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void createDuplicate() throws Exception {
-        Menu expected = new Menu(null, of(2020, Month.MAY, 01));
+        Menu expected = new Menu(null, of(2020, Month.MAY, 1));
         perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL + "10/menus")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))

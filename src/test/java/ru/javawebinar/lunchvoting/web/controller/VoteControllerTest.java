@@ -7,7 +7,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javawebinar.lunchvoting.model.*;
+import ru.javawebinar.lunchvoting.model.Vote;
 import ru.javawebinar.lunchvoting.service.VoteService;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
@@ -15,14 +15,12 @@ import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static java.time.LocalDate.of;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
-import static ru.javawebinar.lunchvoting.DataForTestUnits.VOTE_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
 import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
@@ -90,9 +88,9 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         // prepare for testing
-        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 00);
+        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 5, 1);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 0);
 
         perform(MockMvcRequestBuilders.put("/rest/profile/restaurants/10001/votes")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -105,9 +103,9 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     void updateOldVote() throws Exception {
         // prepare for testing  change vote
-        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 30);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 00);
+        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 5, 30);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 0);
 
         perform(MockMvcRequestBuilders.put("/rest/profile/restaurants/10001/votes")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -122,9 +120,9 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     void updateAfterCriticalTimeNow() throws Exception {
         // prepare for testing  change vote
-        TIME_CHANGE_VOTE = LocalTime.of(11, 00);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(13, 00);
+        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
+        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 5, 1);
+        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(13, 0);
 
         perform(MockMvcRequestBuilders.put("/rest/profile/restaurants/10001/votes")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -18,10 +18,6 @@ public class TestMatcher<T> {
         this.usingEquals = usingEquals;
     }
 
-    public static <T> TestMatcher<T> usingEquals(Class<T> clazz) {
-        return new TestMatcher<>(clazz, true);
-    }
-
     public static <T> TestMatcher<T> usingFieldsComparator(Class<T> clazz, String... fieldsToIgnore) {
         return new TestMatcher<>(clazz, false, fieldsToIgnore);
     }

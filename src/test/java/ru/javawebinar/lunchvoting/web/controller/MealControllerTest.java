@@ -20,11 +20,9 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
-import static ru.javawebinar.lunchvoting.DataForTestUnits.ADMIN;
-import static ru.javawebinar.lunchvoting.DataForTestUnits.MEAL_MATCHER;
 
 class MealControllerTest extends AbstractControllerTest {
 

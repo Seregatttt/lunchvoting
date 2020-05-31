@@ -11,9 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
-import static ru.javawebinar.lunchvoting.DataForTestUnits.VOTE_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.DataForTestUnits.USER;
 
 class VoteUIControllerTest extends AbstractControllerTest {
 
@@ -52,7 +50,6 @@ class VoteUIControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            //    .andExpect(MENU_MATCHER.contentJson(List.of(new Menu(10006, LocalDate.of(2020, Month.MAY, 03)))))
                 .andDo(print());
     }
 }

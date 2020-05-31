@@ -13,19 +13,19 @@ public class TimingExtension implements
     private StopWatch stopWatch;
 
     @Override
-    public void beforeAll(ExtensionContext extensionContext)  {
+    public void beforeAll(ExtensionContext extensionContext) {
         stopWatch = new StopWatch("Execution time of " + extensionContext.getRequiredTestClass().getSimpleName());
     }
 
     @Override
-    public void beforeTestExecution(ExtensionContext extensionContext)  {
+    public void beforeTestExecution(ExtensionContext extensionContext) {
         String testName = extensionContext.getDisplayName();
         log.info("\nStart " + testName);
         stopWatch.start(testName);
     }
 
     @Override
-    public void afterTestExecution(ExtensionContext extensionContext)  {
+    public void afterTestExecution(ExtensionContext extensionContext) {
         stopWatch.stop();
     }
 
