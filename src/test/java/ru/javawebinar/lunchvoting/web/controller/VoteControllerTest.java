@@ -23,6 +23,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static ru.javawebinar.lunchvoting.web.DataForTest.*;
 import static ru.javawebinar.lunchvoting.web.DataForTest.VOTE_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
@@ -35,10 +36,10 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Vote newCreate = DataForTest.NEW_VOTE;
+        Vote newCreate = NEW_VOTE;
         ResultActions action = perform(MockMvcRequestBuilders.post("/rest/profile/restaurants/10006/votes")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.USER)))
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isCreated())
                 .andDo(print());
 
@@ -54,7 +55,7 @@ class VoteControllerTest extends AbstractControllerTest {
     void createDuplicateUserDateLunch() throws Exception {
         perform(MockMvcRequestBuilders.post("/rest/profile/restaurants/10001/votes")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.USER)))
+                .with(userHttpBasic(USER)))
                 //.content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.type", is("CONSTRAINS_ERROR")))
@@ -65,18 +66,18 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get("/rest/profile/restaurants/10002/votes")
-                .with(userHttpBasic(DataForTest.USER)))
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_MATCHER.contentJson(DataForTest.VOTE2))
+                .andExpect(VOTE_MATCHER.contentJson(VOTE2))
                 .andDo(print());
     }
 
     @Test
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get("/rest/profile/restaurants/10000/votes")
-                .with(userHttpBasic(DataForTest.USER2)))
+                .with(userHttpBasic(USER2)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
@@ -97,7 +98,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
         perform(MockMvcRequestBuilders.put("/rest/profile/restaurants/10001/votes")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.USER1)))
+                .with(userHttpBasic(USER1)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
     }
@@ -112,7 +113,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
         perform(MockMvcRequestBuilders.put("/rest/profile/restaurants/10001/votes")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.USER1)))
+                .with(userHttpBasic(USER1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
                 .andExpect(jsonPath("$.details", hasItem("date is Before now() menuId=10001")))
@@ -129,7 +130,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
         perform(MockMvcRequestBuilders.put("/rest/profile/restaurants/10001/votes")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.USER1)))
+                .with(userHttpBasic(USER1)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
                 .andExpect(jsonPath("$.details", hasItem("time is after 11:00 for update menuId 10001")))
@@ -139,7 +140,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete("/rest/profile/restaurants/10003/votes")
-                .with(userHttpBasic(DataForTest.USER2)))
+                .with(userHttpBasic(USER2)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> service.get(10003, 102));
@@ -148,7 +149,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     void deleteNotFound() throws Exception {
         perform(MockMvcRequestBuilders.delete("/rest/profile/restaurants/99988888/votes")
-                .with(userHttpBasic(DataForTest.ADMIN)))
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
@@ -156,7 +157,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     void deleteNotUserVote() throws Exception {
         perform(MockMvcRequestBuilders.delete("/rest/profile/restaurants/10000/votes")
-                .with(userHttpBasic(DataForTest.USER2)))
+                .with(userHttpBasic(USER2)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }

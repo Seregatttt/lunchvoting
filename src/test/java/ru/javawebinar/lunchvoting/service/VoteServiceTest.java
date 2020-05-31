@@ -18,6 +18,7 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
+import static ru.javawebinar.lunchvoting.web.DataForTest.*;
 import static ru.javawebinar.lunchvoting.web.DataForTest.MENU_MATCHER;
 import static ru.javawebinar.lunchvoting.web.DataForTest.VOTE_MATCHER;
 
@@ -32,7 +33,7 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void create() {
-        Vote create = DataForTest.NEW_VOTE;
+        Vote create = NEW_VOTE;
         Vote created = service.create(10006, 102);
         int newId = created.getId();
         create.setId(newId);
@@ -59,14 +60,14 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Test
     void get() {
         Vote vote = service.get(10000, 101);
-        assertEquals(vote, DataForTest.VOTE);
+        assertEquals(vote, VOTE);
     }
 
     @Test
     void getWithUserAndMenu() throws Exception {
         Vote actual = service.getWithUserAndMenu(10000, 101);
-        VOTE_MATCHER.assertMatch(actual, DataForTest.VOTE);
-        MENU_MATCHER.assertMatch(actual.getMenu(), DataForTest.MENU);
+        VOTE_MATCHER.assertMatch(actual, VOTE);
+        MENU_MATCHER.assertMatch(actual.getMenu(), MENU);
     }
 
     @Test
@@ -80,7 +81,7 @@ public class VoteServiceTest extends AbstractServiceTest {
         TIME_CHANGE_VOTE = LocalTime.of(11, 00);
         DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 05, 01);
         TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 00);
-        Vote updated = DataForTest.VOTE_UPDATE;
+        Vote updated = VOTE_UPDATE;
         service.update(10001, 101);
         Vote afterUpdate = repository.getWithUser(10001, 101);
         updated.setId(afterUpdate.getId());
@@ -110,7 +111,7 @@ public class VoteServiceTest extends AbstractServiceTest {
         TIME_CHANGE_VOTE = LocalTime.of(11, 00);
         DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 02, 01);
         TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(14, 00);
-        Vote updated = DataForTest.VOTE_UPDATE;
+        Vote updated = VOTE_UPDATE;
         service.update(10001, 101);
         Vote afterUpdate = repository.getWithUser(10001, 101);
         updated.setId(afterUpdate.getId());

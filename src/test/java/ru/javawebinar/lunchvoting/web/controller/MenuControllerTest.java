@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
+import static ru.javawebinar.lunchvoting.web.DataForTest.*;
 import static ru.javawebinar.lunchvoting.web.DataForTest.MENU_MATCHER;
 
 class MenuControllerTest extends AbstractControllerTest {
@@ -38,7 +39,7 @@ class MenuControllerTest extends AbstractControllerTest {
         Menu newCreate = new Menu(null, of(2020, Month.MAY, 30));
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL + "10/menus")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isCreated())
                 .andDo(print());
@@ -56,7 +57,7 @@ class MenuControllerTest extends AbstractControllerTest {
         Menu newCreate = new Menu(123, of(2020, Month.MAY, 30));
         perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL + "10/menus")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
@@ -70,7 +71,7 @@ class MenuControllerTest extends AbstractControllerTest {
         Menu expected = new Menu(null, of(2020, Month.MAY, 01));
         perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL + "10/menus")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(expected)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.type", is("CONSTRAINS_ERROR")))
@@ -82,28 +83,28 @@ class MenuControllerTest extends AbstractControllerTest {
     @Test
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + "10/menus")
-                .with(userHttpBasic(DataForTest.ADMIN)))
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MENU_MATCHER.contentJson(List.of(DataForTest.MENU, DataForTest.MENU3, DataForTest.MENU6)))
+                .andExpect(MENU_MATCHER.contentJson(List.of(MENU, MENU3, MENU6)))
                 .andDo(print());
     }
 
     @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 10000)
-                .with(userHttpBasic(DataForTest.ADMIN)))
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MENU_MATCHER.contentJson(DataForTest.MENU))
+                .andExpect(MENU_MATCHER.contentJson(MENU))
                 .andDo(print());
     }
 
     @Test
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 1)
-                .with(userHttpBasic(DataForTest.ADMIN)))
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
@@ -117,7 +118,7 @@ class MenuControllerTest extends AbstractControllerTest {
     @Test
     void getForbidden() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 10000)
-                .with(userHttpBasic(DataForTest.USER)))
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isForbidden());
     }
 
@@ -126,7 +127,7 @@ class MenuControllerTest extends AbstractControllerTest {
         Menu updated = new Menu(10002, of(2020, Month.MAY, 11));
         perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + "12/menus/" + 10002)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
@@ -140,7 +141,7 @@ class MenuControllerTest extends AbstractControllerTest {
         updated.setDateMenu(null);
         perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + "12/menus/" + 10002)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
@@ -151,7 +152,7 @@ class MenuControllerTest extends AbstractControllerTest {
     @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 10003)
-                .with(userHttpBasic(DataForTest.ADMIN)))
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> service.get(10003, 10));
@@ -160,7 +161,7 @@ class MenuControllerTest extends AbstractControllerTest {
     @Test
     void deleteNotFound() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 1)
-                .with(userHttpBasic(DataForTest.ADMIN)))
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }

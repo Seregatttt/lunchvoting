@@ -3,7 +3,6 @@ package ru.javawebinar.lunchvoting.service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Restaurant;
 import ru.javawebinar.lunchvoting.repository.RestRepository;
@@ -49,7 +48,7 @@ public class RestServiceTest extends AbstractServiceTest {
     void getWithMenus() throws Exception {
         Restaurant actual = service.getWithMenus(REST.getId());
         REST_MATCHER.assertMatch(actual, REST);
-        List<Menu> menus = List.of(MENU,MENU3,MENU6);
+        List<Menu> menus = List.of(MENU, MENU3, MENU6);
         MENU_MATCHER.assertMatch(actual.getMenus(), menus);
     }
 

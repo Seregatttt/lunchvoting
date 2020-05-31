@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
+import static ru.javawebinar.lunchvoting.web.DataForTest.*;
 import static ru.javawebinar.lunchvoting.web.DataForTest.ADMIN;
 import static ru.javawebinar.lunchvoting.web.DataForTest.MEAL_MATCHER;
 
@@ -68,7 +69,7 @@ class MealControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_MATCHER.contentJson(List.of(DataForTest.MEAL3, DataForTest.MEAL4)))
+                .andExpect(MEAL_MATCHER.contentJson(List.of(MEAL3, MEAL4)))
                 .andDo(print());
     }
 
@@ -79,7 +80,7 @@ class MealControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_MATCHER.contentJson(DataForTest.MEAL3))
+                .andExpect(MEAL_MATCHER.contentJson(MEAL3))
                 .andDo(print());
     }
 
@@ -100,7 +101,7 @@ class MealControllerTest extends AbstractControllerTest {
     @Test
     void getForbidden() throws Exception {
         perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals/" + 1003)
-                .with(userHttpBasic(DataForTest.USER)))
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isForbidden());
     }
 

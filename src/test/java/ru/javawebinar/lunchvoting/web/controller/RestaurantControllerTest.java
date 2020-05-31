@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static ru.javawebinar.lunchvoting.web.DataForTest.*;
 import static ru.javawebinar.lunchvoting.web.DataForTest.REST_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
@@ -34,7 +35,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
         Restaurant newCreate = new Restaurant(null, "new_rest", "new_addr");
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isCreated())
                 .andDo(print());
@@ -52,7 +53,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
         Restaurant newCreate = new Restaurant(10, "new_rest", "new_addr");
         perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
@@ -65,7 +66,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
         Restaurant newCreate = new Restaurant(null, " ", null);
         perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
@@ -77,28 +78,28 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL)
-                .with(userHttpBasic(DataForTest.ADMIN)))
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(REST_MATCHER.contentJson(DataForTest.RESTAURANTS))
+                .andExpect(REST_MATCHER.contentJson(RESTAURANTS))
                 .andDo(print());
     }
 
     @Test
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + DataForTest.REST.getId())
-                .with(userHttpBasic(DataForTest.ADMIN)))
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + REST.getId())
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(REST_MATCHER.contentJson(DataForTest.REST))
+                .andExpect(REST_MATCHER.contentJson(REST))
                 .andDo(print());
     }
 
     @Test
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + 1)
-                .with(userHttpBasic(DataForTest.ADMIN)))
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
@@ -112,17 +113,17 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void getForbidden() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL)
-                .with(userHttpBasic(DataForTest.USER)))
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void update() throws Exception {
-        Restaurant updated = DataForTest.UPDATE_REST_NEW_ADDR;
+        Restaurant updated = UPDATE_REST_NEW_ADDR;
         updated.setId(null);
         perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + 10)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
@@ -132,11 +133,11 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void updateInvalid() throws Exception {
-        Restaurant updated = DataForTest.UPDATE_REST_NEW_ADDR;
+        Restaurant updated = UPDATE_REST_NEW_ADDR;
         updated.setName("");
         perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + 10)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(DataForTest.ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.type", is("VALIDATION_ERROR")))
@@ -147,7 +148,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + 12)
-                .with(userHttpBasic(DataForTest.ADMIN)))
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> restService.get(12));
@@ -156,7 +157,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void deleteNotFound() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + 1)
-                .with(userHttpBasic(DataForTest.ADMIN)))
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }

@@ -110,13 +110,4 @@ public class UserServiceTest extends AbstractServiceTest {
         List<User> all2 = service.getAll();
         assertEquals(all2, of(ADMIN, USER, USER2));
     }
-
-//    @Test
-//    void createWithException() {
-//        validateRootCause(() -> service.create(new User(null, "  ", "user1@mail.ru", "password", Role.ROLE_USER)), ConstraintViolationException.class);
-//        validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.ROLE_USER)), ConstraintViolationException.class);
-//        validateRootCause(() -> service.create(new User(null, "User", "user1@mail.ru", "  ", Role.ROLE_USER)), ConstraintViolationException.class);
-//    }
-
-
 }
