@@ -11,20 +11,17 @@ import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
 import java.util.List;
 
-import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.lunchvoting.web.DataForTest.*;
 
 public class RestServiceTest extends AbstractServiceTest {
+
     @Autowired
     protected RestService service;
 
     @Autowired
     private RestRepository repository;
-
-    @Autowired
-    private CacheManager cacheManager;
 
     @Test
     void create() {

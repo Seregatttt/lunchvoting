@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.lunchvoting.web.DataForTest.MEAL_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.web.controller.MenuControllerTest.ADMIN;
+import static ru.javawebinar.lunchvoting.web.DataForTest.ADMIN;
 
 class MealControllerTest extends AbstractControllerTest {
     private static final String REST_MENUS_MEALS_URL = MealController.REST_MENUS_MEALS + '/';
