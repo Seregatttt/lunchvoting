@@ -1,7 +1,6 @@
 package ru.javawebinar.lunchvoting.service;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -16,8 +15,8 @@ import java.util.List;
 import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javawebinar.lunchvoting.TestData.MEAL_MATCHER;
-import static ru.javawebinar.lunchvoting.TestData.MENU_MATCHER;
+import static ru.javawebinar.lunchvoting.web.TestData.MEAL_MATCHER;
+import static ru.javawebinar.lunchvoting.web.TestData.MENU_MATCHER;
 
 
 public class MealServiceTest extends AbstractServiceTest {

@@ -3,21 +3,15 @@ package ru.javawebinar.lunchvoting.web.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javawebinar.lunchvoting.TestData.MENU_MATCHER;
-import static ru.javawebinar.lunchvoting.TestData.VOTE_MATCHER;
+import static ru.javawebinar.lunchvoting.web.TestData.VOTE_MATCHER;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.service.VoteServiceTest.VOTE;
-import static ru.javawebinar.lunchvoting.service.VoteServiceTest.VOTE2;
 import static ru.javawebinar.lunchvoting.web.controller.VoteControllerTest.USER;
 
 class VoteUIControllerTest extends AbstractControllerTest {

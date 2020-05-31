@@ -7,7 +7,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javawebinar.lunchvoting.TestData;
+import ru.javawebinar.lunchvoting.web.TestData;
 import ru.javawebinar.lunchvoting.model.Role;
 import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.service.UserService;
@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.javawebinar.lunchvoting.TestData.*;
+import static ru.javawebinar.lunchvoting.web.TestData.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
 

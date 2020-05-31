@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.javawebinar.lunchvoting.TestData.*;
+import static ru.javawebinar.lunchvoting.web.TestData.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
 import static ru.javawebinar.lunchvoting.web.controller.ProfileRestController.REST_PROFILE_URL;

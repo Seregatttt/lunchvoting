@@ -18,7 +18,7 @@ import java.util.List;
 import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javawebinar.lunchvoting.TestData.*;
+import static ru.javawebinar.lunchvoting.web.TestData.*;
 
 public class MenuServiceTest extends AbstractServiceTest {
     public static final int REST_ID_MENU = 10;

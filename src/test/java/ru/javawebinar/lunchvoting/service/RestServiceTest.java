@@ -1,11 +1,9 @@
 package ru.javawebinar.lunchvoting.service;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import ru.javawebinar.lunchvoting.model.Meal;
 import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Restaurant;
 import ru.javawebinar.lunchvoting.repository.RestRepository;
@@ -17,7 +15,7 @@ import java.util.List;
 import static java.time.LocalDate.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.javawebinar.lunchvoting.TestData.*;
+import static ru.javawebinar.lunchvoting.web.TestData.*;
 
 public class RestServiceTest extends AbstractServiceTest {
     public static final Restaurant NEW_REST = new Restaurant(null, "New Restaurant", "Moscow");

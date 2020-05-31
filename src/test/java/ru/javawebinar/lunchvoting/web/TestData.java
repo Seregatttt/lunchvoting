@@ -1,5 +1,6 @@
-package ru.javawebinar.lunchvoting;
+package ru.javawebinar.lunchvoting.web;
 
+import ru.javawebinar.lunchvoting.TestMatcher;
 import ru.javawebinar.lunchvoting.model.*;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
