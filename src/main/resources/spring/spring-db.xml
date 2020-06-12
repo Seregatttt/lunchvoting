@@ -63,4 +63,7 @@
 
     <context:component-scan base-package="ru.javawebinar.**.repository"/>
     <jpa:repositories base-package="ru.javawebinar.**.repository"/>
+
+    <bean class="ru.javawebinar.lunchvoting.DateTimeFactory" name="timeFactory"/>
+    <bean class="ru.javawebinar.lunchvoting.repository.VoteRepository" name="voteRepository"/>
 </beans>

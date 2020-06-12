@@ -21,7 +21,7 @@ public class MealRepository {
 
     @Transactional
     public Meal save(Meal meal, int menuId) {
-        if (!meal.isNew() && get(meal.id(), menuId) == null) {
+        if (!meal.isNew() && get(meal.getId(), menuId) == null) {
             return null;
         }
         meal.setMenu(crudMenuRepository.getOne(menuId));

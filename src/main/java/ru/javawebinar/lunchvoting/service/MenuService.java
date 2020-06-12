@@ -36,7 +36,7 @@ public class MenuService {
 
     public void update(Menu menu, int restId) {
         Assert.notNull(menu, "menu must not be null");
-        checkNotFoundWithId(repository.save(menu, restId), menu.id());
+        checkNotFoundWithId(repository.save(menu, restId), menu.getId());
     }
 
 

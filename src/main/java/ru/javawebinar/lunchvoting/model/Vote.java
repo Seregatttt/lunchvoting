@@ -1,11 +1,8 @@
 package ru.javawebinar.lunchvoting.model;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.javawebinar.lunchvoting.HasId;
 import ru.javawebinar.lunchvoting.View;
 
 import javax.persistence.*;
@@ -13,16 +10,16 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "user_id"}, name = "votes_unique_date_user_id_idx")})
 @Entity
 @Table(name = "votes")
-public class Vote implements HasId {
-    public static final int START_SEQ = 0;
+public class Vote extends AbstractBaseEntity {
+    //  public static final int START_SEQ = 0;
 
-    @Id
-    @SequenceGenerator(name = "global_seq_votes", sequenceName = "global_seq_votes", allocationSize = 1, initialValue = START_SEQ)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_votes")
-    private Integer id;
+//    @Id
+//    @SequenceGenerator(name = "global_seq_votes", sequenceName = "global_seq_votes", allocationSize = 1, initialValue = START_SEQ)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_votes")
+//    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -48,17 +45,21 @@ public class Vote implements HasId {
     public Vote() {
     }
 
-    public Vote(Vote m) {
-        this.id = m.getId();
-        this.dateTimeReg = m.getDateTimeReg();
-    }
-
     public Vote(Integer id, User user, Menu menu) {
-        this.id = id;
+        super(id);
         this.user = user;
         this.menu = menu;
         this.dateLunch = menu.getDateMenu();
         this.dateTimeReg = LocalDateTime.now();
+    }
+
+    public Vote(Integer id, User user, Menu menu, LocalDateTime localDateTime) {
+        this(id, user, menu);
+        this.dateTimeReg = localDateTime;
+    }
+
+    public Vote(Vote m) {
+        this(m.getId(), m.getUser(), m.getMenu());
     }
 
     public Integer getId() {
@@ -99,19 +100,6 @@ public class Vote implements HasId {
 
     public void setDateTimeReg(LocalDateTime dateTimeReg) {
         this.dateTimeReg = dateTimeReg;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Vote vote = (Vote) o;
-        return id.equals(vote.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id == null ? 0 : id;
     }
 
     @Override

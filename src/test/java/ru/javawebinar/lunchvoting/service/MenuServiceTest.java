@@ -32,7 +32,7 @@ public class MenuServiceTest extends AbstractServiceTest {
         Menu newMenu = new Menu(null, of(2020, Month.MAY, 5));
         newMenu.setRestaurant(REST);
         Menu created = service.create(newMenu, REST_ID_MENU);
-        int newId = created.id();
+        int newId = created.getId();
         newMenu.setId(newId);
         MENU_MATCHER.assertMatch(created, newMenu);
         MENU_MATCHER.assertMatch(service.get(newId, REST_ID_MENU), newMenu);

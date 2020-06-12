@@ -20,7 +20,7 @@ public class MenuRepository {
 
     @Transactional
     public Menu save(Menu menu, int restId) {
-        if (!menu.isNew() && get(menu.id(), restId) == null) {
+        if (!menu.isNew() && get(menu.getId(), restId) == null) {
             return null;
         }
         menu.setRestaurant(crudRestRepository.getOne(restId));

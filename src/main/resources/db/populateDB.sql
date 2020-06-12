@@ -12,7 +12,8 @@ ALTER SEQUENCE global_seq_meals RESTART WITH 1000;
 INSERT INTO users (name, email, password)
 VALUES ('Admin', 'admin@mail.ru', 'password'),
        ('User1', 'user1@mail.ru', 'password1'),
-       ('User2', 'user2@mail.ru', 'password2')
+       ('User2', 'user2@mail.ru', 'password2'),
+       ('User3', 'user3@mail.ru', 'password3')
 ;
 
 INSERT INTO user_roles (role, user_id)

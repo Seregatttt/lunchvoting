@@ -27,7 +27,7 @@ public class MealServiceTest extends AbstractServiceTest {
     void create() throws Exception {
         Meal newMeal = new Meal(null, "new meal", 5.55f);
         Meal created = service.create(newMeal, MENU_ID_MEAL1_ID);
-        int newId = created.id();
+        int newId = created.getId();
         newMeal.setId(newId);
         MEAL_MATCHER.assertMatch(created, newMeal);
         MEAL_MATCHER.assertMatch(service.get(newId, MENU_ID_MEAL1_ID), newMeal);

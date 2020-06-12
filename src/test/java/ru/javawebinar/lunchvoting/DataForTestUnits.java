@@ -3,6 +3,8 @@ package ru.javawebinar.lunchvoting;
 import ru.javawebinar.lunchvoting.model.*;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class DataForTestUnits {
     public static final User USER = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
     public static final User USER1 = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
     public static final User USER2 = new User(102, "User2", "user2@mail.ru", "password2", Role.ROLE_USER);
+    public static final User USER3 = new User(103, "User3", "user3@mail.ru", "password3", Role.ROLE_USER);
     public static final User NEW_USER = new User(null, "new_user", "new_user@mail.ru", "new_pass", Role.ROLE_USER);
     public static final User NEW_USER_DOUBLE_EMAIL = new User(null, "DuplicateEmail", "user1@mail.ru", "newPass", Role.ROLE_USER);
     public static final User UPDATE_USER1_NEW_PASS = new User(101, "User1", "user1@mail.ru", "newPass", Role.ROLE_USER);
@@ -48,10 +51,13 @@ public class DataForTestUnits {
     public static final Meal MEAL3 = new Meal(1003, "cake", 1.05f);
     public static final Meal MEAL4 = new Meal(1004, "tea", 3.05f);
 
-    public static final Vote VOTE = new Vote(0, USER1, MENU);
+   // public static final Vote VOTE = new Vote(0, USER1, MENU);
     public static final Vote VOTE2 = new Vote(2, USER1, MENU3);
     public static final Vote NEW_VOTE = new Vote(null, USER2, MENU6);
+    public static final Vote NEW_VOTE1 = new Vote(null, USER3, MENU2);
     public static final Vote VOTE_UPDATE = new Vote(null, USER1, MENU2);
+    public static final LocalDate LOCAL_DATE = LocalDate.of(2020,5,1);
+    public static final LocalTime LOCAL_TIME = LocalTime.of(10, 0);
 
     public static TestMatcher<User> USER_MATCHER
             = TestMatcher.usingFieldsComparator(User.class, "password");

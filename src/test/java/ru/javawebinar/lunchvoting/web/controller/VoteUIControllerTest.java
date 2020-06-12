@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
+import static ru.javawebinar.lunchvoting.service.VoteService.VOTE;
 
 class VoteUIControllerTest extends AbstractControllerTest {
 

@@ -1,37 +1,61 @@
 package ru.javawebinar.lunchvoting.service;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+import ru.javawebinar.lunchvoting.DateTimeFactory;
 import ru.javawebinar.lunchvoting.model.Vote;
-import ru.javawebinar.lunchvoting.repository.VoteRepository;
+import ru.javawebinar.lunchvoting.repository.*;
 import ru.javawebinar.lunchvoting.util.exception.IllegalRequestDataException;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
-import static ru.javawebinar.lunchvoting.repository.VoteRepository.*;
+import static ru.javawebinar.lunchvoting.service.VoteService.VOTE;
 
 public class VoteServiceTest extends AbstractServiceTest {
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+
+    public static final LocalTime TIME_LIMIT_VOTE = LocalTime.of(11, 0);
+    @Autowired
+    private VoteService service;
 
     @Autowired
-    protected VoteService service;
+    private CrudVoteRepository repository;
 
-    @Autowired
-    private VoteRepository repository;
+    @Mock
+    private DateTimeFactory timeFactory;
+
+    @Mock
+    private CrudVoteRepository mockVoteRepository;
+
+    @Mock
+    private CrudUserRepository mockUserRepository;
+
+    @Mock
+    private CrudMenuRepository mockMenuRepository;
+
+    @InjectMocks
+    private VoteService mockService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
-    void create() {
+    void createOrUpdate() {
         Vote create = NEW_VOTE;
-        Vote created = service.create(10006, 102);
+        Vote created = service.createOrUpdate(create,10006, 102);
         int newId = created.getId();
         create.setId(newId);
         assertEquals(created, create);
@@ -39,19 +63,49 @@ public class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    void testCreateBeforeTimeLimit() {
+
+        Vote newVote = new Vote(null, USER1, MENU2, LocalDateTime.of(LOCAL_DATE,LOCAL_TIME));
+
+        final Integer userId = newVote.getUser().getId();
+        final Integer menuId = newVote.getMenu().getId();
+
+        when(timeFactory.getCurrentTime()).thenReturn(LOCAL_TIME);
+        when(timeFactory.getCurrentDate()).thenReturn(LOCAL_DATE);
+        when(timeFactory.getTimeLimit()).thenReturn(TIME_LIMIT_VOTE);
+        when(mockVoteRepository.getByDateLunch(LOCAL_DATE, userId)).thenReturn(VOTE);
+        when(mockUserRepository.findById(userId)).thenReturn(java.util.Optional.of(USER1));
+        when(mockMenuRepository.findById(menuId)).thenReturn(java.util.Optional.of(MENU));
+        when(mockVoteRepository.save(newVote)).thenReturn(newVote);
+
+        Vote createdVote = mockService.createOrUpdate(newVote,menuId, userId);
+        VOTE_MATCHER.assertMatch(createdVote, newVote);
+        verify(mockVoteRepository).getByDateLunch(LOCAL_DATE, userId);
+        verify(mockVoteRepository).save(newVote);
+    }
+
+    @Test
+    void testCreateAfterTimeLimit() {
+        Vote newVote = VOTE_UPDATE;
+        when(timeFactory.getCurrentTime()).thenReturn(LocalTime.of(12, 0));
+        when(timeFactory.getTimeLimit()).thenReturn(LocalTime.of(11, 0));
+        when(timeFactory.getCurrentDate()).thenReturn(LOCAL_DATE);
+        when(mockVoteRepository.getByDateLunch(LOCAL_DATE,VOTE_UPDATE.getUser().getId())).thenReturn(VOTE);
+        assertThrows(IllegalRequestDataException.class, () ->
+                mockService.createOrUpdate(newVote,VOTE_UPDATE.getMenu().getId(),VOTE_UPDATE.getUser().getId()));
+        verify(mockVoteRepository).getByDateLunch(LOCAL_DATE,VOTE_UPDATE.getUser().getId());
+    }
+
+    @Test
     void createNotFoundMenu() {
-        assertThrows(NotFoundException.class, () -> service.create(777, 102));
+        Vote newVote = new Vote(null, USER1, MENU2, LocalDateTime.of(LOCAL_DATE,LOCAL_TIME));
+        assertThrows(NotFoundException.class, () -> service.createOrUpdate(newVote,777, 102));
     }
 
     @Test
     void createNotFoundUser() {
-        assertThrows(NotFoundException.class, () -> service.create(10006, 999999));
-    }
-
-    @Test
-    void duplicateDateCreate() throws Exception {
-        assertThrows(DataAccessException.class, () ->
-                service.create(10001, 101));
+        Vote newVote = new Vote(null, USER1, MENU2, LocalDateTime.of(LOCAL_DATE,LOCAL_TIME));
+        assertThrows(NotFoundException.class, () -> service.createOrUpdate(newVote,10006, 999999));
     }
 
     @Test
@@ -70,55 +124,6 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Test
     void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(99999, 101));
-    }
-
-    // update if exist old vote on date
-    @Test
-    void update() {
-        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 5, 1);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 0);
-        Vote updated = VOTE_UPDATE;
-        service.update(10001, 101);
-        Vote afterUpdate = repository.getWithUser(10001, 101);
-        updated.setId(afterUpdate.getId());
-        log.debug("update vote with  menuId={} and userId={} : afterUpdate = {}", 10001, 101, afterUpdate);
-        assertEquals(afterUpdate, updated);
-    }
-
-    @Test
-    void updateOldVote() {
-        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 5, 30);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(10, 0);
-        assertThrows(IllegalRequestDataException.class, () -> service.update(10001, 101));
-    }
-
-    @Test
-    void updateAfterCriticalTimeNow() {
-        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 5, 1);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(13, 0);
-        assertThrows(IllegalRequestDataException.class, () -> service.update(10001, 101));
-    }
-
-    // update if exist old vote on date
-    @Test
-    void updateFutureDate() {
-        TIME_CHANGE_VOTE = LocalTime.of(11, 0);
-        DATE_NOW_FOR_TEST_UPDATE = LocalDate.of(2020, 2, 1);
-        TIME_NOW_FOR_TEST_UPDATE = LocalTime.of(14, 0);
-        Vote updated = VOTE_UPDATE;
-        service.update(10001, 101);
-        Vote afterUpdate = repository.getWithUser(10001, 101);
-        updated.setId(afterUpdate.getId());
-        log.debug("update vote with  menuId={} and userId={} : afterUpdate = {}", 10001, 101, afterUpdate);
-        assertEquals(afterUpdate, updated);
-    }
-
-    @Test
-    void updateNotFoundVote() {
-        assertThrows(NotFoundException.class, () -> service.update(99, 101));
     }
 
     @Test

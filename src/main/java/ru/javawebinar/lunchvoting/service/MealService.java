@@ -37,7 +37,7 @@ public class MealService {
 
     public void update(Meal meal, int menuId) {
         Assert.notNull(meal, "meal must not be null");
-        checkNotFoundWithId(repository.save(meal, menuId), meal.id());
+        checkNotFoundWithId(repository.save(meal, menuId), meal.getId());
     }
 
     public void delete(int id, int menuId) {
