@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Restaurant;
-import ru.javawebinar.lunchvoting.repository.RestRepository;
+import ru.javawebinar.lunchvoting.repository.CrudRestRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
 import java.util.List;
@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
 
-public class RestServiceTest extends AbstractServiceTest {
+public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Autowired
-    protected RestService service;
+    protected RestaurantService service;
 
     @Autowired
-    private RestRepository repository;
+    private CrudRestRepository repository;
 
     @Test
     void create() {
@@ -67,7 +67,7 @@ public class RestServiceTest extends AbstractServiceTest {
     @Test
     public void delete() {
         service.delete(REST1.getId());
-        Assertions.assertNull(repository.get(REST1.getId()));
+        Assertions.assertNull(repository.findById(REST1.getId()).orElse(null));
     }
 
     @Test

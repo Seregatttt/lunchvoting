@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.lunchvoting.model.Restaurant;
-import ru.javawebinar.lunchvoting.service.RestService;
+import ru.javawebinar.lunchvoting.service.RestaurantService;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import ru.javawebinar.lunchvoting.web.AbstractControllerTest;
 import ru.javawebinar.lunchvoting.web.json.JsonUtil;
@@ -26,7 +26,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     public static final String REST_ADMIN_RESTAURANTS_URL = RestaurantController.REST_ADMIN_RESTAURANTS + '/';
 
     @Autowired
-    private RestService restService;
+    private RestaurantService restService;
 
     @Test
     void createWithLocation() throws Exception {
