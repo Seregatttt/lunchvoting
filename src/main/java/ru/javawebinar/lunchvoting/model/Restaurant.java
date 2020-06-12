@@ -13,13 +13,13 @@ import java.util.List;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @Table(name = "restaurants")
-public class Restaurant implements HasId {
-    public static final int START_SEQ = 10;
+public class Restaurant extends AbstractBaseEntity {
+  //  public static final int START_SEQ = 10;
 
-    @Id
+    /*@Id
     @SequenceGenerator(name = "global_seq_rest", sequenceName = "global_seq_rest", allocationSize = 1, initialValue = START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_rest")
-    private Integer id;
+    private Integer id;*/
 
     @NotBlank
     @Size(min = 2, max = 100)

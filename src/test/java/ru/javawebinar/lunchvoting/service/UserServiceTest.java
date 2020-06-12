@@ -81,7 +81,7 @@ public class UserServiceTest extends AbstractServiceTest {
     void update() {
         User updated = UPDATE_ADMIN_NEW_EMAIL;
         service.update(new User(updated));
-        assertEquals(service.get(100), updated);
+        assertEquals(service.get(ADMIN_ID), updated);
     }
 
     @Test
@@ -93,8 +93,8 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void delete() {
-        service.delete(101);
-        Assertions.assertNull(repository.findById(101).orElse(null));
+        service.delete(USER_ID);
+        Assertions.assertNull(repository.findById(USER_ID).orElse(null));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class UserServiceTest extends AbstractServiceTest {
     void deleteUseCache() {
         List<User> all = service.getAll();
         assertEquals(all, of(ADMIN, USER, USER2, USER3));
-        service.deleteUseCache(101);
+        service.deleteUseCache(USER_ID);
         List<User> all2 = service.getAll();
         assertEquals(all2, of(ADMIN, USER, USER2, USER3));
     }

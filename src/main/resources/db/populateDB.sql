@@ -1,13 +1,17 @@
-DELETE FROM votes;
-DELETE FROM meals;
-DELETE FROM menus;
-DELETE FROM restaurants;
-DELETE FROM user_roles;
-DELETE FROM users;
-ALTER SEQUENCE global_seq_users RESTART WITH 100;
-ALTER SEQUENCE global_seq_rest RESTART WITH 10;
-ALTER SEQUENCE global_seq_menus RESTART WITH 10000;
-ALTER SEQUENCE global_seq_meals RESTART WITH 1000;
+DELETE
+FROM votes;
+DELETE
+FROM meals;
+DELETE
+FROM menus;
+DELETE
+FROM restaurants;
+DELETE
+FROM user_roles;
+DELETE
+FROM users;
+ALTER SEQUENCE global_seq RESTART WITH 10000;
+
 
 INSERT INTO users (name, email, password)
 VALUES ('Admin', 'admin@mail.ru', 'password'),
@@ -17,49 +21,41 @@ VALUES ('Admin', 'admin@mail.ru', 'password'),
 ;
 
 INSERT INTO user_roles (role, user_id)
-VALUES ('ROLE_ADMIN', 100),
-       ('ROLE_USER', 101),
-       ('ROLE_USER', 102),
-       ('ROLE_USER', 103);
-
-ALTER SEQUENCE global_seq_rest RESTART WITH 10;
+VALUES ('ROLE_ADMIN', 10000),
+       ('ROLE_USER', 10001),
+       ('ROLE_USER', 10002),
+       ('ROLE_USER', 10003);
 
 INSERT INTO restaurants (name, address)
-VALUES ('Celler de Can Roca', 'Spain'),
-       ('Noma', 'Copenhagen'),
-       ('Sato', 'Mexico');
-
-ALTER SEQUENCE global_seq_menus RESTART WITH 10000;
+VALUES ('Celler de Can Roca', 'Spain'),--10004
+       ('Noma', 'Copenhagen'),--10005
+       ('Sato', 'Mexico');--10006
 
 INSERT INTO menus (rest_id, date_menu)
-VALUES (10, '2020-05-01'),--10000
-       (11, '2020-05-01'),--10001
-       (12, '2020-05-01'),--10002
-       (10, '2020-05-02'),--10003
-       (11, '2020-05-02'),--10004
-       (12, '2020-05-02'),--10005
-       (10, '2020-05-03');--10006
-
-ALTER SEQUENCE global_seq_meals RESTART WITH 1000;
+VALUES (10004, '2020-05-01'),--10000 10 10007
+       (10005, '2020-05-01'),--10001 11 10008
+       (10006, '2020-05-01'),--10002 12 10009
+       (10004, '2020-05-02'),--10003 10 10010
+       (10005, '2020-05-02'),--10004 11 10011
+       (10006, '2020-05-02'),--10005 12 10012
+       (10004, '2020-05-03');--10006 10 10013
 
 INSERT INTO meals (menu_id, name, price)
-VALUES (10000, 'Salad', 5.50),
-       (10000, 'juice', 4.50),
-       (10000, 'soup', 3.05),
-       (10001, 'cake', 1.05),
-       (10001, 'tea', 3.05),
-       (10002, 'coffee', 4.05),
-       (10002, 'ice cream', 5.05),
-       (10003, 'chocolate', 6.05),
-       (10003, 'soup', 7.55),
-       (10004, 'Salad', 9.00),
-       (10004, 'soup', 10.05),
-       (10005, 'fat in chocolate', 55.55);
+VALUES (10007, 'Salad', 5.50),-- 10014
+       (10007, 'juice', 4.50),-- 10015
+       (10007, 'soup', 3.05),-- 10016
+       (10008, 'cake', 1.05),-- 10017
+       (10008, 'tea', 3.05),-- 10018
+       (10009, 'coffee', 4.05),-- 10019
+       (10009, 'ice cream', 5.05),-- 10020
+       (10010, 'chocolate', 6.05),-- 10021
+       (10010, 'soup', 7.55),-- 10022
+       (10011, 'Salad', 9.00),-- 10023
+       (10011, 'soup', 10.05),-- 10024
+       (10012, 'fat in chocolate', 55.55);--10025
 
-ALTER SEQUENCE global_seq_votes RESTART WITH 0;
-
-INSERT INTO votes (user_id, menu_id,date_menu,date_reg)
-VALUES (101, 10000,'2020-05-01','2020-05-01 09:00:00'),
-       (102, 10001,'2020-05-01','2020-05-01 12:00:00'),
-       (101, 10002,'2020-05-02','2020-05-01 10:00:00'),
-       (102, 10003,'2020-05-02','2020-05-01 22:00:00');
+/*INSERT INTO votes (user_id, menu_id, date_menu, date_reg)
+VALUES (101, 10000, '2020-05-01', '2020-05-01 09:00:00'),
+       (102, 10001, '2020-05-01', '2020-05-01 12:00:00'),
+       (101, 10002, '2020-05-02', '2020-05-01 10:00:00'),
+       (102, 10003, '2020-05-02', '2020-05-01 22:00:00');*/

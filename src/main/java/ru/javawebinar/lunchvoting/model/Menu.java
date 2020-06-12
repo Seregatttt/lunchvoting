@@ -16,13 +16,13 @@ import java.util.List;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @Table(name = "menus")
-public class Menu implements HasId {
-    public static final int START_SEQ = 10000;
+public class Menu extends AbstractBaseEntity {
+  // public static final int START_SEQ = 10000;
 
-    @Id
+   /* @Id
     @SequenceGenerator(name = "global_seq_menus", sequenceName = "global_seq_menus", allocationSize = 1, initialValue = START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_menus")
-    private Integer id;
+    private Integer id;*/
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rest_id", nullable = false)

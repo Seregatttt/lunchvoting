@@ -19,17 +19,17 @@ public class DataForTestUnits {
     public static final Restaurant UPDATE_REST_NEW_ADDR = new Restaurant(10, "Celler de Can Roca", "newAdr");
     public static final List<Restaurant> RESTAURANTS = List.of(REST, REST1, REST2);
 
-    public static final User ADMIN = new User(100, "Admin", "admin@mail.ru", "password", Role.ROLE_ADMIN);
-    public static final User USER = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
-    public static final User USER1 = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
-    public static final User USER2 = new User(102, "User2", "user2@mail.ru", "password2", Role.ROLE_USER);
-    public static final User USER3 = new User(103, "User3", "user3@mail.ru", "password3", Role.ROLE_USER);
+    public static final User ADMIN = new User(10000, "Admin", "admin@mail.ru", "password", Role.ROLE_ADMIN);
+    public static final User USER = new User(10001, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
+    public static final User USER1 = new User(10001, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
+    public static final User USER2 = new User(10002, "User2", "user2@mail.ru", "password2", Role.ROLE_USER);
+    public static final User USER3 = new User(10003, "User3", "user3@mail.ru", "password3", Role.ROLE_USER);
     public static final User NEW_USER = new User(null, "new_user", "new_user@mail.ru", "new_pass", Role.ROLE_USER);
     public static final User NEW_USER_DOUBLE_EMAIL = new User(null, "DuplicateEmail", "user1@mail.ru", "newPass", Role.ROLE_USER);
     public static final User UPDATE_USER1_NEW_PASS = new User(101, "User1", "user1@mail.ru", "newPass", Role.ROLE_USER);
-    public static final User UPDATE_ADMIN_NEW_EMAIL = new User(100, "Admin", "super-admin@mail.ru", "admin", Role.ROLE_ADMIN);
-    public static final int USER_ID = 101;
-    public static final int ADMIN_ID = 100;
+    public static final User UPDATE_ADMIN_NEW_EMAIL = new User(10000, "Admin", "super-admin@mail.ru", "admin", Role.ROLE_ADMIN);
+    public static final int USER_ID = 10001;
+    public static final int ADMIN_ID = 10000;
 
     public static final int REST_ID_MENU = 10;
     public static final int MENU_ID = 10000;

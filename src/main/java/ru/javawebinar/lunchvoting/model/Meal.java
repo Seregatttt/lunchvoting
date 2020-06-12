@@ -5,7 +5,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import ru.javawebinar.lunchvoting.HasId;
 import ru.javawebinar.lunchvoting.View;
 
 import javax.persistence.*;
@@ -17,13 +16,13 @@ import javax.validation.constraints.Size;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @Table(name = "meals")
-public class Meal implements HasId {
-    public static final int START_SEQ = 1000;
+public class Meal extends AbstractBaseEntity {
+   /* public static final int START_SEQ = 1000;
 
     @Id
     @SequenceGenerator(name = "global_seq_meals", sequenceName = "global_seq_meals", allocationSize = 1, initialValue = START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_meals")
-    private Integer id;
+    private Integer id;*/
 
     @Column(name = "name", nullable = false)
     @NotBlank

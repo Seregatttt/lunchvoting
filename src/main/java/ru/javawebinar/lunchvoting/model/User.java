@@ -19,13 +19,13 @@ import java.util.Set;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
-public class User implements HasId {
-    public static final int START_USERS_SEQ = 100;
+public class User extends AbstractBaseEntity {
+  //  public static final int START_USERS_SEQ = 100;
 
-    @Id
-    @SequenceGenerator(name = "global_seq_users", sequenceName = "global_seq_users", allocationSize = 1, initialValue = START_USERS_SEQ)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_users")
-    protected Integer id;
+//    @Id
+//    @SequenceGenerator(name = "global_seq_users", sequenceName = "global_seq_users", allocationSize = 1, initialValue = START_USERS_SEQ)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_users")
+//    protected Integer id;
 
     @NotBlank
     @Size(min = 2, max = 100)
