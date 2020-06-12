@@ -5,7 +5,6 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.CollectionUtils;
-import ru.javawebinar.lunchvoting.HasId;
 import ru.javawebinar.lunchvoting.View;
 
 import javax.persistence.*;

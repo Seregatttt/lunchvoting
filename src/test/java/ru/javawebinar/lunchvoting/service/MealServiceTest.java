@@ -68,8 +68,8 @@ public class MealServiceTest extends AbstractServiceTest {
     @Test
     void update() throws Exception {
         Meal updated = new Meal(MEAL3_ID, "update salad", 555f);
-        service.createOrUpdate(updated, 10001);
-        MEAL_MATCHER.assertMatch(service.get(MEAL3_ID, 10001), updated);
+        service.createOrUpdate(updated, MENU_ID_MEAL1_ID);
+        MEAL_MATCHER.assertMatch(service.get(MEAL3_ID, MENU_ID_MEAL1_ID), updated);
     }
 
     @Test

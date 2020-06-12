@@ -1,6 +1,6 @@
 package ru.javawebinar.lunchvoting.to;
 
-import ru.javawebinar.lunchvoting.HasId;
+import ru.javawebinar.lunchvoting.model.HasId;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

@@ -3,7 +3,6 @@ package ru.javawebinar.lunchvoting.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import ru.javawebinar.lunchvoting.HasId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

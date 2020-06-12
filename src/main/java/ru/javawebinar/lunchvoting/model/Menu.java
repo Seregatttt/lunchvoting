@@ -1,11 +1,9 @@
 package ru.javawebinar.lunchvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import ru.javawebinar.lunchvoting.HasId;
 import ru.javawebinar.lunchvoting.View;
 
 import javax.persistence.*;

@@ -18,11 +18,11 @@ import static ru.javawebinar.lunchvoting.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNew;
 
 @RestController
-@RequestMapping(value = MealController.REST_MENUS_MEALS, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = MealController.REST_MENUS_ID_MEALS, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MealController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
-
-    static final String REST_MENUS_MEALS = "/rest/admin/menus" + "/{menuId}/meals";
+    static final String REST_ADMIN_MENUS = "/rest/admin/menus" ;
+    static final String REST_MENUS_ID_MEALS = REST_ADMIN_MENUS + "/{menuId}/meals";
 
     protected final MealService service;
 
@@ -36,7 +36,7 @@ public class MealController {
         checkNew(meal);
         Meal created = service.createOrUpdate(meal, menuId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_MENUS_MEALS + "/{id}")
+                .path(REST_MENUS_ID_MEALS + "/{id}")
                 .buildAndExpand(menuId, created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }

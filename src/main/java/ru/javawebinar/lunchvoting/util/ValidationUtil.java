@@ -1,7 +1,7 @@
 package ru.javawebinar.lunchvoting.util;
 
 import org.slf4j.Logger;
-import ru.javawebinar.lunchvoting.HasId;
+import ru.javawebinar.lunchvoting.model.HasId;
 import ru.javawebinar.lunchvoting.util.exception.IllegalRequestDataException;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 

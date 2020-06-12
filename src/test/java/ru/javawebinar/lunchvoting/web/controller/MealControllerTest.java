@@ -25,14 +25,15 @@ import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
 
 class MealControllerTest extends AbstractControllerTest {
-
+    public static final String REST_ADMIN_MENUS_URL = MealController.REST_ADMIN_MENUS + '/';
     @Autowired
     private MealService service;
 
     @Test
     void createWithLocation() throws Exception {
         Meal newCreate = new Meal(null, "super-tea", 999.05f);
-        ResultActions action = perform(MockMvcRequestBuilders.post("/rest/admin/menus/10001/meals")
+        ResultActions action = perform(MockMvcRequestBuilders
+                .post(REST_ADMIN_MENUS_URL + MENU1_ID + "/meals")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
@@ -43,14 +44,14 @@ class MealControllerTest extends AbstractControllerTest {
         int newId = created.getId();
         newCreate.setId(newId);
         MEAL_MATCHER.assertMatch(created, newCreate);
-        MEAL_MATCHER.assertMatch(service.get(newId, 10001), newCreate);
+        MEAL_MATCHER.assertMatch(service.get(newId, MENU1_ID), newCreate);
     }
 
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void createNewRestWithId() throws Exception {
         Meal newCreate = new Meal(1233, "super-tea", 999.05f);
-        perform(MockMvcRequestBuilders.post("/rest/admin/menus/10001/meals")
+        perform(MockMvcRequestBuilders.post(REST_ADMIN_MENUS_URL + MENU1_ID + "/meals")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
@@ -62,7 +63,7 @@ class MealControllerTest extends AbstractControllerTest {
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals")
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_MENUS_URL + MENU1_ID + "/meals")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -72,7 +73,7 @@ class MealControllerTest extends AbstractControllerTest {
 
     @Test
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals/" + 1003)
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_MENUS_URL + MENU1_ID + "/meals/" + MEAL3_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
@@ -83,7 +84,7 @@ class MealControllerTest extends AbstractControllerTest {
 
     @Test
     void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals/" + 2)
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_MENUS_URL + MENU1_ID + "/meals/" + 2)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
@@ -91,34 +92,34 @@ class MealControllerTest extends AbstractControllerTest {
 
     @Test
     void getUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals/" + 1003))
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_MENUS_URL + MENU1_ID + "/meals/" + MEAL3_ID))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void getForbidden() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/admin/menus/10001/meals/" + 1003)
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_MENUS_URL + MENU1_ID + "/meals/" + MEAL3_ID)
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void update() throws Exception {
-        Meal updated = new Meal(1003, "update salad", 555f);
-        perform(MockMvcRequestBuilders.put("/rest/admin/menus/10001/meals/" + 1003)
+        Meal updated = new Meal(MEAL3_ID, "update salad", 555f);
+        perform(MockMvcRequestBuilders.put(REST_ADMIN_MENUS_URL + MENU1_ID + "/meals/" + MEAL3_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
-        MEAL_MATCHER.assertMatch(service.get(1003, 10001), updated);
+        MEAL_MATCHER.assertMatch(service.get(MEAL3_ID, MENU1_ID), updated);
     }
 
     @Test
     void updateInvalid() throws Exception {
-        Meal updated = new Meal(1003, "update salad", 555f);
+        Meal updated = new Meal(MEAL3_ID, "update salad", 555f);
         updated.setPrice(0f);
-        perform(MockMvcRequestBuilders.put("/rest/admin/menus/10001/meals/" + 1003)
+        perform(MockMvcRequestBuilders.put(REST_ADMIN_MENUS_URL + MENU1_ID + "/meals/" + MEAL3_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
@@ -130,16 +131,16 @@ class MealControllerTest extends AbstractControllerTest {
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete("/rest/admin/menus/10004/meals/" + 1010)
+        perform(MockMvcRequestBuilders.delete(REST_ADMIN_MENUS_URL + MENU4_ID + "/meals/" + MEAL10_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> service.get(1010, 10004));
+        assertThrows(NotFoundException.class, () -> service.get(MEAL10_ID, MENU4_ID));
     }
 
     @Test
     void deleteNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.delete("/rest/admin/menus/10004/meals/" + 99)
+        perform(MockMvcRequestBuilders.delete(REST_ADMIN_MENUS_URL + MENU1_ID + "/meals/" + 99)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());

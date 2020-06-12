@@ -11,12 +11,13 @@ import java.util.List;
 import static java.time.LocalDate.of;
 
 public class DataForTestUnits {
-    public static final Restaurant REST = new Restaurant(10, "Celler de Can Roca", "Spain");
-    public static final Restaurant REST1 = new Restaurant(11, "Noma", "Copenhagen");
-    public static final Restaurant REST2 = new Restaurant(12, "Sato", "Mexico");
-    public static final Restaurant UPDATE_REST2_ADDRESS = new Restaurant(12, "Sato", "Update city");
+    public static final int REST2_ID = 10006;
+    public static final Restaurant REST = new Restaurant(10004, "Celler de Can Roca", "Spain");
+    public static final Restaurant REST1 = new Restaurant(10005, "Noma", "Copenhagen");
+    public static final Restaurant REST2 = new Restaurant(10006, "Sato", "Mexico");
+    public static final Restaurant UPDATE_REST2_ADDRESS = new Restaurant(10006, "Sato", "Update city");
     public static final Restaurant NEW_REST = new Restaurant(null, "New Restaurant", "Moscow");
-    public static final Restaurant UPDATE_REST_NEW_ADDR = new Restaurant(10, "Celler de Can Roca", "newAdr");
+    public static final Restaurant UPDATE_REST = new Restaurant(10004, "Celler de Can Roca", "newAdr");
     public static final List<Restaurant> RESTAURANTS = List.of(REST, REST1, REST2);
 
     public static final User ADMIN = new User(10000, "Admin", "admin@mail.ru", "password", Role.ROLE_ADMIN);
@@ -31,25 +32,34 @@ public class DataForTestUnits {
     public static final int USER_ID = 10001;
     public static final int ADMIN_ID = 10000;
 
-    public static final int REST_ID_MENU = 10;
-    public static final int MENU_ID = 10000;
-    public static final Menu MENU = new Menu(10000, of(2020, Month.MAY, 1));
-    public static final Menu MENU1 = new Menu(10001, of(2020, Month.MAY, 1));
-    public static final Menu MENU2 = new Menu(10002, of(2020, Month.MAY, 1));
-    public static final Menu MENU3 = new Menu(10003, of(2020, Month.MAY, 2));
-    public static final Menu MENU4 = new Menu(10004, of(2020, Month.MAY, 2));
-    public static final Menu MENU5 = new Menu(10005, of(2020, Month.MAY, 2));
-    public static final Menu MENU6 = new Menu(10006, of(2020, Month.MAY, 3));
+    public static final int REST_ID_MENU = 10004;
+    public static final int REST2_ID_MENU = 10006;
+    public static final int MENU_ID = 10007;
+    public static final int MENU1_ID = 10008;
+    public static final int MENU2_ID = 10009;
+    public static final int MENU3_ID = 10010;
+    public static final int MENU4_ID = 10011;
+    public static final Menu MENU = new Menu(10007, of(2020, Month.MAY, 1));
+    public static final Menu MENU1 = new Menu(10008, of(2020, Month.MAY, 1));
+    public static final Menu MENU2 = new Menu(10009, of(2020, Month.MAY, 1));
+    public static final Menu MENU3 = new Menu(10010, of(2020, Month.MAY, 2));
+    public static final Menu MENU4 = new Menu(10011, of(2020, Month.MAY, 2));
+    public static final Menu MENU5 = new Menu(10012, of(2020, Month.MAY, 2));
+    public static final Menu MENU6 = new Menu(10013, of(2020, Month.MAY, 3));
     public static final Menu MENU_WITH_REST = new Menu(MENU_ID, REST, of(2020, Month.MAY, 1));
     public static final List<Menu> MENUS = List.of(MENU, MENU3, MENU6);
 
-    public static final int MEAL3_ID = 1003;
-    public static final int MENU_ID_MEAL1_ID = 10001;
-    public static final Meal MEAL = new Meal(1000, "Salad", 5.50f);
-    public static final Meal MEAL1 = new Meal(1001, "juice", 4.50f);
-    public static final Meal MEAL2 = new Meal(1002, "soup", 3.05f);
-    public static final Meal MEAL3 = new Meal(1003, "cake", 1.05f);
-    public static final Meal MEAL4 = new Meal(1004, "tea", 3.05f);
+    public static final int MEAL_ID = 10014;
+    public static final int MEAL1_ID = 10015;
+    public static final int MEAL2_ID = 10016;
+    public static final int MEAL3_ID = 10017;
+    public static final int MEAL10_ID = 10024;
+    public static final int MENU_ID_MEAL1_ID = 10008;
+    public static final Meal MEAL = new Meal(10014, "Salad", 5.50f);
+    public static final Meal MEAL1 = new Meal(10015, "juice", 4.50f);
+    public static final Meal MEAL2 = new Meal(10016, "soup", 3.05f);
+    public static final Meal MEAL3 = new Meal(10017, "cake", 1.05f);
+    public static final Meal MEAL4 = new Meal(10018, "tea", 3.05f);
 
    // public static final Vote VOTE = new Vote(0, USER1, MENU);
     public static final Vote VOTE2 = new Vote(2, USER1, MENU3);

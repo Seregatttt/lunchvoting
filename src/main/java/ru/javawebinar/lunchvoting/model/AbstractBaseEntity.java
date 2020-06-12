@@ -1,7 +1,5 @@
 package ru.javawebinar.lunchvoting.model;
 
-import ru.javawebinar.lunchvoting.HasId;
-
 import javax.persistence.*;
 
 @MappedSuperclass

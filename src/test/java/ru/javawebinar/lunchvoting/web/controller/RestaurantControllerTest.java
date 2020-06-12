@@ -117,23 +117,23 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        Restaurant updated = UPDATE_REST_NEW_ADDR;
+        Restaurant updated = UPDATE_REST;
         updated.setId(null);
-        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + 10)
+        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + REST2_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
-        updated.setId(10);
-        REST_MATCHER.assertMatch(restService.get(10), updated);
+        updated.setId(REST2_ID);
+        REST_MATCHER.assertMatch(restService.get(REST2_ID), updated);
     }
 
     @Test
     void updateInvalid() throws Exception {
-        Restaurant updated = UPDATE_REST_NEW_ADDR;
+        Restaurant updated = UPDATE_REST;
         updated.setName("");
-        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + 10)
+        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + REST2_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
@@ -145,11 +145,11 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + 12)
+        perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + REST2_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> restService.get(12));
+        assertThrows(NotFoundException.class, () -> restService.get(REST2_ID));
     }
 
     @Test

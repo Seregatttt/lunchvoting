@@ -61,7 +61,7 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     void getWithRestAndMeals() throws Exception {
-        Menu actual = service.getWithRestAndMeals(MENU_ID, 10);
+        Menu actual = service.getWithRestAndMeals(MENU_ID, REST_ID_MENU);
         MENU_MATCHER.assertMatch(actual, new Menu(MENU_ID, of(2020, Month.MAY, 1)));
         REST_MATCHER.assertMatch(actual.getRestaurant(), REST);
         List<Meal> meals = List.of(MEAL, MEAL1, MEAL2);
@@ -70,7 +70,7 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     void getWithRest() throws Exception {
-        Menu actual = service.getWithRest(MENU_ID, 10);
+        Menu actual = service.getWithRest(MENU_ID, REST_ID_MENU);
         MENU_MATCHER.assertMatch(actual, new Menu(MENU_ID, of(2020, Month.MAY, 1)));
         REST_MATCHER.assertMatch(actual.getRestaurant(), REST);
     }
@@ -89,10 +89,10 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Test
     void update() throws Exception {
-        Menu updated = new Menu(10002, of(2020, Month.MAY, 11));
+        Menu updated = new Menu(10009, of(2020, Month.MAY, 11));
         updated.setRestaurant(REST2);
         service.createOrUpdate(updated, REST2.getId());
-        MENU_MATCHER.assertMatch(service.get(10002, 12), updated);
+        MENU_MATCHER.assertMatch(service.get(10009, REST2.getId()), updated);
     }
 
     @Test

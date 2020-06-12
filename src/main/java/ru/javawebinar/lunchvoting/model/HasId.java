@@ -1,4 +1,4 @@
-package ru.javawebinar.lunchvoting;
+package ru.javawebinar.lunchvoting.model;
 
 public interface HasId {
     Integer getId();

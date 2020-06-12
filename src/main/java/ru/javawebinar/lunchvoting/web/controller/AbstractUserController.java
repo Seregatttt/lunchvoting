@@ -3,7 +3,7 @@ package ru.javawebinar.lunchvoting.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.javawebinar.lunchvoting.HasId;
+import ru.javawebinar.lunchvoting.model.HasId;
 import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.service.UserService;
 import ru.javawebinar.lunchvoting.to.UserTo;

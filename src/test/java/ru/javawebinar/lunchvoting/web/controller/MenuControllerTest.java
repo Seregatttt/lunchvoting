@@ -35,7 +35,8 @@ class MenuControllerTest extends AbstractControllerTest {
     @Test
     void createWithLocation() throws Exception {
         Menu newCreate = new Menu(null, of(2020, Month.MAY, 30));
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL + "10/menus")
+        ResultActions action = perform(MockMvcRequestBuilders
+                .post(REST_ADMIN_RESTAURANTS_URL + REST_ID_MENU + "/menus")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
@@ -46,14 +47,14 @@ class MenuControllerTest extends AbstractControllerTest {
         int newId = created.getId();
         newCreate.setId(newId);
         MENU_MATCHER.assertMatch(created, newCreate);
-        MENU_MATCHER.assertMatch(service.get(newId, 10), newCreate);
+        MENU_MATCHER.assertMatch(service.get(newId, REST_ID_MENU), newCreate);
     }
 
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void createNewRestWithId() throws Exception {
         Menu newCreate = new Menu(123, of(2020, Month.MAY, 30));
-        perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL + "10/menus")
+        perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL + REST_ID_MENU + "/menus")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newCreate)))
@@ -67,7 +68,7 @@ class MenuControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     void createDuplicate() throws Exception {
         Menu expected = new Menu(null, of(2020, Month.MAY, 1));
-        perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL + "10/menus")
+        perform(MockMvcRequestBuilders.post(REST_ADMIN_RESTAURANTS_URL + REST_ID_MENU + "/menus")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(expected)))
@@ -80,7 +81,7 @@ class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + "10/menus")
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + REST_ID_MENU + "/menus")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -90,7 +91,7 @@ class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 10000)
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + REST_ID_MENU + "/menus/" + MENU_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 // https://jira.spring.io/browse/SPR-14472
@@ -101,7 +102,7 @@ class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void getNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 1)
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + REST_ID_MENU + "/menus/" + 1)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
@@ -109,35 +110,35 @@ class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void getUnAuth() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 10000))
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + REST_ID_MENU + "/menus/" + MENU_ID))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
     void getForbidden() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 10000)
+        perform(MockMvcRequestBuilders.get(REST_ADMIN_RESTAURANTS_URL + REST_ID_MENU + "/menus/" + MENU_ID)
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void update() throws Exception {
-        Menu updated = new Menu(10002, of(2020, Month.MAY, 11));
-        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + "12/menus/" + 10002)
+        Menu updated = new Menu(MENU2_ID, of(2020, Month.MAY, 11));
+        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + REST2_ID_MENU + "/menus/" + MENU2_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
-        updated.setId(10002);
-        MENU_MATCHER.assertMatch(service.get(10002, 12), updated);
+        updated.setId(MENU2_ID);
+        MENU_MATCHER.assertMatch(service.get(MENU2_ID, REST2_ID_MENU), updated);
     }
 
     @Test
     void updateInvalid() throws Exception {
         Menu updated = new Menu(10002, of(2020, Month.MAY, 11));
         updated.setDateMenu(null);
-        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + "12/menus/" + 10002)
+        perform(MockMvcRequestBuilders.put(REST_ADMIN_RESTAURANTS_URL + REST2_ID_MENU + "/menus/" + MENU2_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(updated)))
@@ -149,16 +150,16 @@ class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 10003)
+        perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + REST_ID_MENU + "/menus/" + MENU3_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> service.get(10003, 10));
+        assertThrows(NotFoundException.class, () -> service.get(MENU3_ID, REST_ID_MENU));
     }
 
     @Test
     void deleteNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + "10/menus/" + 1)
+        perform(MockMvcRequestBuilders.delete(REST_ADMIN_RESTAURANTS_URL + REST_ID_MENU + "/menus/" + 1)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
