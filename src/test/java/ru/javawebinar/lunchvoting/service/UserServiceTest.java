@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.lunchvoting.model.User;
-import ru.javawebinar.lunchvoting.repository.UserRepository;
+import ru.javawebinar.lunchvoting.repository.CrudUserRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class UserServiceTest extends AbstractServiceTest {
     protected UserService service;
 
     @Autowired
-    private UserRepository repository;
+    private CrudUserRepository repository;
 
     @Autowired
     private CacheManager cacheManager;
@@ -52,7 +52,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     void getAll() {
         List<User> all = service.getAll();
-        assertEquals(all, of(ADMIN, USER, USER2));
+        assertEquals(all, of(ADMIN, USER, USER2, USER3));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void delete() {
         service.delete(101);
-        Assertions.assertNull(repository.get(101));
+        Assertions.assertNull(repository.findById(101).orElse(null));
     }
 
     @Test
@@ -105,9 +105,9 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     void deleteUseCache() {
         List<User> all = service.getAll();
-        assertEquals(all, of(ADMIN, USER, USER2));
+        assertEquals(all, of(ADMIN, USER, USER2, USER3));
         service.deleteUseCache(101);
         List<User> all2 = service.getAll();
-        assertEquals(all2, of(ADMIN, USER, USER2));
+        assertEquals(all2, of(ADMIN, USER, USER2, USER3));
     }
 }

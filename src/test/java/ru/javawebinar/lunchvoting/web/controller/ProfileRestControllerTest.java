@@ -49,7 +49,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.delete(REST_PROFILE_URL)
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isNoContent());
-        USER_MATCHER.assertMatch(userService.getAll(), ADMIN, USER2);
+        USER_MATCHER.assertMatch(userService.getAll(), ADMIN, USER2, USER3);
     }
 
     @Test

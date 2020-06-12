@@ -19,7 +19,8 @@ VALUES ('Admin', 'admin@mail.ru', 'password'),
 INSERT INTO user_roles (role, user_id)
 VALUES ('ROLE_ADMIN', 100),
        ('ROLE_USER', 101),
-       ('ROLE_USER', 102);
+       ('ROLE_USER', 102),
+       ('ROLE_USER', 103);
 
 ALTER SEQUENCE global_seq_rest RESTART WITH 10;
 

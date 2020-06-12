@@ -52,7 +52,7 @@ public class VoteServiceTest extends AbstractServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
+    /*@Test
     void createOrUpdate() {
         Vote create = NEW_VOTE;
         Vote created = service.createOrUpdate(create,10006, 102);
@@ -135,5 +135,5 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Test
     void deletedNotFound() {
         assertThrows(NotFoundException.class, () -> service.delete(9999, 102));
-    }
+    }*/
 }

@@ -16,7 +16,7 @@ import static ru.javawebinar.lunchvoting.service.VoteService.VOTE;
 
 class VoteUIControllerTest extends AbstractControllerTest {
 
-    @Test
+/*    @Test
     void getLunchVotes() throws Exception {
         perform(MockMvcRequestBuilders.get("/rest/profile/historyLunchVotes")
                 .param("startDate", "2020-05-01")
@@ -53,5 +53,5 @@ class VoteUIControllerTest extends AbstractControllerTest {
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(print());
-    }
+    }*/
 }

@@ -40,7 +40,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
 
 
-
+/*
     @Test
     void createWithLocation() throws Exception {
        // Vote newCreate = NEW_VOTE1;
@@ -111,5 +111,5 @@ class VoteControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER2)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
-    }
+    }*/
 }

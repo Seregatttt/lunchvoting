@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.lunchvoting.AuthorizedUser;
 import ru.javawebinar.lunchvoting.model.User;
-import ru.javawebinar.lunchvoting.repository.UserRepository;
+import ru.javawebinar.lunchvoting.repository.CrudUserRepository;
 import ru.javawebinar.lunchvoting.to.UserTo;
 import ru.javawebinar.lunchvoting.util.UserUtil;
 
@@ -26,10 +27,11 @@ import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithId
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserService implements UserDetailsService {
     protected final Logger log = LoggerFactory.getLogger(getClass());
+    private static final Sort SORT_NAME = Sort.by(Sort.Direction.ASC, "name");
 
-    private final UserRepository repository;
+    private final CrudUserRepository repository;
 
-    public UserService(UserRepository repository) {
+    public UserService(CrudUserRepository repository) {
         this.repository = repository;
     }
 
@@ -41,12 +43,12 @@ public class UserService implements UserDetailsService {
 
     @Cacheable("users")
     public List<User> getAll() {
-        return repository.getAll();
+        return repository.findAll(SORT_NAME);
     }
 
     public User get(int id) {
         log.debug("get id={}", id);
-        return checkNotFoundWithId(repository.get(id), id);
+        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
     public User getByEmail(String email) {
@@ -70,12 +72,12 @@ public class UserService implements UserDetailsService {
 
     @CacheEvict(value = "users", allEntries = true)
     public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+        checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
     //specially comment for test enabled @CacheEvict(value = "users", allEntries = true)
     public void deleteUseCache(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+        checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
     @Override

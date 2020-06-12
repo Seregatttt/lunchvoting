@@ -34,20 +34,6 @@ abstract public class AbstractControllerTest {
         CHARACTER_ENCODING_FILTER.setEncoding("UTF-8");
         CHARACTER_ENCODING_FILTER.setForceEncoding(true);
     }
-    @Mock
-    protected DateTimeFactory timeFactory;
-
-    @Mock
-    protected CrudVoteRepository mockVoteRepository;
-
-    @Mock
-    protected CrudUserRepository mockUserRepository;
-
-    @Mock
-    protected CrudMenuRepository mockMenuRepository;
-
-    @InjectMocks
-    protected VoteController controller;
 
     private MockMvc mockMvc;
 
@@ -56,10 +42,9 @@ abstract public class AbstractControllerTest {
 
     @PostConstruct
     private void postConstruct() {
-        mockMvc = MockMvcBuilders.standaloneSetup(controller)
-              //  .webAppContextSetup(webApplicationContext)
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
                 .addFilter(CHARACTER_ENCODING_FILTER)
-
                 .apply(springSecurity())
                 .build();
     }
