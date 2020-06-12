@@ -34,7 +34,7 @@ public class MealController {
     public ResponseEntity<Meal> createWithLocation(@Valid @RequestBody Meal meal, @PathVariable int menuId) {
         log.info("create {}", meal);
         checkNew(meal);
-        Meal created = service.create(meal, menuId);
+        Meal created = service.createOrUpdate(meal, menuId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_MENUS_MEALS + "/{id}")
                 .buildAndExpand(menuId, created.getId()).toUri();
@@ -58,7 +58,7 @@ public class MealController {
     public void update(@Valid @RequestBody Meal meal, @PathVariable int menuId, @PathVariable int id) {
         log.info("update {} with menuId={} id={}", meal, menuId, id);
         assureIdConsistent(meal, id);
-        service.update(meal, menuId);
+        service.createOrUpdate(meal, menuId);
     }
 
     @DeleteMapping("/{id}")

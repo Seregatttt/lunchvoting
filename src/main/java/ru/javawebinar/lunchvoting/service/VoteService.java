@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.lunchvoting.DateTimeFactory;
 import ru.javawebinar.lunchvoting.model.Menu;
-import ru.javawebinar.lunchvoting.model.Role;
 import ru.javawebinar.lunchvoting.model.User;
 import ru.javawebinar.lunchvoting.model.Vote;
 import ru.javawebinar.lunchvoting.repository.CrudMenuRepository;
@@ -20,19 +19,17 @@ import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
-import static java.time.LocalDate.of;
 import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class VoteService {
     protected final Logger log = LoggerFactory.getLogger(getClass());
-    public static final User USER1 = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
-    public static final Menu MENU = new Menu(10000, of(2020, Month.MAY, 1));
-    public static final Vote VOTE = new Vote(0, USER1, MENU);
+    ///  public static final User USER1 = new User(101, "User1", "user1@mail.ru", "password1", Role.ROLE_USER);
+    //  public static final Menu MENU = new Menu(10000, of(2020, Month.MAY, 1));
+    //  public static final Vote VOTE = new Vote(0, USER1, MENU);
 
 
     private final CrudVoteRepository crudVoteRepository;
@@ -67,15 +64,14 @@ public class VoteService {
             crudVoteRepository.delete(existVote.getId(), userId);
         }
 
-        User user = crudUserRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Not found user for prepare save vote with userId " + userId));
+        User user = crudUserRepository.getOne(userId);
         Menu menu = crudMenuRepository.findById(menuId)
                 .orElseThrow(() -> new NotFoundException("Not found menu for prepare save vote with menuId " + menuId));
 
         vote.setUser(user);
         vote.setMenu(menu);
         vote.setDateLunch(currentDate);
-        vote.setDateTimeReg(LocalDateTime.of(currentDate,currentTime));
+        vote.setDateTimeReg(LocalDateTime.of(currentDate, currentTime));
         return crudVoteRepository.save(vote);
     }
 
@@ -87,16 +83,13 @@ public class VoteService {
     public Vote get(int menuId, int userId) {
         log.debug("get menuId={}", menuId);
         return checkNotFoundWithId(Optional.ofNullable(crudVoteRepository.get(menuId, userId)).orElse(null), menuId);
-        // return Optional.ofNullable(crudVoteRepository.get(menuId, userId)).orElse(null);
     }
 
-    public Vote getWithUserAndMenu(int menuId, int userId) {
+   /* public Vote getWithUserAndMenu(int menuId, int userId) {
         return checkNotFoundWithId(Optional.ofNullable(crudVoteRepository.getWithUserAndMenu(menuId, userId)).orElse(null), menuId);
-        // return checkNotFoundWithId(crudVoteRepository.getWithUserAndMenu(menuId, userId), menuId);
-    }
+    }*/
 
     public void delete(int menuId, int userId) {
         checkNotFoundWithId(crudVoteRepository.delete(menuId, userId) != 0, menuId);
-        // return crudVoteRepository.delete(menuId, userId) != 0;
     }
 }

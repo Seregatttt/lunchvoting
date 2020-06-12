@@ -9,7 +9,7 @@ import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Restaurant;
 
 @Transactional(readOnly = true)
-public interface CrudRestRepository extends JpaRepository<Restaurant, Integer> {
+public interface CrudRestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
     @Transactional
     @Modifying

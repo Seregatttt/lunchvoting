@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Restaurant;
-import ru.javawebinar.lunchvoting.repository.CrudRestRepository;
+import ru.javawebinar.lunchvoting.repository.CrudRestaurantRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     protected RestaurantService service;
 
     @Autowired
-    private CrudRestRepository repository;
+    private CrudRestaurantRepository repository;
 
     @Test
     void create() {

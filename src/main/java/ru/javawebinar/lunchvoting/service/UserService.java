@@ -75,7 +75,6 @@ public class UserService implements UserDetailsService {
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
-    //specially comment for test enabled @CacheEvict(value = "users", allEntries = true)
     public void deleteUseCache(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }

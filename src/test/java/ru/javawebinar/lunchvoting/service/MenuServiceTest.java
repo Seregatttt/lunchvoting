@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.lunchvoting.model.Meal;
 import ru.javawebinar.lunchvoting.model.Menu;
-import ru.javawebinar.lunchvoting.repository.MenuRepository;
+import ru.javawebinar.lunchvoting.repository.CrudMenuRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -25,13 +25,13 @@ public class MenuServiceTest extends AbstractServiceTest {
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    private MenuRepository repository;
+    private CrudMenuRepository repository;
 
     @Test
     void create() throws Exception {
         Menu newMenu = new Menu(null, of(2020, Month.MAY, 5));
         newMenu.setRestaurant(REST);
-        Menu created = service.create(newMenu, REST_ID_MENU);
+        Menu created = service.createOrUpdate(newMenu, REST_ID_MENU);
         int newId = created.getId();
         newMenu.setId(newId);
         MENU_MATCHER.assertMatch(created, newMenu);
@@ -91,14 +91,14 @@ public class MenuServiceTest extends AbstractServiceTest {
     void update() throws Exception {
         Menu updated = new Menu(10002, of(2020, Month.MAY, 11));
         updated.setRestaurant(REST2);
-        service.update(updated, REST2.getId());
+        service.createOrUpdate(updated, REST2.getId());
         MENU_MATCHER.assertMatch(service.get(10002, 12), updated);
     }
 
     @Test
     void updateNotFound() throws Exception {
         NotFoundException ex = assertThrows(NotFoundException.class,
-                () -> service.update(MENU_WITH_REST, 1));
+                () -> service.createOrUpdate(MENU_WITH_REST, 1));
     }
 
     @Test
