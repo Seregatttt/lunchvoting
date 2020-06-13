@@ -63,9 +63,8 @@ public class DataForTestUnits {
 
     public static final Vote VOTE = new Vote(10026, USER1, REST,LocalDate.of(2020,5,1));
     public static final Vote VOTE1 = new Vote(10027, USER2, REST2,LocalDate.of(2020,5,1));
-    public static final Vote VOTE2 = new Vote(2, USER1, REST1,LocalDate.of(2020,5,1));
+    public static final Vote VOTE2 = new Vote(10028, USER1, REST1,LocalDate.of(2020,5,2));
     public static final Vote NEW_VOTE = new Vote(null, USER2, REST2,LocalDate.of(2020,5,1));
-    public static final Vote NEW_VOTE1 = new Vote(null, USER3, REST2,LocalDate.of(2020,5,1));
     public static final Vote VOTE_UPDATE = new Vote(null, USER1, REST2,LocalDate.of(2020,5,1));
     public static final LocalDate LOCAL_DATE = LocalDate.of(2020,5,1);
     public static final LocalTime LOCAL_TIME = LocalTime.of(10, 0);
@@ -83,7 +82,7 @@ public class DataForTestUnits {
             = TestMatcher.usingFieldsComparator(Restaurant.class, "menus");
 
     public static TestMatcher<Vote> VOTE_MATCHER
-            = TestMatcher.usingFieldsComparator(Vote.class, "menu", "user", "dateTimeReg");
+            = TestMatcher.usingFieldsComparator(Vote.class, "restaurant", "user", "dateTimeReg");
 
     public static String jsonWithPassword(User user, String passw) {
         return JsonUtil.writeAdditionProps(user, "password", passw);

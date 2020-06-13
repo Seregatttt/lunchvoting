@@ -25,11 +25,11 @@ public class VoteUIController {
 
     static final String REST_PROFILE_RESTAURANTS_VOTES_UI = "/rest/profile";  //  /restaurants/{menuId}/votes
 
-    protected final VoteService voteServiceImpl;
+    protected final VoteService voteService;
     protected final MenuService menuService;
 
     public VoteUIController(VoteService voteServiceImpl, MenuService menuService) {
-        this.voteServiceImpl = voteServiceImpl;
+        this.voteService = voteServiceImpl;
         this.menuService = menuService;
     }
 
@@ -38,7 +38,7 @@ public class VoteUIController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Nullable LocalDate endDate) {
         log.info("get all lunchVotes ");
-        return voteServiceImpl.getLunchVotesBetweenInclude(startDate, endDate, SecurityUtil.authUserId());
+        return voteService.getUserVotesBetweenInclude(startDate, endDate, SecurityUtil.authUserId());
     }
 
     @GetMapping("/showMenuAndRestaurant")

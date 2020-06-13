@@ -5,14 +5,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.javawebinar.lunchvoting.model.Restaurant;
 import ru.javawebinar.lunchvoting.repository.CrudRestaurantRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithId;
+import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithLocalDate;
 
 @Service
 public class RestaurantService {
@@ -35,6 +38,12 @@ public class RestaurantService {
     public List<Restaurant> getAll() {
         return repository.findAll(SORT);
     }
+
+//    @Cacheable("restaurants")
+//    public List<Restaurant> getAllWithMenuByDate(LocalDate date) {
+//        Assert.notNull(date, "date must not be null");
+//        return repository.findAllWithMenusAndMeals();
+//    }
 
     public Restaurant get(int id) {
         log.debug("get id={}", id);

@@ -9,12 +9,15 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.lunchvoting.DateTimeFactory;
 import ru.javawebinar.lunchvoting.model.Vote;
-import ru.javawebinar.lunchvoting.repository.*;
+import ru.javawebinar.lunchvoting.repository.CrudRestaurantRepository;
+import ru.javawebinar.lunchvoting.repository.CrudUserRepository;
+import ru.javawebinar.lunchvoting.repository.CrudVoteRepository;
 import ru.javawebinar.lunchvoting.util.exception.IllegalRequestDataException;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -55,7 +58,7 @@ public class VoteServiceTest extends AbstractServiceTest {
     @Test
     void create() {
         Vote create = NEW_VOTE;
-        Vote created = service.createOrUpdate(create, REST2.getId(),USER1.getId());
+        Vote created = service.createOrUpdate(create, REST2.getId(), USER1.getId());
         int newId = created.getId();
         create.setId(newId);
         assertEquals(created, create);
@@ -78,7 +81,7 @@ public class VoteServiceTest extends AbstractServiceTest {
         when(mockRestaurantRepository.findById(restaurantId)).thenReturn(java.util.Optional.of(REST2));
         when(mockVoteRepository.save(newVote)).thenReturn(newVote);
 
-        Vote createdVote = mockService.createOrUpdate(newVote,restaurantId, userId);
+        Vote createdVote = mockService.createOrUpdate(newVote, restaurantId, userId);
         VOTE_MATCHER.assertMatch(createdVote, newVote);
         verify(mockVoteRepository).getByDateLunch(LOCAL_DATE, userId);
         verify(mockVoteRepository).save(newVote);
@@ -90,36 +93,38 @@ public class VoteServiceTest extends AbstractServiceTest {
         when(timeFactory.getCurrentTime()).thenReturn(LocalTime.of(12, 0));
         when(timeFactory.getTimeLimit()).thenReturn(LocalTime.of(11, 0));
         when(timeFactory.getCurrentDate()).thenReturn(LOCAL_DATE);
-        when(mockVoteRepository.getByDateLunch(LOCAL_DATE,VOTE_UPDATE.getUser().getId())).thenReturn(VOTE);
+        when(mockVoteRepository.getByDateLunch(LOCAL_DATE, VOTE_UPDATE.getUser().getId())).thenReturn(VOTE);
         assertThrows(IllegalRequestDataException.class, () ->
-                mockService.createOrUpdate(newVote,VOTE_UPDATE.getRestaurant().getId(),VOTE_UPDATE.getUser().getId()));
-        verify(mockVoteRepository).getByDateLunch(LOCAL_DATE,VOTE_UPDATE.getUser().getId());
+                mockService.createOrUpdate(newVote, VOTE_UPDATE.getRestaurant().getId(), VOTE_UPDATE.getUser().getId()));
+        verify(mockVoteRepository).getByDateLunch(LOCAL_DATE, VOTE_UPDATE.getUser().getId());
     }
 
     @Test
     void createNotFoundRestaurant() {
         Vote newVote = new Vote(null, USER1, NEW_REST);
-        assertThrows(NotFoundException.class, () -> service.createOrUpdate(newVote,777, USER1.getId()));
+        assertThrows(NotFoundException.class, () -> service.createOrUpdate(newVote, 777, USER1.getId()));
     }
 
     @Test
     void getById() {
-        Vote vote = service.get( VOTE.getId(),USER1.getId());
+        Vote vote = service.get(VOTE.getId(), USER1.getId());
         assertEquals(vote, VOTE);
     }
 
     @Test
     void getByDate() {
-        Vote vote = service.get( USER1.getId(),REST.getId(),LOCAL_DATE);
+        Vote vote = service.get(USER1.getId(), REST.getId(), LOCAL_DATE);
         assertEquals(vote, VOTE);
     }
 
-//    @Test
-//    void getWithUserAndMenu() throws Exception {
-//        Vote actual = service.getWithUserAndMenu(10000, 101);
-//        VOTE_MATCHER.assertMatch(actual, VOTE);
-//        MENU_MATCHER.assertMatch(actual.getMenu(), MENU);
-//    }
+    @Test
+    void getUserVotesBetweenInclude() throws Exception {
+        List<Vote> actual = service.getUserVotesBetweenInclude(
+                LocalDate.of(2020, 5, 1),
+                LocalDate.of(2020, 5, 2),
+                USER1.getId());
+        VOTE_MATCHER.assertMatch(actual, List.of(VOTE2, VOTE));
+    }
 
     @Test
     void getNotFound() {

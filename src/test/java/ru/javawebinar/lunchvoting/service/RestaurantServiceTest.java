@@ -52,6 +52,12 @@ public class RestaurantServiceTest extends AbstractServiceTest {
         MENU_MATCHER.assertMatch(actual.getMenus(), menus);
     }
 
+//    @Test
+//    void getAllWithMenuByDate() throws Exception {
+//        List<Restaurant> actual = service.getAllWithMenuByDate(LOCAL_DATE);
+//        REST_MATCHER.assertMatch(actual, REST);
+//    }
+
     @Test
     void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(1));

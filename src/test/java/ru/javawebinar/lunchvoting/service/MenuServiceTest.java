@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.lunchvoting.model.Meal;
 import ru.javawebinar.lunchvoting.model.Menu;
+import ru.javawebinar.lunchvoting.model.Restaurant;
 import ru.javawebinar.lunchvoting.repository.CrudMenuRepository;
 import ru.javawebinar.lunchvoting.util.exception.NotFoundException;
 
@@ -58,6 +59,12 @@ public class MenuServiceTest extends AbstractServiceTest {
         List<Meal> meals = List.of(MEAL, MEAL1, MEAL2);
         MEAL_MATCHER.assertMatch(actual.getMeals(), meals);
     }
+
+//    @Test
+//    void getAllWithMenuByDate() throws Exception {
+//        List<Restaurant> actual = service.getAllWithMenuByDate(LOCAL_DATE);
+//        REST_MATCHER.assertMatch(actual, REST);
+//    }
 
     @Test
     void getWithRestAndMeals() throws Exception {

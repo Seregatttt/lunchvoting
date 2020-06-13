@@ -72,8 +72,8 @@ public class VoteService {
         return crudVoteRepository.save(vote);
     }
 
-    public List<Vote> getLunchVotesBetweenInclude(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
-        return crudVoteRepository.getLunchVotesBetweenInclude(DateUtil.atStartOfDayOrMin(startDate),
+    public List<Vote> getUserVotesBetweenInclude(@Nullable LocalDate startDate, @Nullable LocalDate endDate, int userId) {
+        return crudVoteRepository.getUserVotesBetweenInclude(DateUtil.atStartOfDayOrMin(startDate),
                 DateUtil.atStartOfDayOrMax(endDate), userId);
     }
 
@@ -88,12 +88,7 @@ public class VoteService {
                 .orElse(null), restaurantId);
     }
 
-   /* public Vote getWithUserAndMenu(int menuId, int userId) {
-        return checkNotFoundWithId(Optional.ofNullable(crudVoteRepository.getWithUserAndMenu(menuId, userId)).orElse(null), menuId);
-    }*/
-
     public void delete(int id, int userId) {
         checkNotFoundWithId(crudVoteRepository.delete(id, userId) != 0, id);
     }
-
 }
