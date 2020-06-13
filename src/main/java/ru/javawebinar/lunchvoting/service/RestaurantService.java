@@ -51,7 +51,6 @@ public class RestaurantService {
         return crudRestaurantRepository.findAll(SORT);
     }
 
-    @Cacheable("restaurants")
     public List<RestaurantTo> getAllWithMenuAndMealsByDate(LocalDate dateMenu) {
         Assert.notNull(dateMenu, "dateMenu must not be null");
         List<Vote> voteList = crudVoteRepository.findAllByDateVote(dateMenu);

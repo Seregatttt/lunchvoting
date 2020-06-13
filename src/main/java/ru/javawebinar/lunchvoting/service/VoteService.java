@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static ru.javawebinar.lunchvoting.util.ValidationUtil.checkNotFoundWithId;
 
@@ -79,7 +80,12 @@ public class VoteService {
 
     public Vote get(int id, int userId) {
         return checkNotFoundWithId(crudVoteRepository.findById(id)
-                .filter(vote -> vote.getUser().getId() == userId).orElse(null), id);
+                .filter(vote -> vote.getUser().getId() == userId).
+                        orElse(null), id);
+    }
+
+    public Vote get(int id, int userId, int restaurantId) {
+        return checkNotFoundWithId(crudVoteRepository.get(id,userId,restaurantId),id);
     }
 
     public Vote get(int userId, int restaurantId, LocalDate dateVote) {

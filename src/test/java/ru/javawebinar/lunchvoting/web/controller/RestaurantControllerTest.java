@@ -26,7 +26,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     public static final String REST_ADMIN_RESTAURANTS_URL = RestaurantController.REST_ADMIN_RESTAURANTS + '/';
 
     @Autowired
-    private RestaurantService restService;
+    private RestaurantService restaurantService;
 
     @Test
     void createWithLocation() throws Exception {
@@ -42,7 +42,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
         int newId = created.getId();
         newCreate.setId(newId);
         REST_MATCHER.assertMatch(created, newCreate);
-        REST_MATCHER.assertMatch(restService.get(newId), newCreate);
+        REST_MATCHER.assertMatch(restaurantService.get(newId), newCreate);
     }
 
     @Test
@@ -126,7 +126,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent())
                 .andDo(print());
         updated.setId(REST2_ID);
-        REST_MATCHER.assertMatch(restService.get(REST2_ID), updated);
+        REST_MATCHER.assertMatch(restaurantService.get(REST2_ID), updated);
     }
 
     @Test
@@ -149,7 +149,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> restService.get(REST2_ID));
+        assertThrows(NotFoundException.class, () -> restaurantService.get(REST2_ID));
     }
 
     @Test

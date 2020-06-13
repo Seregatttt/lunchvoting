@@ -65,6 +65,7 @@ public class MenuService {
         return crudMenuRepository.getBetweenInclude(DateUtil.atStartOfDayOrMin(startDate), DateUtil.atStartOfDayOrMax(endDate));
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     public void delete(int id, int restId) {
         checkNotFoundWithId(crudMenuRepository.delete(id, restId) != 0, id);
     }

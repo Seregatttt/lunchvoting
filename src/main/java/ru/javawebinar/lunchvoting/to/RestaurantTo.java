@@ -4,6 +4,7 @@ import ru.javawebinar.lunchvoting.model.Menu;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class RestaurantTo extends BaseTo implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -72,6 +73,20 @@ public class RestaurantTo extends BaseTo implements Serializable {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RestaurantTo that = (RestaurantTo) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(address, that.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, address);
     }
 
     @Override

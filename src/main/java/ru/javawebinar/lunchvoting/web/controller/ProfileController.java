@@ -14,8 +14,8 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping(ProfileRestController.REST_PROFILE_URL)
-public class ProfileRestController extends AbstractUserController {
+@RequestMapping(ProfileController.REST_PROFILE_URL)
+public class ProfileController extends AbstractUserController {
     static final String REST_PROFILE_URL = "/rest/profile";
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)

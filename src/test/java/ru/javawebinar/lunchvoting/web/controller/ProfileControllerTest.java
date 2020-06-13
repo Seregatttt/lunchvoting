@@ -21,9 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
 import static ru.javawebinar.lunchvoting.TestUtil.readFromJson;
 import static ru.javawebinar.lunchvoting.TestUtil.userHttpBasic;
-import static ru.javawebinar.lunchvoting.web.controller.ProfileRestController.REST_PROFILE_URL;
+import static ru.javawebinar.lunchvoting.web.controller.ProfileController.REST_PROFILE_URL;
 
-class ProfileRestControllerTest extends AbstractControllerTest {
+class ProfileControllerTest extends AbstractControllerTest {
 
     @Autowired
     private UserService userService;
