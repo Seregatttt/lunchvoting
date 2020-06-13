@@ -41,7 +41,6 @@ class VoteControllerTest extends AbstractControllerTest {
         createdVote.setId(newId);
         createdVote.setDateVote(created.getDateVote());
         VOTE_MATCHER.assertMatch(created, createdVote);
-        VOTE_MATCHER.assertMatch(voteService.get(10030, 10001), createdVote);
     }
 
     @Test
@@ -111,7 +110,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.delete("/rest/profile/restaurants/99988888/votes")
+        perform(MockMvcRequestBuilders.delete("/rest/profile/restaurants/99988888/votes/11")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
