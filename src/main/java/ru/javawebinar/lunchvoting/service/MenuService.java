@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.lunchvoting.model.Menu;
-import ru.javawebinar.lunchvoting.model.Restaurant;
 import ru.javawebinar.lunchvoting.repository.CrudMenuRepository;
 import ru.javawebinar.lunchvoting.repository.CrudRestaurantRepository;
 import ru.javawebinar.lunchvoting.util.DateUtil;
@@ -41,11 +40,6 @@ public class MenuService {
         return crudMenuRepository.getAll(restId);
     }
 
-//    public List<Restaurant> getAllWithMenuByDate(LocalDate date) {
-//        Assert.notNull(date, "date must not be null");
-//        return crudMenuRepository.findAllWithMenusAndMeals();
-//    }
-
     public Menu get(int id, int restId) {
         return checkNotFoundWithId(crudMenuRepository.findById(id).
                 filter(m -> m.getRestaurant().getId() == restId).orElse(null), id);
@@ -61,6 +55,10 @@ public class MenuService {
 
     public Menu getWithRestAndMeals(int id, int restId) {
         return checkNotFoundWithId(crudMenuRepository.getWithRestAndMeals(id, restId), id);
+    }
+
+    public List<Menu> getAllByDateWithRestAndMeals(LocalDate dateMenu) {
+        return (crudMenuRepository.getAllByDateWithRestAndMeals(dateMenu));
     }
 
     public List<Menu> getBetweenInclude(@Nullable LocalDate startDate, @Nullable LocalDate endDate) {

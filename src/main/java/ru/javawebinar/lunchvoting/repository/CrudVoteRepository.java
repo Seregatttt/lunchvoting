@@ -1,5 +1,6 @@
 package ru.javawebinar.lunchvoting.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -31,6 +32,10 @@ public interface CrudVoteRepository extends JpaRepository<Vote, Integer> {
             " WHERE v.user.id=:userId AND v.dateVote >= :startDate " +
             " AND v.dateVote <= :endDate ORDER BY v.dateVote DESC")
     List<Vote> getUserVotesBetweenInclude(@Param("startDate") LocalDate startDate,
-                                           @Param("endDate") LocalDate endDate,
-                                           @Param("userId") int userId);
+                                          @Param("endDate") LocalDate endDate,
+                                          @Param("userId") int userId);
+
+    @EntityGraph(attributePaths = {"restaurant"})
+    @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.dateVote=:dateVote ")
+    List<Vote> findAllByDateVote(@Param("dateVote") LocalDate dateVote);
 }
