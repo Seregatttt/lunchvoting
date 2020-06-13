@@ -1,8 +1,6 @@
 package ru.javawebinar.lunchvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.javawebinar.lunchvoting.View;
@@ -13,16 +11,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @Table(name = "meals")
 public class Meal extends AbstractBaseEntity {
-   /* public static final int START_SEQ = 1000;
-
-    @Id
-    @SequenceGenerator(name = "global_seq_meals", sequenceName = "global_seq_meals", allocationSize = 1, initialValue = START_SEQ)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_meals")
-    private Integer id;*/
 
     @Column(name = "name", nullable = false)
     @NotBlank
@@ -48,14 +39,6 @@ public class Meal extends AbstractBaseEntity {
         this.id = id;
         this.name = name;
         this.price = price;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public String getName() {

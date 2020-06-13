@@ -13,12 +13,6 @@ import java.util.List;
 @Entity
 @Table(name = "restaurants")
 public class Restaurant extends AbstractBaseEntity {
-  //  public static final int START_SEQ = 10;
-
-    /*@Id
-    @SequenceGenerator(name = "global_seq_rest", sequenceName = "global_seq_rest", allocationSize = 1, initialValue = START_SEQ)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_rest")
-    private Integer id;*/
 
     @NotBlank
     @Size(min = 2, max = 100)
@@ -30,7 +24,7 @@ public class Restaurant extends AbstractBaseEntity {
     @Size(min = 5, max = 100)
     private String address;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @JsonIgnore
     private List<Menu> menus;
 
@@ -45,14 +39,6 @@ public class Restaurant extends AbstractBaseEntity {
         this.id = id;
         this.name = name;
         this.address = address;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public String getName() {
@@ -77,19 +63,6 @@ public class Restaurant extends AbstractBaseEntity {
 
     public void setMenus(List<Menu> menus) {
         this.menus = menus;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Restaurant restaurant = (Restaurant) o;
-        return id.equals(restaurant.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id == null ? 0 : id;
     }
 
     @Override

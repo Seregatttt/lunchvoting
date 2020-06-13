@@ -19,12 +19,6 @@ import java.util.Set;
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User extends AbstractBaseEntity {
-  //  public static final int START_USERS_SEQ = 100;
-
-//    @Id
-//    @SequenceGenerator(name = "global_seq_users", sequenceName = "global_seq_users", allocationSize = 1, initialValue = START_USERS_SEQ)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_users")
-//    protected Integer id;
 
     @NotBlank
     @Size(min = 2, max = 100)
@@ -53,18 +47,12 @@ public class User extends AbstractBaseEntity {
     @BatchSize(size = 200)
     private Set<Role> roles;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
-//    @OrderBy("dateTime DESC")
-////    @JsonIgnore
-//    private List<Meal> meals;
-
     public User() {
     }
 
     public User(User u) {
         this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.getRoles());
     }
-
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
         this(id, name, email, password, EnumSet.of(role, roles));
@@ -76,14 +64,6 @@ public class User extends AbstractBaseEntity {
         this.email = email;
         this.password = password;
         setRoles(roles);
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public String getEmail() {
@@ -116,23 +96,6 @@ public class User extends AbstractBaseEntity {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
-    }
-
-//    public List<Meal> getMeals() {
-//        return meals;
-//    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id == null ? 0 : id;
     }
 
     @Override

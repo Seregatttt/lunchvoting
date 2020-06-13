@@ -13,38 +13,39 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface CrudVoteRepository extends JpaRepository<Vote, Integer> {
 
-    /*@Override
-    @Transactional
-    Vote save(Vote vote);*/
-
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Vote t WHERE t.menu.id=:menuId and t.user.id = :userId")
-    int delete(@Param("menuId") int id, @Param("userId") int userId);
-
     @Transactional
     @Modifying
     @Query("DELETE FROM Vote t WHERE t.id=:id and t.user.id = :userId")
-    int deleteByIdUserId(@Param("id") int id, @Param("userId") int userId);
+    int delete(@Param("id") int id, @Param("userId") int userId);
 
-    @Query("SELECT m FROM Vote m JOIN FETCH m.menu  " +
-            " WHERE m.user.id=:userId AND m.dateLunch >= :startDate " +
-            " AND m.dateLunch <= :endDate ORDER BY m.dateLunch DESC")
-    List<Vote> getLunchVotesBetweenInclude(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,@Param("userId") int userId);
+//    @Transactional
+//    @Modifying
+//    @Query("DELETE FROM Vote t WHERE t.id=:id and t.user.id = :userId")
+//    int deleteByIdUserId(@Param("id") int id, @Param("userId") int userId);
 
-    @Query("SELECT t FROM Vote t WHERE t.menu.id=:menuId and t.user.id = :userId")
-    Vote get(@Param("menuId") int menuId, @Param("userId") int userId);
+    @Query("SELECT m FROM Vote m JOIN FETCH m.restaurant  " +
+            " WHERE m.user.id=:userId AND m.dateVote >= :startDate " +
+            " AND m.dateVote <= :endDate ORDER BY m.dateVote DESC")
+    List<Vote> getLunchVotesBetweenInclude(@Param("startDate") LocalDate startDate,
+                                           @Param("endDate") LocalDate endDate,
+                                           @Param("userId") int userId);
 
-    @Query("SELECT t FROM Vote t JOIN FETCH t.user WHERE t.dateLunch=:dateLunch and t.user.id = :userId")
-    Vote getByDateLunch(@Param("dateLunch") LocalDate dateLunch, @Param("userId") int userId);
+    @Query("SELECT t FROM Vote t WHERE t.id = :id and t.user.id=:userId ")
+    Vote get(@Param("id") int id, @Param("userId") int userId);
 
-    @Query("SELECT m FROM Vote m JOIN FETCH m.menu WHERE m.menu.id = ?1 and m.user.id = ?2")
-    Vote getWithMenu(int menuId, int userId);
+    @Query("SELECT t FROM Vote t WHERE t.user.id = :userId and t.restaurant.id=:restaurantId and t.dateVote = :dateVote")
+    Vote get(@Param("userId") int userId, @Param("restaurantId") int restaurantId, @Param("dateVote") LocalDate dateVote);
 
-    @Query("SELECT m FROM Vote m JOIN FETCH m.user WHERE m.menu.id = ?1 and m.user.id = ?2")
-    Vote getWithUser(int menuId, int userId);
+    @Query("SELECT t FROM Vote t JOIN FETCH t.user WHERE t.dateVote=:dateVote and t.user.id = :userId")
+    Vote getByDateLunch(@Param("dateVote") LocalDate dateVote, @Param("userId") int userId);
 
-    //@EntityGraph(attributePaths = {"menus","users"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT m FROM Vote m JOIN FETCH m.user JOIN FETCH m.menu WHERE m.menu.id = ?1 and m.user.id = ?2")
-    Vote getWithUserAndMenu(int menuId, int userId);
+//    @Query("SELECT m FROM Vote m JOIN FETCH m.menu WHERE m.menu.id = ?1 and m.user.id = ?2")
+//    Vote getWithMenu(int menuId, int userId);
+//
+//    @Query("SELECT m FROM Vote m JOIN FETCH m.user WHERE m.menu.id = ?1 and m.user.id = ?2")
+//    Vote getWithUser(int menuId, int userId);
+//
+//    //@EntityGraph(attributePaths = {"menus","users"}, type = EntityGraph.EntityGraphType.LOAD)
+//    @Query("SELECT m FROM Vote m JOIN FETCH m.user JOIN FETCH m.menu WHERE m.menu.id = ?1 and m.user.id = ?2")
+//    Vote getWithUserAndMenu(int menuId, int userId);
 }

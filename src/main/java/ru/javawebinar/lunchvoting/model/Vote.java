@@ -10,16 +10,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-//@Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "user_id"}, name = "votes_unique_date_user_id_idx")})
 @Entity
-@Table(name = "votes")
+@Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "user_id"}, name = "user_lunch_idx")})
 public class Vote extends AbstractBaseEntity {
-    //  public static final int START_SEQ = 0;
-
-//    @Id
-//    @SequenceGenerator(name = "global_seq_votes", sequenceName = "global_seq_votes", allocationSize = 1, initialValue = START_SEQ)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_votes")
-//    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -28,14 +21,15 @@ public class Vote extends AbstractBaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id", nullable = false)
+    @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull(groups = View.Persist.class)
-    private Menu menu;
+    private Restaurant restaurant;
 
-    @Column(name = "date_menu", nullable = false)
+    @Column(name = "date_vote", nullable = false)
     @NotNull(groups = View.Persist.class)
-    private LocalDate dateLunch;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateVote;
 
     @Column(name = "date_reg", nullable = false)
     @NotNull
@@ -45,29 +39,20 @@ public class Vote extends AbstractBaseEntity {
     public Vote() {
     }
 
-    public Vote(Integer id, User user, Menu menu) {
+    public Vote(Vote m) {
+        this(m.getId(), m.getUser(), m.getRestaurant(), m.getDateVote());
+    }
+
+    public Vote(Integer id, User user, Restaurant restaurant) {
+        this(id, user, restaurant, LocalDate.now());
+    }
+
+    public Vote(Integer id, User user, Restaurant restaurant, LocalDate dateVote) {
         super(id);
         this.user = user;
-        this.menu = menu;
-        this.dateLunch = menu.getDateMenu();
+        this.restaurant = restaurant;
+        this.dateVote = dateVote;
         this.dateTimeReg = LocalDateTime.now();
-    }
-
-    public Vote(Integer id, User user, Menu menu, LocalDateTime localDateTime) {
-        this(id, user, menu);
-        this.dateTimeReg = localDateTime;
-    }
-
-    public Vote(Vote m) {
-        this(m.getId(), m.getUser(), m.getMenu());
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public User getUser() {
@@ -78,20 +63,20 @@ public class Vote extends AbstractBaseEntity {
         this.user = user;
     }
 
-    public Menu getMenu() {
-        return menu;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
-    public LocalDate getDateLunch() {
-        return dateLunch;
+    public LocalDate getDateVote() {
+        return dateVote;
     }
 
-    public void setDateLunch(LocalDate dateLunch) {
-        this.dateLunch = dateLunch;
+    public void setDateVote(LocalDate dateVote) {
+        this.dateVote = dateVote;
     }
 
     public LocalDateTime getDateTimeReg() {
@@ -105,9 +90,9 @@ public class Vote extends AbstractBaseEntity {
     @Override
     public String toString() {
         return "Vote{" +
-                "id=" + id +
-                ", dateLunch=" + dateLunch +
+                ", dateVote=" + dateVote +
                 ", dateTimeReg=" + dateTimeReg +
+                ", id=" + id +
                 '}';
     }
 }

@@ -42,7 +42,7 @@ public class VoteServiceTest extends AbstractServiceTest {
     private CrudUserRepository mockUserRepository;
 
     @Mock
-    private CrudMenuRepository mockMenuRepository;
+    private CrudRestaurantRepository mockRestaurantRepository;
 
     @InjectMocks
     private VoteService mockService;
@@ -52,33 +52,33 @@ public class VoteServiceTest extends AbstractServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    /*@Test
-    void createOrUpdate() {
+    @Test
+    void create() {
         Vote create = NEW_VOTE;
-        Vote created = service.createOrUpdate(create,10006, 102);
+        Vote created = service.createOrUpdate(create, REST2.getId(),USER1.getId());
         int newId = created.getId();
         create.setId(newId);
         assertEquals(created, create);
-        assertEquals(service.get(10006, 102), create);
+        assertEquals(service.get(10030, USER1.getId()), create);
     }
 
     @Test
     void testCreateBeforeTimeLimit() {
 
-        Vote newVote = new Vote(null, USER1, MENU2, LocalDateTime.of(LOCAL_DATE,LOCAL_TIME));
-
+        Vote newVote = new Vote(null, USER1, REST2);
+        newVote.setDateVote(LOCAL_DATE);
         final Integer userId = newVote.getUser().getId();
-        final Integer menuId = newVote.getMenu().getId();
+        final Integer restaurantId = newVote.getRestaurant().getId();
 
         when(timeFactory.getCurrentTime()).thenReturn(LOCAL_TIME);
         when(timeFactory.getCurrentDate()).thenReturn(LOCAL_DATE);
         when(timeFactory.getTimeLimit()).thenReturn(TIME_LIMIT_VOTE);
         when(mockVoteRepository.getByDateLunch(LOCAL_DATE, userId)).thenReturn(VOTE);
-        when(mockUserRepository.findById(userId)).thenReturn(java.util.Optional.of(USER1));
-        when(mockMenuRepository.findById(menuId)).thenReturn(java.util.Optional.of(MENU));
+        when(mockUserRepository.getOne(userId)).thenReturn(USER1);
+        when(mockRestaurantRepository.findById(restaurantId)).thenReturn(java.util.Optional.of(REST2));
         when(mockVoteRepository.save(newVote)).thenReturn(newVote);
 
-        Vote createdVote = mockService.createOrUpdate(newVote,menuId, userId);
+        Vote createdVote = mockService.createOrUpdate(newVote,restaurantId, userId);
         VOTE_MATCHER.assertMatch(createdVote, newVote);
         verify(mockVoteRepository).getByDateLunch(LOCAL_DATE, userId);
         verify(mockVoteRepository).save(newVote);
@@ -92,34 +92,34 @@ public class VoteServiceTest extends AbstractServiceTest {
         when(timeFactory.getCurrentDate()).thenReturn(LOCAL_DATE);
         when(mockVoteRepository.getByDateLunch(LOCAL_DATE,VOTE_UPDATE.getUser().getId())).thenReturn(VOTE);
         assertThrows(IllegalRequestDataException.class, () ->
-                mockService.createOrUpdate(newVote,VOTE_UPDATE.getMenu().getId(),VOTE_UPDATE.getUser().getId()));
+                mockService.createOrUpdate(newVote,VOTE_UPDATE.getRestaurant().getId(),VOTE_UPDATE.getUser().getId()));
         verify(mockVoteRepository).getByDateLunch(LOCAL_DATE,VOTE_UPDATE.getUser().getId());
     }
 
     @Test
-    void createNotFoundMenu() {
-        Vote newVote = new Vote(null, USER1, MENU2, LocalDateTime.of(LOCAL_DATE,LOCAL_TIME));
-        assertThrows(NotFoundException.class, () -> service.createOrUpdate(newVote,777, 102));
+    void createNotFoundRestaurant() {
+        Vote newVote = new Vote(null, USER1, NEW_REST);
+        assertThrows(NotFoundException.class, () -> service.createOrUpdate(newVote,777, USER1.getId()));
     }
 
     @Test
-    void createNotFoundUser() {
-        Vote newVote = new Vote(null, USER1, MENU2, LocalDateTime.of(LOCAL_DATE,LOCAL_TIME));
-        assertThrows(NotFoundException.class, () -> service.createOrUpdate(newVote,10006, 999999));
-    }
-
-    @Test
-    void get() {
-        Vote vote = service.get(10000, 101);
+    void getById() {
+        Vote vote = service.get( VOTE.getId(),USER1.getId());
         assertEquals(vote, VOTE);
     }
 
     @Test
-    void getWithUserAndMenu() throws Exception {
-        Vote actual = service.getWithUserAndMenu(10000, 101);
-        VOTE_MATCHER.assertMatch(actual, VOTE);
-        MENU_MATCHER.assertMatch(actual.getMenu(), MENU);
+    void getByDate() {
+        Vote vote = service.get( USER1.getId(),REST.getId(),LOCAL_DATE);
+        assertEquals(vote, VOTE);
     }
+
+//    @Test
+//    void getWithUserAndMenu() throws Exception {
+//        Vote actual = service.getWithUserAndMenu(10000, 101);
+//        VOTE_MATCHER.assertMatch(actual, VOTE);
+//        MENU_MATCHER.assertMatch(actual.getMenu(), MENU);
+//    }
 
     @Test
     void getNotFound() {
@@ -128,12 +128,12 @@ public class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     public void delete() {
-        service.delete(10000, 101);
-        Assertions.assertNull(repository.get(10000, 101));
+        service.delete(VOTE.getId(), USER1.getId());
+        Assertions.assertNull(repository.get(VOTE.getId(), USER1.getId()));
     }
 
     @Test
     void deletedNotFound() {
         assertThrows(NotFoundException.class, () -> service.delete(9999, 102));
-    }*/
+    }
 }

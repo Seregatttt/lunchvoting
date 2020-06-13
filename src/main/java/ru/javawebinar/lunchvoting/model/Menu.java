@@ -1,7 +1,5 @@
 package ru.javawebinar.lunchvoting.model;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.javawebinar.lunchvoting.View;
@@ -11,16 +9,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
-@Table(name = "menus")
+@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"rest_id", "date_menu"}, name = "menu_date_idx")})
 public class Menu extends AbstractBaseEntity {
-  // public static final int START_SEQ = 10000;
-
-   /* @Id
-    @SequenceGenerator(name = "global_seq_menus", sequenceName = "global_seq_menus", allocationSize = 1, initialValue = START_SEQ)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq_menus")
-    private Integer id;*/
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rest_id", nullable = false)
@@ -32,8 +23,8 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     private LocalDate dateMenu;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
-   // @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
+
     private List<Meal> meals;
 
     public Menu() {
@@ -53,14 +44,6 @@ public class Menu extends AbstractBaseEntity {
         this.id = id;
         this.restaurant = rest;
         this.dateMenu = dateMenu;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public Restaurant getRestaurant() {
@@ -85,19 +68,6 @@ public class Menu extends AbstractBaseEntity {
 
     public void setDateMenu(LocalDate dateMenu) {
         this.dateMenu = dateMenu;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Menu menu = (Menu) o;
-        return id.equals(menu.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id == null ? 0 : id;
     }
 
     @Override
