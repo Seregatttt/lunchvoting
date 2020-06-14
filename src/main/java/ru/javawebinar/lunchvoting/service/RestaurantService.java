@@ -72,12 +72,6 @@ public class RestaurantService {
         return checkNotFoundWithId(crudRestaurantRepository.findById(id).orElse(null), id);
     }
 
-//    @CacheEvict(value = "restaurants", allEntries = true)
-//    public void update(Restaurant restaurant) {
-//        Assert.notNull(restaurant, "restaurant must not be null");
-//        checkNotFoundWithId(crudRestaurantRepository.save(restaurant),restaurant.getId());
-//    }
-
     public Restaurant getWithMenus(int id) {
         return checkNotFoundWithId(crudRestaurantRepository.getWithMenus(id), id);
     }
