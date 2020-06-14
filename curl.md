@@ -1,4 +1,10 @@
-## User
+## REST API documentation
+
+### Registration
+
+`curl -s -X POST -d '{"name":"New User","email":"testReg@mail.ru","password":"testReg-password"}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/lunchvoting/rest/profile/register`  
+
+### User
 
 #### Profile:
 get profile <br>
@@ -108,3 +114,9 @@ delete Menu<br>
 
 create invalid Meals for Menu id 10001<br>
 `curl -s -X POST -d '{"name":"super-cake","price":0.0}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/lunchvoting/rest/admin/menus/10001/meals --user admin@mail.ru:password`
+
+
+
+
+
+

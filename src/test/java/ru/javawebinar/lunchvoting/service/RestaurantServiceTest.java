@@ -39,7 +39,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void create() {
         Restaurant newRest = NEW_REST;
-        Restaurant created = restaurantService.create(new Restaurant(newRest));
+        Restaurant created = restaurantService.createOrUpdate(new Restaurant(newRest));
         int newId = created.getId();
         newRest.setId(newId);
         assertEquals(created, newRest);
@@ -80,7 +80,7 @@ public class RestaurantServiceTest extends AbstractServiceTest {
     @Test
     void update() {
         Restaurant updated = UPDATE_REST2_ADDRESS;
-        restaurantService.update(new Restaurant(updated));
+        restaurantService.createOrUpdate(new Restaurant(updated));
         assertEquals(restaurantService.get(REST2.getId()), updated);
     }
 

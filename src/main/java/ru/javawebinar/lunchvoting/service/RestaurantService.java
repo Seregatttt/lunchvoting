@@ -41,8 +41,11 @@ public class RestaurantService {
     }
 
     @CacheEvict(value = "restaurants", allEntries = true)
-    public Restaurant create(Restaurant restaurant) {
+    public Restaurant createOrUpdate(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
+        if (!restaurant.isNew() && get(restaurant.getId()) == null) {
+            return null;
+        }
         return crudRestaurantRepository.save(restaurant);
     }
 
@@ -69,11 +72,11 @@ public class RestaurantService {
         return checkNotFoundWithId(crudRestaurantRepository.findById(id).orElse(null), id);
     }
 
-    @CacheEvict(value = "restaurants", allEntries = true)
-    public void update(Restaurant restaurant) {
-        Assert.notNull(restaurant, "restaurant must not be null");
-        crudRestaurantRepository.save(restaurant);
-    }
+//    @CacheEvict(value = "restaurants", allEntries = true)
+//    public void update(Restaurant restaurant) {
+//        Assert.notNull(restaurant, "restaurant must not be null");
+//        checkNotFoundWithId(crudRestaurantRepository.save(restaurant),restaurant.getId());
+//    }
 
     public Restaurant getWithMenus(int id) {
         return checkNotFoundWithId(crudRestaurantRepository.getWithMenus(id), id);
