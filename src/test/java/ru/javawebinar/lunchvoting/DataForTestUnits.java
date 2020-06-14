@@ -62,23 +62,23 @@ public class DataForTestUnits {
     public static final Meal MEAL3 = new Meal(10017, "cake", 1.05f);
     public static final Meal MEAL4 = new Meal(10018, "tea", 3.05f);
 
-    public static final Vote VOTE = new Vote(10026, USER1, REST,LocalDate.of(2020,5,1));
-    public static final Vote VOTE1 = new Vote(10027, USER2, REST2,LocalDate.of(2020,5,1));
-    public static final Vote VOTE2 = new Vote(10028, USER1, REST1,LocalDate.of(2020,5,2));
-    public static final Vote VOTE3 = new Vote(10029, USER2, REST2,LocalDate.of(2020,5,2));
-    public static final Vote NEW_VOTE = new Vote(null, USER2, REST2,LocalDate.of(2020,5,1));
-    public static final Vote VOTE_UPDATE = new Vote(null, USER1, REST2,LocalDate.of(2020,5,1));
-    public static final LocalDate LOCAL_DATE = LocalDate.of(2020,5,1);
+    public static final Vote VOTE = new Vote(10026, USER1, REST, LocalDate.of(2020, 5, 1));
+    public static final Vote VOTE1 = new Vote(10027, USER2, REST2, LocalDate.of(2020, 5, 1));
+    public static final Vote VOTE2 = new Vote(10028, USER1, REST1, LocalDate.of(2020, 5, 2));
+    public static final Vote VOTE3 = new Vote(10029, USER2, REST2, LocalDate.of(2020, 5, 2));
+    public static final Vote NEW_VOTE = new Vote(null, USER2, REST2, LocalDate.of(2020, 5, 1));
+    public static final Vote VOTE_UPDATE = new Vote(null, USER1, REST2, LocalDate.of(2020, 5, 1));
+    public static final LocalDate LOCAL_DATE = LocalDate.of(2020, 5, 1);
     public static final LocalTime LOCAL_TIME = LocalTime.of(10, 0);
 
     public static final RestaurantTo REST_TO =
-            new RestaurantTo(10004, "Celler de Can Roca", "Spain",MENU1,1L,LocalDate.of(2020,5,1));
+            new RestaurantTo(10004, "Celler de Can Roca", "Spain", MENU1, 1L, LocalDate.of(2020, 5, 1));
 
     public static final RestaurantTo REST1_TO =
-            new RestaurantTo(10005, "Noma", "Copenhagen",MENU1,1L,LocalDate.of(2020,5,1));
+            new RestaurantTo(10005, "Noma", "Copenhagen", MENU1, 1L, LocalDate.of(2020, 5, 1));
 
     public static final RestaurantTo REST2_TO =
-            new RestaurantTo(10006, "Sato", "Mexico",MENU1,0L,LocalDate.of(2020,5,1));
+            new RestaurantTo(10006, "Sato", "Mexico", MENU1, 0L, LocalDate.of(2020, 5, 1));
 
     public static TestMatcher<User> USER_MATCHER
             = TestMatcher.usingFieldsComparator(User.class, "password");

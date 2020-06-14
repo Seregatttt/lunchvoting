@@ -20,6 +20,4 @@ public class UserUtil {
         user.setPassword(userTo.getPassword());
         return user;
     }
-
-
 }

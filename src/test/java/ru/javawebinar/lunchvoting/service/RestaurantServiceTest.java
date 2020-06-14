@@ -1,8 +1,10 @@
 package ru.javawebinar.lunchvoting.service;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import ru.javawebinar.lunchvoting.model.Menu;
 import ru.javawebinar.lunchvoting.model.Restaurant;
 import ru.javawebinar.lunchvoting.repository.CrudRestaurantRepository;
@@ -25,6 +27,14 @@ public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Autowired
     private CrudRestaurantRepository repository;
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        cacheManager.getCache("restaurants").clear();
+    }
 
     @Test
     void create() {

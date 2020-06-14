@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ru.javawebinar.lunchvoting.DataForTestUnits.*;
-//import static ru.javawebinar.lunchvoting.service.VoteService.VOTE;
 
 public class VoteServiceTest extends AbstractServiceTest {
 

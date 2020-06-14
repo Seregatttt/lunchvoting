@@ -11,11 +11,9 @@ public class RootController {
         return "index";
     }
 
-    //   @Secured("ROLE_ADMIN")
-    // @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")
     public String getUsers() {
-        return null;//"users";
+        return null;
     }
 
     @GetMapping(value = "/login")

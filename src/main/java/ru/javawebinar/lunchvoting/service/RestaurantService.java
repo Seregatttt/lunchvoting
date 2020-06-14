@@ -59,7 +59,7 @@ public class RestaurantService {
 
         List<Menu> menus = crudMenuRepository.getAllByDateWithRestAndMeals(dateMenu);
         List<RestaurantTo> restaurantTos = menus.stream()
-                .map(menu -> asTo(menu,mapCountVote.getOrDefault(menu.getRestaurant(),0L)))
+                .map(menu -> asTo(menu, mapCountVote.getOrDefault(menu.getRestaurant(), 0L)))
                 .collect(Collectors.toList());
         return restaurantTos;
     }

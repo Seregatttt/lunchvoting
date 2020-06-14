@@ -67,15 +67,4 @@ public class RestaurantController {
         log.info("delete {}", id);
         service.delete(id);
     }
-//    public void update(UserTo userTo, int id) {
-//        log.info("update {} with id={}", userTo, id);
-//        assureIdConsistent(userTo, id);
-//        //checkModificationAllowed(id);
-//        service.update(userTo);
-//    }
-    //    public User create(UserTo userTo) {
-//        log.info("create from to {}", userTo);
-//        return create(UserUtil.createNewFromTo(userTo));
-//    }
-
 }
